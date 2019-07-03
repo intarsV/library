@@ -1,6 +1,7 @@
 package com.accenture.library.repository;
 
 import com.accenture.library.domain.Book;
+import com.accenture.library.domain.Library;
 import com.accenture.library.domain.Reservation;
 import com.accenture.library.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +19,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByUser(User user);
 
-//    @Query(nativeQuery = true, value = "SELECT book, SUM( book) AS Count FROM RESERVATION where returned=0 group By book")
-//    Map<Book, Integer> findDistinc();
+
 }

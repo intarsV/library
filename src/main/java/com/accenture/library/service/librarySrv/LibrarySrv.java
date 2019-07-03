@@ -1,10 +1,10 @@
 package com.accenture.library.service.librarySrv;
 
-import com.accenture.library.domain.Book;
+import com.accenture.library.domain.Library;
 
-import java.util.Map;
+import java.util.List;
 
 public interface LibrarySrv {
 
-    Map<Book, Integer> reservedBookCount();
+    List<Library> reservedBookCount();
 }

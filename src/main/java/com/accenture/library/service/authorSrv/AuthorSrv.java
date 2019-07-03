@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface AuthorSrv {
 
-    Long saveAuthor(String author);
+    Long saveAuthor(String name);
     List<Author> authorList();
-    Author findByName(String authorName);
+    Author findByName(String name);
 }

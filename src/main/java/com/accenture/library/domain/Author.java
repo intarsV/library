@@ -13,15 +13,15 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqAuthor")
     private Long id;
 
-    @Column(name = "authorName")
-    @NotNull(message = "Should enter some name1")
-    private String authorName;
+    @Column(name = "name")
+    @NotNull(message = "Should enter some name!")
+    private String name;
 
     public Author() {
     }
 
-    public Author(@NotNull(message = "Should eneter some name1") String authorName) {
-        this.authorName = authorName;
+    public Author(@NotNull(message = "Should enter some name!") String name) {
+        this.name = name;
     }
 
     public Long getId() {
@@ -32,12 +32,12 @@ public class Author {
         this.id = id;
     }
 
-    public String getAuthorName() {
-        return authorName;
+    public String getName() {
+        return name;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -47,11 +47,11 @@ public class Author {
 
         Author that = (Author) o;
 
-        return authorName.equals(that.authorName);
+        return name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return authorName.hashCode();
+        return name.hashCode();
     }
 }

@@ -28,14 +28,16 @@ public class AuthorControllerREST {
     }
 
     @GetMapping("/search/name")
-    public Author getByName(@RequestBody AuthorDto authorName) {
-        return authorSrv.findByName(authorName.getName());
+    public Author getByFullName(@RequestBody AuthorDto name) {
+        return authorSrv.findByName(name.getName());
     }
 
     @PostMapping
     public ResponseEntity<AuthorDto> saveAuthor(@RequestBody AuthorDto authorDto) {
+        System.out.println(" bdbkjkjh: "+authorDto.getName());
         Long id = authorSrv.saveAuthor(authorDto.getName());
         authorDto.setId(id);
+
         return new ResponseEntity<>(authorDto, HttpStatus.CREATED);
     }
 }

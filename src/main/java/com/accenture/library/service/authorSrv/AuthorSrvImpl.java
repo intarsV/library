@@ -20,8 +20,9 @@ public class AuthorSrvImpl implements AuthorSrv {
 
 
     @Override
-    public Long saveAuthor(String author) {
-        return repository.save(new Author(author)).getId();
+    public Long saveAuthor(String name) {
+        System.out.println("rest: "+ name);
+        return repository.save(new Author(name)).getId();
     }
 
     @Override
@@ -30,8 +31,8 @@ public class AuthorSrvImpl implements AuthorSrv {
     }
 
     @Override
-    public Author findByName(String authorName) {
-        Optional<Author> foundAuthor = repository.findByAuthorName(authorName);
+    public Author findByName(String name) {
+        Optional<Author> foundAuthor = repository.findByName(name);
         return foundAuthor.get();
     }
 }
