@@ -3,6 +3,7 @@ package com.accenture.library.service.authorSrv;
 import com.accenture.library.domain.Author;
 import com.accenture.library.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,6 @@ public class AuthorSrvImpl implements AuthorSrv {
 
     @Override
     public Long saveAuthor(String name) {
-        System.out.println("rest: "+ name);
         return repository.save(new Author(name)).getId();
     }
 
@@ -31,8 +31,11 @@ public class AuthorSrvImpl implements AuthorSrv {
     }
 
     @Override
-    public Author findByName(String name) {
+    public Author findByName(String name) throws DataRetrievalFailureException {
         Optional<Author> foundAuthor = repository.findByName(name);
+        if (!foundAuthor.isPresent()) {
+            throw new DataRetrievalFailureException("No such author found!");
+        }
         return foundAuthor.get();
     }
 }

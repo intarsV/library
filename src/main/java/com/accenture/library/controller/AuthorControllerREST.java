@@ -34,10 +34,8 @@ public class AuthorControllerREST {
 
     @PostMapping
     public ResponseEntity<AuthorDto> saveAuthor(@RequestBody AuthorDto authorDto) {
-        System.out.println(" bdbkjkjh: "+authorDto.getName());
         Long id = authorSrv.saveAuthor(authorDto.getName());
         authorDto.setId(id);
-
         return new ResponseEntity<>(authorDto, HttpStatus.CREATED);
     }
 }

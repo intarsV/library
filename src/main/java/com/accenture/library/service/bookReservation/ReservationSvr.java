@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ReservationSvr {
     Long save(Long bookId, Long userId, Date date);
+    Long update(Long reservationId);
     List<Reservation> getAllReservations();
     List<Reservation> getAllByBook(Long bookId);
     List<Reservation> getAllByUser(Long userId);
