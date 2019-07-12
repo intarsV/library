@@ -29,16 +29,20 @@ public class Book {
     @Column(name = "copies")
     private int copies;
 
+    @Column(name="available")
+    private int available;
+
     public Book() {
     }
 
-    public Book(@NotNull(message = "Should add some title!") String title
-            , @NotNull(message = "Should add some author!") Author author
-            , @NotNull(message = "Select genre!") EnumGenre genre, int copies) {
+    public Book(@NotNull(message = "Should add some title!") String title,
+                @NotNull(message = "Should add some author!") Author author,
+                @NotNull(message = "Select genre!") EnumGenre genre, int copies, int available) {
         this.title = title;
         this.author = author;
         this.genre = genre;
         this.copies = copies;
+        this.available = available;
     }
 
     public Long getId() {
@@ -71,6 +75,22 @@ public class Book {
 
     public void setGenre(EnumGenre genre) {
         this.genre = genre;
+    }
+
+    public int getCopies() {
+        return copies;
+    }
+
+    public void setCopies(int copies) {
+        this.copies = copies;
+    }
+
+    public int getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(int available) {
+        this.available = available;
     }
 
     @Override

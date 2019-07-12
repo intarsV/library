@@ -26,6 +26,10 @@ public class Reservation {
     public Reservation() {
     }
 
+    public Reservation(Long id) {
+        this.id = id;
+    }
+
     public Reservation(Book book, User user, Date reservationDate) {
         this.book = book;
         this.user = user;

@@ -40,9 +40,9 @@ public class BookControllerREST {
     }
 
     @PostMapping
-    public ResponseEntity saveBook(@RequestBody BookDto bookDto) {
+    public ResponseEntity<BookDto> saveBook(@RequestBody BookDto bookDto) {
         Long id = bookSrv.save(bookDto.getTitle(), bookDto.getAuthorName(), bookDto.getGenre(), bookDto.getCopies());
         bookDto.setId(id);
-        return new ResponseEntity(bookDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(bookDto, HttpStatus.CREATED);
     }
 }

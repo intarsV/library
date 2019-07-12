@@ -8,6 +8,7 @@ import com.accenture.library.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -26,12 +27,14 @@ public class ReservationSvrImpl implements ReservationSvr {
     }
 
     @Override
+    @Transactional
     public Long save(Long bookId, Long userId, Date reservationDate) {
-        Optional<Book> foundBook=bookRepository.findById(bookId);
-        if(!foundBook.isPresent()){
-            throw new DataRetrievalFailureException("No such book found!");
+        Optional<Book> foundBook = bookRepository.findById(bookId);
+        if (!foundBook.isPresent() || foundBook.get().getAvailable() == 0) {
+            throw new DataRetrievalFailureException("No such available book found!");
         }
         Book book = foundBook.get();
+        book.setAvailable(book.getAvailable() - 1);
         User user = new User();
         user.setId(userId);
         Reservation reservation = new Reservation(book, user, reservationDate);
@@ -39,13 +42,16 @@ public class ReservationSvrImpl implements ReservationSvr {
     }
 
     @Override
+    @Transactional
     public Long update(Long reservationId) {
-        Optional<Reservation> foundReservation=reservationRepository.findById(reservationId);
-        if(!foundReservation.isPresent()){
+        Optional<Reservation> foundReservation = reservationRepository.findById(reservationId);
+        if (!foundReservation.isPresent()) {
             throw new DataRetrievalFailureException("No such reservation found!");
         }
-        Reservation reservation=foundReservation.get();
+        Reservation reservation = foundReservation.get();
         reservation.setReturned(true);
+        Book book = reservation.getBook();
+        book.setAvailable(book.getAvailable() + 1);
         return reservationRepository.save(reservation).getId();
     }
 
@@ -57,8 +63,8 @@ public class ReservationSvrImpl implements ReservationSvr {
 
     @Override
     public List<Reservation> getAllByBook(Long bookId) {
-        Optional<Book> foundBook=bookRepository.findById(bookId);
-        if(!foundBook.isPresent()){
+        Optional<Book> foundBook = bookRepository.findById(bookId);
+        if (!foundBook.isPresent()) {
             throw new DataRetrievalFailureException("No such book found!");
         }
         Book book = foundBook.get();
@@ -67,7 +73,7 @@ public class ReservationSvrImpl implements ReservationSvr {
 
     @Override//Need check user
     public List<Reservation> getAllByUser(Long userId) {
-        User user=new User();
+        User user = new User();
         user.setId(userId);
         return reservationRepository.findByUser(user);
     }

@@ -16,34 +16,40 @@ import java.util.List;
 @RequestMapping("/api/v1/reservation")
 public class ReservationControllerREST {
 
-    private ReservationSvr reservationSvr;
+    private ReservationSvr reservationService;
 
     @Autowired
     public ReservationControllerREST(ReservationSvrImpl bookReservationSvr) {
-        this.reservationSvr = bookReservationSvr;
+        this.reservationService = bookReservationSvr;
     }
 
     @GetMapping
     public List<Reservation> getReservations() {
-        return reservationSvr.getAllReservations();
+        return reservationService.getAllReservations();
     }
 
     @GetMapping(value = "/search/users")
     public List<Reservation> getReservationsByUser(@RequestBody ReservationDto reservationDto) {
-        return reservationSvr.getAllByUser(reservationDto.getUserId());
+        return reservationService.getAllByUser(reservationDto.getUserId());
     }
 
     @GetMapping(value = "/search/books")
     public List<Reservation> getReservationsByBook(@RequestBody ReservationDto reservationDto) {
-        return reservationSvr.getAllByBook(reservationDto.getBookId());
+        return reservationService.getAllByBook(reservationDto.getBookId());
     }
 
     @PostMapping
     public ResponseEntity save(@RequestBody ReservationDto reservationDto) {
         Date reservationDate = new Date();
-        Long id = reservationSvr.save(reservationDto.getBookId(), reservationDto.getUserId(), reservationDate);
+        Long id = reservationService.save(reservationDto.getBookId(), reservationDto.getUserId(), reservationDate);
         reservationDto.setBookId(id);
         reservationDto.setReservationDate(reservationDate);
-        return new ResponseEntity(reservationDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(reservationDto, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/update")
+    public ResponseEntity update(@RequestBody Reservation reservationDto) {
+        reservationService.update(reservationDto.getId());
+        return new ResponseEntity<>(reservationDto, HttpStatus.OK);
     }
 }
