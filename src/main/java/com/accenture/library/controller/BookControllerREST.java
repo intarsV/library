@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
 @RestController
 @RequestMapping("/api/v1/books")
 public class BookControllerREST {
@@ -30,7 +31,7 @@ public class BookControllerREST {
     }
 
     @GetMapping(value = "/search/authors")
-    public List<Book> getByAuthor(@RequestBody AuthorDto author) {
+    public List<Book> getByAuthor(@RequestBody AuthorDto author) throws Exception {
         return bookSrv.getByAuthor(author.getName());
     }
 
@@ -40,7 +41,7 @@ public class BookControllerREST {
     }
 
     @PostMapping
-    public ResponseEntity<BookDto> saveBook(@RequestBody BookDto bookDto) {
+    public ResponseEntity<BookDto> saveBook(@RequestBody BookDto bookDto) throws Exception {
         Long id = bookSrv.save(bookDto.getTitle(), bookDto.getAuthorName(), bookDto.getGenre(), bookDto.getCopies());
         bookDto.setId(id);
         return new ResponseEntity<>(bookDto, HttpStatus.CREATED);

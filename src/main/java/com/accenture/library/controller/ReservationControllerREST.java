@@ -2,8 +2,8 @@ package com.accenture.library.controller;
 
 import com.accenture.library.domain.Reservation;
 import com.accenture.library.dto.ReservationDto;
-import com.accenture.library.service.bookReservation.ReservationSvr;
-import com.accenture.library.service.bookReservation.ReservationSvrImpl;
+import com.accenture.library.service.bookReservation.ReservationSrv;
+import com.accenture.library.service.bookReservation.ReservationSrvImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +16,10 @@ import java.util.List;
 @RequestMapping("/api/v1/reservation")
 public class ReservationControllerREST {
 
-    private ReservationSvr reservationService;
+    private ReservationSrv reservationService;
 
     @Autowired
-    public ReservationControllerREST(ReservationSvrImpl bookReservationSvr) {
+    public ReservationControllerREST(ReservationSrvImpl bookReservationSvr) {
         this.reservationService = bookReservationSvr;
     }
 
@@ -47,7 +47,7 @@ public class ReservationControllerREST {
         return new ResponseEntity<>(reservationDto, HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/update")
+    @PutMapping(value = "/update")
     public ResponseEntity update(@RequestBody Reservation reservationDto) {
         reservationService.update(reservationDto.getId());
         return new ResponseEntity<>(reservationDto, HttpStatus.OK);

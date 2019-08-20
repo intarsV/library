@@ -7,8 +7,8 @@ insert into AUTHOR values
 
 insert into BOOK values(1,7 ,7,1 , 'Zelta zirgs', 1),
 (2, 5 ,5, 2, 'Super book' ,1),
-(3, 9,9, 2, 'Naves ena', 2),
-(4,3 ,3,0 , 'Le miserables', 3);
+(3, 9,9, 2, 'Nāves enā', 2),
+(4,3 ,3,0 , 'Le Miserables', 3);
 
 insert into user values(1, 'intars','xxx' ),
 (2, 'ritvars', 'yyy');

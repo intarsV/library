@@ -5,7 +5,7 @@ import com.accenture.library.domain.Reservation;
 import java.util.Date;
 import java.util.List;
 
-public interface ReservationSvr {
+public interface ReservationSrv {
     Long save(Long bookId, Long userId, Date date);
     Long update(Long reservationId);
     List<Reservation> getAllReservations();

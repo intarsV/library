@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ReservationSvrImpl implements ReservationSvr {
+public class ReservationSrvImpl implements ReservationSrv {
 
     private ReservationRepository reservationRepository;
     private BookRepository bookRepository;
 
     @Autowired
-    public ReservationSvrImpl(ReservationRepository reservationRepository, BookRepository bookRepository) {
+    public ReservationSrvImpl(ReservationRepository reservationRepository, BookRepository bookRepository) {
         this.reservationRepository = reservationRepository;
         this.bookRepository = bookRepository;
     }

@@ -7,9 +7,9 @@ import java.util.List;
 public interface BookSrv {
     List<Book> getAllBooks();
 
-    Long save(String title, String author, String genre, Integer copies);
+    Long save(String title, String author, String genre, Integer copies) throws Exception;
 
-    List<Book> getByAuthor(String author);
+    List<Book> getByAuthor(String author) throws Exception;
 
     List<Book> getByGenre(String genre);
 }
