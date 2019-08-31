@@ -2,30 +2,41 @@ package com.accenture.library.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Table(name="USER")
+@Table(name = "users")
 public class User {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
+    @SequenceGenerator(name = "seqUserName", initialValue = 3, allocationSize = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqUserName")
     private Long id;
 
-    @Column(name = "name")
-    @NotNull(message = "Should provide username!")
-    private String name;
+    @Column(name = "USERNAME")
+    @NotNull(message = "Should enter some name!")
+    private String userName;
 
     @Column(name = "password")
-    @NotNull(message = "Should provide password!")
     private String password;
+
+    @Column(name = "enabled")
+    private int enabled;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
+    private Set<Authority> authorities;
 
     public User() {
     }
 
-    public User(@NotNull(message = "Should provide username!") String name, @NotNull(message = "Should provide password!") String password) {
-        this.name = name;
+    public User(@NotNull(message = "Should enter some name!") String userName, String password, int enabled, Set<Authority> authorities) {
+        this.userName = userName;
         this.password = password;
+        this.enabled = enabled;
+        this.authorities = authorities;
     }
 
     public Long getId() {
@@ -36,12 +47,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -52,23 +63,43 @@ public class User {
         this.password = password;
     }
 
+    public int getActive() {
+        return enabled;
+    }
+
+    public void setActive(int active) {
+        this.enabled = active;
+    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user1 = (User) o;
+        User user = (User) o;
 
-        if (id != null ? !id.equals(user1.id) : user1.id != null) return false;
-        if (!name.equals(user1.name)) return false;
-        return password.equals(user1.password);
+        if (enabled != user.enabled) return false;
+        if (!Objects.equals(id, user.id)) return false;
+        if (!Objects.equals(userName, user.userName)) return false;
+        if (!Objects.equals(password, user.password)) return false;
+        return Objects.equals(authorities, user.authorities);
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + password.hashCode();
+        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + enabled;
+        result = 31 * result + (authorities != null ? authorities.hashCode() : 0);
         return result;
     }
 }

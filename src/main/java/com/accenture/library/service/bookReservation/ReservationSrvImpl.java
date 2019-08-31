@@ -77,6 +77,4 @@ public class ReservationSrvImpl implements ReservationSrv {
         user.setId(userId);
         return reservationRepository.findByUser(user);
     }
-
-
 }

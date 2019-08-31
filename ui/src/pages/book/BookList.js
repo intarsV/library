@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import BookService from '../../common/BookService'
+import BookService from '../../common/services/BookService'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
