@@ -12,8 +12,8 @@ public class BasicAuthenticationController {
     @GetMapping(path = "/basicauth")
     public AuthenticationBean helloWorldBean() {
 
-//        System.out.println("BEeeee");
-//        String encoded=new BCryptPasswordEncoder().encode("initex000");
+//
+//        String encoded=new BCryptPasswordEncoder().encode("ivars000");
 //        System.out.println("XIX "+encoded+" XIX");
 //        String encoded1=new BCryptPasswordEncoder().encode("ritvars000");
 //        System.out.println(encoded1);

@@ -4,25 +4,25 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="book")
+@Table(name="books")
 public class Book {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "book_id")
     @SequenceGenerator(name = "seqBook", initialValue = 5, allocationSize = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqBook")
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "book_title")
     @NotNull(message = "Should add some title!")
     private String title;
 
     @ManyToOne
-    @JoinColumn(name = "author")
+    @JoinColumn(name = "book_author")
     @NotNull(message = "Should add some author!")
     private Author author;
 
-    @JoinColumn(name = "genre")
+    @Column(name = "book_genre")
     @NotNull(message = "Select genre!")
     private EnumGenre genre;
 

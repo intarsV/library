@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "authority")
+@Table(name = "authorities")
 public class Authority {
 
     @Id
@@ -13,7 +13,7 @@ public class Authority {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqAuthority ")
     private Long id;
 
-    @Column(name = "authority")
+    @Column(name = "authority_name")
     private String authority;
 
     public Authority() {

@@ -4,16 +4,16 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="AUTHOR")
+@Table(name="authors")
 public class Author {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "author_id")
     @SequenceGenerator(name = "seqAuthor", initialValue = 4, allocationSize = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqAuthor")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "author_name")
     @NotNull(message = "Should enter some name!")
     private String name;
 
