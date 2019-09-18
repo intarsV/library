@@ -1,12 +1,12 @@
-package com.accenture.library.service.bookReservation;
+package com.accenture.library.service.reservationSrv;
 
 import com.accenture.library.domain.Book;
 import com.accenture.library.domain.Reservation;
 import com.accenture.library.domain.User;
+import com.accenture.library.exceptions.LibraryException;
 import com.accenture.library.repository.BookRepository;
 import com.accenture.library.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +31,7 @@ public class ReservationSrvImpl implements ReservationSrv {
     public Long save(Long bookId, Long userId, Date reservationDate) {
         Optional<Book> foundBook = bookRepository.findById(bookId);
         if (!foundBook.isPresent() || foundBook.get().getAvailable() == 0) {
-            throw new DataRetrievalFailureException("No such available book found!");
+            throw new LibraryException("No such available book found!");
         }
         Book book = foundBook.get();
         book.setAvailable(book.getAvailable() - 1);
@@ -46,7 +46,7 @@ public class ReservationSrvImpl implements ReservationSrv {
     public Long update(Long reservationId) {
         Optional<Reservation> foundReservation = reservationRepository.findById(reservationId);
         if (!foundReservation.isPresent()) {
-            throw new DataRetrievalFailureException("No such reservation found!");
+            throw new LibraryException("No such reservation found!");
         }
         Reservation reservation = foundReservation.get();
         reservation.setReturned(true);
@@ -65,7 +65,7 @@ public class ReservationSrvImpl implements ReservationSrv {
     public List<Reservation> getAllByBook(Long bookId) {
         Optional<Book> foundBook = bookRepository.findById(bookId);
         if (!foundBook.isPresent()) {
-            throw new DataRetrievalFailureException("No such book found!");
+            throw new LibraryException("No such book found!");
         }
         Book book = foundBook.get();
         return reservationRepository.findByBook(book);

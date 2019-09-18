@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="books")
+@Table(name = "books")
 public class Book {
 
     @Id
@@ -24,20 +24,18 @@ public class Book {
 
     @Column(name = "book_genre")
     @NotNull(message = "Select genre!")
-    private EnumGenre genre;
+    private String genre;
 
     @Column(name = "copies")
     private int copies;
 
-    @Column(name="available")
+    @Column(name = "available")
     private int available;
 
     public Book() {
     }
 
-    public Book(@NotNull(message = "Should add some title!") String title,
-                @NotNull(message = "Should add some author!") Author author,
-                @NotNull(message = "Select genre!") EnumGenre genre, int copies, int available) {
+    public Book(@NotNull(message = "Should add some title!") String title, @NotNull(message = "Should add some author!") Author author, @NotNull(message = "Select genre!") String genre, int copies, int available) {
         this.title = title;
         this.author = author;
         this.genre = genre;
@@ -69,11 +67,11 @@ public class Book {
         this.author = author;
     }
 
-    public EnumGenre getGenre() {
+    public String getGenre() {
         return genre;
     }
 
-    public void setGenre(EnumGenre genre) {
+    public void setGenre(String genre) {
         this.genre = genre;
     }
 
@@ -103,7 +101,7 @@ public class Book {
         if (!id.equals(book.id)) return false;
         if (!title.equals(book.title)) return false;
         if (!author.equals(book.author)) return false;
-        return genre == book.genre;
+        return genre.equals(book.genre);
     }
 
     @Override

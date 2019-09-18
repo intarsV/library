@@ -2,8 +2,8 @@ package com.accenture.library.controller;
 
 import com.accenture.library.domain.Reservation;
 import com.accenture.library.dto.ReservationDto;
-import com.accenture.library.service.bookReservation.ReservationSrv;
-import com.accenture.library.service.bookReservation.ReservationSrvImpl;
+import com.accenture.library.service.reservationSrv.ReservationSrv;
+import com.accenture.library.service.reservationSrv.ReservationSrvImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

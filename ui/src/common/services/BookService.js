@@ -8,6 +8,11 @@ class BookService {
         return axios.get(API_URL+'/api/v1/books');
     }
 
+    searchBook(searchData) {
+        console.log(API_URL + '/api/v1/books/search');
+        return axios.post(API_URL + '/api/v1/books/search', searchData);
+    }
+
 }
 
 export default new BookService();

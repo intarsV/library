@@ -4,13 +4,16 @@ import com.accenture.library.domain.Book;
 import com.accenture.library.dto.AuthorDto;
 import com.accenture.library.dto.BookDto;
 import com.accenture.library.dto.GenreDto;
+import com.accenture.library.dto.SearchRequestDTO;
 import com.accenture.library.service.bookSrv.BookSrv;
 import com.accenture.library.service.bookSrv.BookSrvImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,19 +34,17 @@ public class BookControllerREST {
         return bookSrv.getAllBooks();
     }
 
-    @GetMapping(value = "/search/authors")
-    public List<Book> getByAuthor(@RequestBody AuthorDto author) throws Exception {
-        return bookSrv.getByAuthor(author.getName());
-    }
-
-    @GetMapping("/search/genres")
-    public List<Book> getByGenre(@RequestBody GenreDto genre) {
-        return bookSrv.getByGenre(genre.getGenre());
+    @PostMapping(value = "/search")
+    public List<Book> getByParameters(@RequestBody @Validated SearchRequestDTO searchRequestDTO) {
+        final String title = searchRequestDTO.getTitle();
+        final String author = searchRequestDTO.getAuthor();
+        final String genre = searchRequestDTO.getGenre();
+        return bookSrv.getByParameters(title, author, genre);
     }
 
     @PostMapping
     public ResponseEntity<BookDto> saveBook(@RequestBody BookDto bookDto) throws Exception {
-        Long id = bookSrv.save(bookDto.getTitle(), bookDto.getAuthorName(), bookDto.getGenre(), bookDto.getCopies());
+        Long id = bookSrv.addBook(bookDto.getTitle(), bookDto.getAuthorName(), bookDto.getGenre(), bookDto.getCopies());
         bookDto.setId(id);
         return new ResponseEntity<>(bookDto, HttpStatus.CREATED);
     }

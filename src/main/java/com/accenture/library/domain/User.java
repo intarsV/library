@@ -22,8 +22,8 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "enabled")
-    private int enabled;
+    @Column(name = "enabled", columnDefinition = "TINYINT", length = 1)
+    private boolean enabled;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
@@ -32,7 +32,7 @@ public class User {
     public User() {
     }
 
-    public User(@NotNull(message = "Should enter some name!") String userName, String password, int enabled, Set<Authority> authorities) {
+    public User(@NotNull(message = "Should enter some name!") String userName, String password, boolean enabled, Set<Authority> authorities) {
         this.userName = userName;
         this.password = password;
         this.enabled = enabled;
@@ -63,12 +63,12 @@ public class User {
         this.password = password;
     }
 
-    public int getActive() {
+    public boolean isEnabled() {
         return enabled;
     }
 
-    public void setActive(int active) {
-        this.enabled = active;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Set<Authority> getAuthorities() {
@@ -98,7 +98,7 @@ public class User {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (userName != null ? userName.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + enabled;
+        result = 31 * result + (enabled ? 1 : 0);
         result = 31 * result + (authorities != null ? authorities.hashCode() : 0);
         return result;
     }

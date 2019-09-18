@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import AuthenticationService from '../../common/services/AuthentificationService'
+import AuthenticationService from '../../common/services/AuthenticationService'
 
 class LoginPage extends Component{
 
@@ -28,7 +28,7 @@ class LoginPage extends Component{
             .executeBasicAuthenticationService(this.state.username, this.state.password)
             .then(() => {
                 AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password);
-                this.props.history.push('/books')
+                this.props.history.push('/books/search')
             }).catch(() => {
             this.setState({showSuccessMessage: false});
             this.setState({hasLoginFailed: true});
@@ -43,7 +43,9 @@ class LoginPage extends Component{
                     {this.state.hasLoginFailed && <div className='alert alert-warning'>Invalid Credentials</div>}
                     {this.state.showSuccessMessage && <div>login Successful</div>}
                     User Name: <input type='text' name='username' value={this.state.username}
-                                      onChange={this.handleChange}/>
+                                      onChange={(evn, value)=>{
+                                          console.log(value);
+                                      }}/>
                     Password: <input type='password' name='password' value={this.state.password}
                                      onChange={this.handleChange}/>
                     <button className='btn btn-success' onClick={this.loginClicked}> Login</button>
@@ -53,3 +55,22 @@ class LoginPage extends Component{
     }
 }
 export default LoginPage
+
+
+
+// render() {
+//     return (
+//         <div>
+//             <h1>Login</h1>
+//             <div className='container'>
+//                 {this.state.hasLoginFailed && <div className='alert alert-warning'>Invalid Credentials</div>}
+//                 {this.state.showSuccessMessage && <div>login Successful</div>}
+//                 User Name: <input type='text' name='username' value={this.state.username}
+//                                   onChange={this.handleChange}/>
+//                 Password: <input type='password' name='password' value={this.state.password}
+//                                  onChange={this.handleChange}/>
+//                 <button className='btn btn-success' onClick={this.loginClicked}> Login</button>
+//             </div>
+//         </div>
+//     )
+// }

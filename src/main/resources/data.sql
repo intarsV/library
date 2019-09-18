@@ -15,7 +15,7 @@ create table books(
 book_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 book_title VARCHAR(100) NOT NULL,
 book_author BIGINT, foreign key (book_author) references authors(author_id),
-book_genre INTEGER ,
+book_genre VARCHAR(30),
 copies INTEGER,
 available INTEGER
 );
@@ -24,7 +24,7 @@ create table users(
 user_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 user_name VARCHAR(100) NOT NULL,
 password VARCHAR(100) NOT NULL,
-enabled INTEGER
+enabled TINYINT
 );
 
 create table reservations (
@@ -42,7 +42,7 @@ insert into authors (author_id, author_name) values
 
 insert into authorities (authority_id, authority_name) values
 (1, 'ADMIN'),
-(2,'USER');
+(2, 'USER');
 
 insert into users ( user_name, password, enabled) values
 ( 'initex', '$2a$10$b5Ehdr5IysRZvOsUbHN2GuaPsN5zPKTr95FOli8gzWEo91YCCcX3K', 1),
@@ -51,10 +51,10 @@ insert into users ( user_name, password, enabled) values
 
 insert into user_authorities values (1, 1), (2, 2), (3, 2);
 
-insert into books ( book_title, book_author, book_genre, copies, available) values ( 'Zelta zirgs', 2, 0, 7, 6);
-insert into books ( book_title, book_author, book_genre, copies, available) values ( 'Super book', 1, 1, 5, 4);
-insert into books ( book_title, book_author, book_genre, copies, available) values ( 'Nāves enā', 2, 2, 9, 9);
-insert into books ( book_title, book_author, book_genre, copies, available) values ( 'Le Miserables', 3, 2, 3, 2);
+insert into books ( book_title, book_author, book_genre, copies, available) values ( 'Zelta zirgs', 2, 'POETRY', 7, 6);
+insert into books ( book_title, book_author, book_genre, copies, available) values ( 'Super book', 1, 'NOVEL', 5, 4);
+insert into books ( book_title, book_author, book_genre, copies, available) values ( 'Nāves enā', 2, 'PROSE', 9, 9);
+insert into books ( book_title, book_author, book_genre, copies, available) values ( 'Le Miserables', 3, 'PROSE', 3, 2);
 
 insert into reservations (reservation_date, book, user, returned)values ( NOW(), 1, 3, true);
 insert into reservations (reservation_date, book, user, returned)values ( NOW(), 4, 2, true);

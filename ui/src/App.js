@@ -1,35 +1,38 @@
-import React,{Component}  from 'react';
-import {BrowserRouter as Router, Route,Switch} from 'react-router-dom'
+import React, {Component} from 'react';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import './App.css';
 import LoginPage from './pages/login/LoginPage';
 import LogoutPage from './pages/login/LoginPage';
-import BookPage from './pages/book/BookPage';
 import AuthenticatedRoute from './common/AuthenticatedRoute';
+import BookSearch from "./pages/book/BookSearch";
+import {pageRoutes} from "./common/Constants";
 
 class App extends Component {
 
+
     render() {
         return (
-            <>
-                <Router>
-                    <>
+            <Router>
+                    <div id='logo-menu'>
+                        <h4>Super Library </h4>
+                        <h6>by Initex</h6>
+                    </div>
+                    <div id='library-content'>
                         <Switch>
-                            <Route path='/' exact component={LoginPage}/>
-                            <Route path='/login' exact component={LoginPage}/>
-                            <AuthenticatedRoute path='/logout' exact component={LogoutPage}/>
-                            <AuthenticatedRoute path='/books' exact component={BookPage}/>
-                        </Switch>
-                    </>
-                </Router>
+                        <Route path="/" exact component={LoginPage}/>
+                        <Route  path='/login' exact component={LoginPage}/>
+                        <AuthenticatedRoute path='pageRoutes.logoutPage'  exact component={LogoutPage}/>
+                        <AuthenticatedRoute path="/books/search" exact component={BookSearch}/>
 
-            </>
+                        {/*<Route exact path={pageRoutes.loginPage} component={LoginPage}/>*/}
+                        {/*<AuthenticatedRoute exact path={pageRoutes.logoutPage} component={LogoutPage}/>*/}
+                        {/*<AuthenticatedRoute exact path={pageRoutes.bookSearch} component={BookSearch}/>*/}
+                        </Switch>
+                    </div>
+            </Router>
+
         )
     }
 }
 
 export default App;
-
-
-{/*<div className="container">*/}
-{/*  <BookPage />*/}
-{/*</div>*/}

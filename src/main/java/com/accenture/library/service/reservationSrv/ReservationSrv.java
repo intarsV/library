@@ -1,4 +1,4 @@
-package com.accenture.library.service.bookReservation;
+package com.accenture.library.service.reservationSrv;
 
 import com.accenture.library.domain.Reservation;
 
