@@ -120,7 +120,7 @@ class BookSearch extends Component{
                         {
                             minWidth: 200,
                             Header: "Author",
-                            accessor: "author.name"
+                            accessor: "authorName"
                         },
                         {
                             minWidth: 40,

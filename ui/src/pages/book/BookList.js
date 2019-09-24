@@ -40,11 +40,11 @@ class BookList extends Component {
                         },
                         {
                             Header: "Title",
-                            accessor: "title"
+                            accessor: "bookTitle"
                         },
                         {
                             Header: "Author",
-                            accessor: "author.name"
+                            accessor: "authorName"
                         },
                         {
                             Header: "Genre",

@@ -1,7 +1,5 @@
 package com.accenture.library.dto;
 
-import com.accenture.library.domain.EnumGenre;
-
 public class BookDTO {
 
     private Long id;

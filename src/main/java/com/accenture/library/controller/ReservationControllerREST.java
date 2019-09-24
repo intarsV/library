@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,7 +55,7 @@ public class ReservationControllerREST {
 
     //Library ADMIN search by parameters
     @GetMapping(value = "/admin/search")
-    public List<ReservationDTO> searchByParameters(@RequestBody @Validated ReservationDTO reservationDTO) {
+    public List<ReservationDTO> searchByParameters(@RequestBody ReservationDTO reservationDTO) {
         final String bookTitle = reservationDTO.getBookTitle();
         final String userName = reservationDTO.getUserName();
         final Boolean returned = reservationDTO.isReturned();

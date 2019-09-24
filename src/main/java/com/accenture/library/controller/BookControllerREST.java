@@ -32,7 +32,7 @@ public class BookControllerREST {
     public List<BookDTO> getByParameters(@RequestBody BookDTO bookDTO) {
         final String title = bookDTO.getTitle();
         final String author = bookDTO.getAuthorName();
-        final String genre = bookDTO.getGenre().toString();
+        final String genre = bookDTO.getGenre();
         return bookSrv.getByParameters(title, author, genre);
     }
 
