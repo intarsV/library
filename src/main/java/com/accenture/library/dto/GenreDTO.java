@@ -1,13 +1,13 @@
 package com.accenture.library.dto;
 
-public class GenreDto {
+public class GenreDTO {
 
     private String genre;
 
-    public GenreDto() {
+    public GenreDTO() {
     }
 
-    public GenreDto(String genre) {
+    public GenreDTO(String genre) {
         this.genre = genre;
     }
 

@@ -116,11 +116,18 @@ body {
   font-size: 12px;
 }
 
+.height{
+  height: 23px;
+}
+
 .button{
-  padding-top: 3px;
-  padding-bottom: 3px;
-  background: #1c7430;
+  background:ghostwhite;
   border-radius: 20%;
+}
+
+.col-width-height{
+  width: inherit;
+  height: 23px;
 }
 
 

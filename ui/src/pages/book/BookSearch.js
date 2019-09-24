@@ -76,7 +76,7 @@ class BookSearch extends Component{
                         Book title:
                     </Col>
                     <Col xl={3}>
-                        <input type='text' name='title' value={this.state.title} onChange={this.handleChange}/>
+                        <input className='col-width-height ' type='text' name='title' value={this.state.title} onChange={this.handleChange}/>
                     </Col>
                 </Row>
                 <Row className='space-top'>
@@ -84,7 +84,7 @@ class BookSearch extends Component{
                         Book author:
                     </Col>
                     <Col xl={3}>
-                        <input type='text' name='author' value={this.state.author} onChange={this.handleChange}/>
+                        <input className='col-width-height ' type='text' name='author' value={this.state.author} onChange={this.handleChange}/>
                     </Col>
                     <Col>
                         <button className=' button ' onClick={this.searchBooks}> Search</button>
@@ -95,7 +95,7 @@ class BookSearch extends Component{
                         Book genre:
                     </Col>
                     <Col xl={3}>
-                        <select name='genre' value={this.state.genre} onChange={this.handleChange}>
+                        <select className='col-width-height ' name='genre' value={this.state.genre} onChange={this.handleChange}>
                             <option value={''}/>
                             {genres.map(genre =>
                                 <option value={genre}>{genre}</option>)
@@ -104,32 +104,36 @@ class BookSearch extends Component{
                     </Col>
                 </Row >
                 <ReactTable
-                    defaultPageSize= {10}
-                    minRows={1}
-                    noDataText={ 'No data found'}
+                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
                     data={this.state.books}
                     columns={[
                         {
+                            show: false,
                             Header: "Id",
                             accessor: "id"
                         },
                         {
+                            minWidth: 200,
                             Header: "Title",
                             accessor: "title"
                         },
                         {
+                            minWidth: 200,
                             Header: "Author",
                             accessor: "author.name"
                         },
                         {
+                            minWidth: 40,
                             Header: "Genre",
                             accessor: "genre"
                         },
                         {
+                            show: false,
                             Header: "Copies",
                             accessor: "copies"
                         },
                         {
+                            minWidth: 40,
                             Header: "Available",
                             accessor: "available"
                         }

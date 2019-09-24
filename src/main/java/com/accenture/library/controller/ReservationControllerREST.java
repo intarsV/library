@@ -1,15 +1,16 @@
 package com.accenture.library.controller;
 
 import com.accenture.library.domain.Reservation;
-import com.accenture.library.dto.ReservationDto;
+import com.accenture.library.dto.ReservationDTO;
 import com.accenture.library.service.reservationSrv.ReservationSrv;
 import com.accenture.library.service.reservationSrv.ReservationSrvImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -24,33 +25,41 @@ public class ReservationControllerREST {
         this.reservationService = bookReservationSvr;
     }
 
-    @GetMapping
-    public List<Reservation> getReservations() {
-        return reservationService.getAllReservations();
-    }
-
-    @GetMapping(value = "/search/users")
-    public List<Reservation> getReservationsByUser(@RequestBody ReservationDto reservationDto) {
-        return reservationService.getAllByUser(reservationDto.getUserId());
-    }
-
-    @GetMapping(value = "/search/books")
-    public List<Reservation> getReservationsByBook(@RequestBody ReservationDto reservationDto) {
-        return reservationService.getAllByBook(reservationDto.getBookId());
-    }
-
+    //User make book reservation
     @PostMapping
-    public ResponseEntity save(@RequestBody ReservationDto reservationDto) {
-        Date reservationDate = new Date();
-        Long id = reservationService.save(reservationDto.getBookId(), reservationDto.getUserId(), reservationDate);
-        reservationDto.setBookId(id);
-        reservationDto.setReservationDate(reservationDate);
+    public ResponseEntity makeReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {
+        final String userName = authentication.getName();
+        Long id = reservationService.makeReservation(reservationDto.getBookId(), userName);
+        reservationDto.setId(id);
         return new ResponseEntity<>(reservationDto, HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/update")
-    public ResponseEntity update(@RequestBody Reservation reservationDto) {
-        reservationService.update(reservationDto.getId());
+    //Library ADMIN reservation queue
+    @GetMapping(value = "/admin/queue")
+    public List<ReservationDTO> getQueue() {
+        return reservationService.getReservationQueue();
+    }
+
+    //Library ADMIN hands out the book
+    @PutMapping(value = "/admin/hand-out")
+    public ResponseEntity handOut(@RequestBody ReservationDTO reservationDto) {
+        reservationService.handOut(reservationDto.getId());
+        return new ResponseEntity<>(reservationDto, HttpStatus.CREATED);
+    }
+
+    //Library ADMIN take in the book
+    @PutMapping(value = "/admin/take-in")
+    public ResponseEntity takeIn(@RequestBody Reservation reservationDto) {
+        reservationService.takeIn(reservationDto.getId());
         return new ResponseEntity<>(reservationDto, HttpStatus.OK);
+    }
+
+    //Library ADMIN search by parameters
+    @GetMapping(value = "/admin/search")
+    public List<ReservationDTO> searchByParameters(@RequestBody @Validated ReservationDTO reservationDTO) {
+        final String bookTitle = reservationDTO.getBookTitle();
+        final String userName = reservationDTO.getUserName();
+        final Boolean returned = reservationDTO.isReturned();
+        return reservationService.getByParameters(bookTitle, userName, returned);
     }
 }

@@ -1,7 +1,7 @@
 package com.accenture.library.controller;
 
 import com.accenture.library.domain.Author;
-import com.accenture.library.dto.AuthorDto;
+import com.accenture.library.dto.AuthorDTO;
 import com.accenture.library.service.authorSrv.AuthorSrv;
 import com.accenture.library.service.authorSrv.AuthorSrvImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +28,22 @@ public class AuthorControllerREST {
         return authorSrv.authorList();
     }
 
-    @GetMapping("/search/name")
-    public Author getByFullName(@RequestBody AuthorDto name) throws Exception {
+    @GetMapping("/search")
+    public Author getByName(@RequestBody AuthorDTO name) throws Exception {
         return authorSrv.findByName(name.getName());
     }
 
     @PostMapping
-    public ResponseEntity<AuthorDto> saveAuthor(@RequestBody AuthorDto authorDto) {
-        Long id = authorSrv.saveAuthor(authorDto.getName());
+    public ResponseEntity<AuthorDTO> saveAuthor(@RequestBody AuthorDTO authorDto) {
+        final Long id = authorSrv.saveAuthor(authorDto.getName());
         authorDto.setId(id);
         return new ResponseEntity<>(authorDto, HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity<AuthorDTO> deleteAuthor(@RequestBody AuthorDTO authorDto) {
+        final boolean isDeleted = authorSrv.deleteAuthor(authorDto.getId());
+        authorDto.setDeleted(isDeleted);
+        return new ResponseEntity<>(authorDto, HttpStatus.ACCEPTED);
     }
 }

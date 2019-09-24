@@ -2,6 +2,7 @@ package com.accenture.library.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 @Table(name = "books")
@@ -32,15 +33,24 @@ public class Book {
     @Column(name = "available")
     private int available;
 
+    @Column(name = "deleted", columnDefinition = "TINYINT", length = 1)
+    private boolean deleted;
+
     public Book() {
     }
 
-    public Book(@NotNull(message = "Should add some title!") String title, @NotNull(message = "Should add some author!") Author author, @NotNull(message = "Select genre!") String genre, int copies, int available) {
+    public Book(@NotNull(message = "Should add some title!") String title, @NotNull(message = "Should add some author!") Author author, @NotNull(message = "Select genre!") String genre, int copies, int available, boolean deleted) {
         this.title = title;
         this.author = author;
         this.genre = genre;
         this.copies = copies;
         this.available = available;
+        this.deleted = deleted;
+    }
+
+    public Book(Long bookId) {
+
+        this.id=bookId;
     }
 
     public Long getId() {
@@ -91,6 +101,14 @@ public class Book {
         this.available = available;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,18 +116,24 @@ public class Book {
 
         Book book = (Book) o;
 
-        if (!id.equals(book.id)) return false;
-        if (!title.equals(book.title)) return false;
-        if (!author.equals(book.author)) return false;
-        return genre.equals(book.genre);
+        if (copies != book.copies) return false;
+        if (available != book.available) return false;
+        if (deleted != book.deleted) return false;
+        if (!Objects.equals(id, book.id)) return false;
+        if (!Objects.equals(title, book.title)) return false;
+        if (!Objects.equals(author, book.author)) return false;
+        return Objects.equals(genre, book.genre);
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + title.hashCode();
-        result = 31 * result + author.hashCode();
-        result = 31 * result + genre.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (author != null ? author.hashCode() : 0);
+        result = 31 * result + (genre != null ? genre.hashCode() : 0);
+        result = 31 * result + copies;
+        result = 31 * result + available;
+        result = 31 * result + (deleted ? 1 : 0);
         return result;
     }
 }

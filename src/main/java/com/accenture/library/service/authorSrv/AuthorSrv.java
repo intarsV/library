@@ -10,4 +10,5 @@ public interface AuthorSrv {
     Long saveAuthor(String name);
     List<Author> authorList();
     Author findByName(String name) throws DataRetrievalFailureException;
+    Boolean deleteAuthor(Long id);
 }

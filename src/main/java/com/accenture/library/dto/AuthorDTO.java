@@ -2,16 +2,19 @@ package com.accenture.library.dto;
 
 import javax.validation.constraints.NotEmpty;
 
-public class AuthorDto {
+public class AuthorDTO {
     @NotEmpty(message = "Name must be not blank")
     private Long id;
     private String name;
+    private boolean deleted;
 
-    public AuthorDto() {
+    public AuthorDTO() {
     }
 
-    public AuthorDto(String name) {
+    public AuthorDTO(@NotEmpty(message = "Name must be not blank") Long id, String name, boolean deleted) {
+        this.id = id;
         this.name = name;
+        this.deleted = deleted;
     }
 
     public Long getId() {
@@ -28,5 +31,13 @@ public class AuthorDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

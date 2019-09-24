@@ -1,19 +1,13 @@
 package com.accenture.library.controller;
 
-import com.accenture.library.domain.Book;
-import com.accenture.library.dto.AuthorDto;
-import com.accenture.library.dto.BookDto;
-import com.accenture.library.dto.GenreDto;
-import com.accenture.library.dto.SearchRequestDTO;
+import com.accenture.library.dto.BookDTO;
 import com.accenture.library.service.bookSrv.BookSrv;
 import com.accenture.library.service.bookSrv.BookSrvImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,22 +24,29 @@ public class BookControllerREST {
     }
 
     @GetMapping
-    public List<Book> getAllBooks() {
+    public List<BookDTO> getAllBooks() {
         return bookSrv.getAllBooks();
     }
 
     @PostMapping(value = "/search")
-    public List<Book> getByParameters(@RequestBody @Validated SearchRequestDTO searchRequestDTO) {
-        final String title = searchRequestDTO.getTitle();
-        final String author = searchRequestDTO.getAuthor();
-        final String genre = searchRequestDTO.getGenre();
+    public List<BookDTO> getByParameters(@RequestBody BookDTO bookDTO) {
+        final String title = bookDTO.getTitle();
+        final String author = bookDTO.getAuthorName();
+        final String genre = bookDTO.getGenre().toString();
         return bookSrv.getByParameters(title, author, genre);
     }
 
     @PostMapping
-    public ResponseEntity<BookDto> saveBook(@RequestBody BookDto bookDto) throws Exception {
+    public ResponseEntity<BookDTO> saveBook(@RequestBody BookDTO bookDto) throws Exception {
         Long id = bookSrv.addBook(bookDto.getTitle(), bookDto.getAuthorName(), bookDto.getGenre(), bookDto.getCopies());
         bookDto.setId(id);
         return new ResponseEntity<>(bookDto, HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity<BookDTO> deleteBook(@RequestBody BookDTO bookDto) {
+        final boolean isDeleted = bookSrv.deleteBook(bookDto.getId());
+        bookDto.setDeleted(isDeleted);
+        return new ResponseEntity<>(bookDto, HttpStatus.ACCEPTED);
     }
 }

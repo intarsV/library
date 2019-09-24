@@ -3,7 +3,8 @@ drop table if exists authors, authorities, books, reservations, users;
 
 create table authors(
 author_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-author_name VARCHAR(100) NOT NULL
+author_name VARCHAR(100) NOT NULL,
+deleted TINYINT
  );
 
 create table authorities(
@@ -17,7 +18,8 @@ book_title VARCHAR(100) NOT NULL,
 book_author BIGINT, foreign key (book_author) references authors(author_id),
 book_genre VARCHAR(30),
 copies INTEGER,
-available INTEGER
+available INTEGER,
+deleted TINYINT
 );
 
 create table users(
@@ -32,13 +34,18 @@ reservation_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 reservation_date timestamp ,
 book BIGINT, foreign key (book) references books(book_id),
 user BIGINT, foreign key (user) references users(user_id),
-returned INTEGER
+hand_out INTEGER,
+returned INTEGER,
+deleted TINYINT
+
 );
 
-insert into authors (author_id, author_name) values
-(1, 'Rainis'),
-(2, 'R.Blaumanis'),
-(3, 'Viktors Igo');
+insert into authors (author_id, author_name, deleted) values
+(1, 'Rainis', false),
+(2, 'Rūdolfs Blaumanis', false),
+(3, 'Viktors Igo', false),
+(4, 'Aleksandrs Dimā', false),
+(5, 'Džeks Londons', false);
 
 insert into authorities (authority_id, authority_name) values
 (1, 'ADMIN'),
@@ -51,13 +58,15 @@ insert into users ( user_name, password, enabled) values
 
 insert into user_authorities values (1, 1), (2, 2), (3, 2);
 
-insert into books ( book_title, book_author, book_genre, copies, available) values ( 'Zelta zirgs', 2, 'POETRY', 7, 6);
-insert into books ( book_title, book_author, book_genre, copies, available) values ( 'Super book', 1, 'NOVEL', 5, 4);
-insert into books ( book_title, book_author, book_genre, copies, available) values ( 'Nāves enā', 2, 'PROSE', 9, 9);
-insert into books ( book_title, book_author, book_genre, copies, available) values ( 'Le Miserables', 3, 'PROSE', 3, 2);
+insert into books ( book_title, book_author, book_genre, copies, available, deleted) values ( 'Zelta zirgs', 2, 'POETRY', 7, 6, false);
+insert into books ( book_title, book_author, book_genre, copies, available, deleted) values ( 'Super book', 1, 'NOVEL', 5, 4, false);
+insert into books ( book_title, book_author, book_genre, copies, available, deleted) values ( 'Nāves enā', 2, 'PROSE', 9, 9, false );
+insert into books ( book_title, book_author, book_genre, copies, available, deleted) values ( 'Le Miserables', 3, 'PROSE', 3, 2, false);
+insert into books ( book_title, book_author, book_genre, copies, available, deleted) values ( 'Trīs musketieri', 4, 'NOVEL', 3, 3, false);
+insert into books ( book_title, book_author, book_genre, copies, available, deleted) values ( 'Baltais Ilknis', 5, 'NOVEL', 4, 4, false);
 
-insert into reservations (reservation_date, book, user, returned)values ( NOW(), 1, 3, true);
-insert into reservations (reservation_date, book, user, returned)values ( NOW(), 4, 2, true);
-insert into reservations (reservation_date, book, user, returned)values ( NOW(), 4, 3, false);
-insert into reservations (reservation_date, book, user, returned)values ( NOW(), 2, 2, false);
-insert into reservations (reservation_date, book, user, returned)values ( NOW(), 1, 2, false);
+insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 1, 3, true, true, false);
+insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 4, 2, true, true, false);
+insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 4, 3, true, false, false);
+insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 2, 2, true, false, false);
+insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 1, 2, true, false, false);

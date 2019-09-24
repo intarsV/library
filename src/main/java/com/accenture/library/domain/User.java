@@ -15,7 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqUserName")
     private Long id;
 
-    @Column(name = "USERNAME")
+    @Column(name = "user_name")
     @NotNull(message = "Should enter some name!")
     private String userName;
 

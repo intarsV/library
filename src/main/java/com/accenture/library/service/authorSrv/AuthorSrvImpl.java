@@ -1,6 +1,7 @@
 package com.accenture.library.service.authorSrv;
 
 import com.accenture.library.domain.Author;
+import com.accenture.library.exceptions.LibraryException;
 import com.accenture.library.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
@@ -21,8 +22,12 @@ public class AuthorSrvImpl implements AuthorSrv {
 
 
     @Override
-    public Long saveAuthor(String name) {
-        return repository.save(new Author(name)).getId();
+    public Long saveAuthor(String name) throws LibraryException {
+        Optional<Author> foundAuthor = repository.findByName(name);
+        if (foundAuthor.isPresent()) {
+            throw new LibraryException("Duplicate name exists!");
+        }
+        return repository.save(new Author(name, false)).getId();
     }
 
     @Override
@@ -31,11 +36,23 @@ public class AuthorSrvImpl implements AuthorSrv {
     }
 
     @Override
-    public Author findByName(String name) throws DataRetrievalFailureException {
+    public Author findByName(String name) throws LibraryException {
         Optional<Author> foundAuthor = repository.findByName(name);
         if (!foundAuthor.isPresent()) {
-            throw new DataRetrievalFailureException("No such author found!");
+            throw new LibraryException("No such author found!");
         }
         return foundAuthor.get();
+    }
+
+    @Override
+    public Boolean deleteAuthor(Long id) {
+        Optional<Author> findAuthor = repository.findById(id);
+        if (!findAuthor.isPresent()) {
+            throw new LibraryException("No such author with id: " + id);
+        }
+        Author updateAuthor = findAuthor.get();
+        updateAuthor.setDeleted(true);
+        repository.save(updateAuthor);
+        return true;
     }
 }
