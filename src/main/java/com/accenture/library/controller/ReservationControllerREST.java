@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/v1/reservation")
+@RequestMapping("/api/v1/reservations")
 public class ReservationControllerREST {
 
     private ReservationSrv reservationService;
@@ -24,8 +24,18 @@ public class ReservationControllerREST {
         this.reservationService = bookReservationSvr;
     }
 
+    @PostMapping(value="/user/list-reservation")
+    public List<ReservationDTO> getReservations(@RequestBody ReservationDTO reservationDTO, Authentication authentication){
+        System.out.println("this is called");
+        final String userName = authentication.getName();
+        final String bookTitle = reservationDTO.getBookTitle();
+        final Boolean returned = reservationDTO.isReturned();
+        System.out.println("Request: "+bookTitle+" "+userName+" "+returned);
+        return reservationService.getByParameters( bookTitle, userName, returned);
+    }
+
     //User make book reservation
-    @PostMapping
+    @PostMapping(value="/user/make-reservation")
     public ResponseEntity makeReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {
         final String userName = authentication.getName();
         Long id = reservationService.makeReservation(reservationDto.getBookId(), userName);

@@ -6,8 +6,8 @@ class LoginPage extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            username: 'initex',
-            password: 'initex000',
+            username: 'ritvars',
+            password: 'ritvars000',
             hasLoginFailed: false,
             showSuccessMessage: false
         };
@@ -38,19 +38,17 @@ class LoginPage extends Component{
     render() {
         return (
             <div>
-                <h1>Login</h1>
-                <div className='container'>
-                    {this.state.hasLoginFailed && <div className='alert alert-warning'>Invalid Credentials</div>}
-                    {this.state.showSuccessMessage && <div>login Successful</div>}
-                    User Name: <input type='text' name='username' value={this.state.username}
-                                      onChange={(evn, value)=>{
-                                          console.log(value);
-                                      }}/>
-                    Password: <input type='password' name='password' value={this.state.password}
-                                     onChange={this.handleChange}/>
-                    <button className='btn btn-success' onClick={this.loginClicked}> Login</button>
-                </div>
-            </div>
+            <h1>Login</h1>
+        <div className='container'>
+            {this.state.hasLoginFailed && <div className='alert alert-warning'>Invalid Credentials</div>}
+            {this.state.showSuccessMessage && <div>login Successful</div>}
+            User Name: <input type='text' name='username'
+                              onChange={this.handleChange}/>
+            Password: <input type='password' name='password'
+                             onChange={this.handleChange}/>
+            <button className='button' onClick={this.loginClicked}> Login</button>
+        </div>
+        </div>
         )
     }
 }
@@ -58,19 +56,3 @@ export default LoginPage
 
 
 
-// render() {
-//     return (
-//         <div>
-//             <h1>Login</h1>
-//             <div className='container'>
-//                 {this.state.hasLoginFailed && <div className='alert alert-warning'>Invalid Credentials</div>}
-//                 {this.state.showSuccessMessage && <div>login Successful</div>}
-//                 User Name: <input type='text' name='username' value={this.state.username}
-//                                   onChange={this.handleChange}/>
-//                 Password: <input type='password' name='password' value={this.state.password}
-//                                  onChange={this.handleChange}/>
-//                 <button className='btn btn-success' onClick={this.loginClicked}> Login</button>
-//             </div>
-//         </div>
-//     )
-// }

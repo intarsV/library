@@ -1,133 +1,138 @@
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
 }
 
-#main-content{
-  max-width: 100% !important;
+#main-content {
+    max-width: 100% !important;
 }
 
 #library-wrapper {
-  max-width: none !important;
+    max-width: none !important;
 }
 
 #library-content {
-  margin-left: 500px;
-  margin-right: 500px;
+    margin-left: 500px;
+    margin-right: 500px;
 }
 
 @media (max-width: 1693px) {
-  #library-content {
-    margin-left: 420px;
-    margin-right: 420px;
-  }
+    #library-content {
+        margin-left: 420px;
+        margin-right: 420px;
+    }
 }
 
 @media (max-width: 1560px) {
-  #library-content {
-    margin-left: 400px;
-    margin-right: 400px;
-  }
+    #library-content {
+        margin-left: 400px;
+        margin-right: 400px;
+    }
 }
 
 @media (max-width: 1450px) {
-  #library-content {
-    margin-left: 350px;
-    margin-right: 350px;
-  }
+    #library-content {
+        margin-left: 350px;
+        margin-right: 350px;
+    }
 }
 
 @media (max-width: 1300px) {
-  #library-content {
-    margin-left: 300px;
-    margin-right: 300px;
-  }
+    #library-content {
+        margin-left: 300px;
+        margin-right: 300px;
+    }
 }
 
 @media (max-width: 1200px) {
-  #library-content {
-    margin-left: 200px;
-    margin-right: 200px;
-  }
+    #library-content {
+        margin-left: 200px;
+        margin-right: 200px;
+    }
 }
 
 @media (max-width: 1000px) {
-  #library-content {
-    margin-left: 100px;
-    margin-right: 100px;
-  }
+    #library-content {
+        margin-left: 100px;
+        margin-right: 100px;
+    }
 }
 
 @media (max-width: 800px) {
-  #library-content {
-    margin-left: 50px;
-    margin-right: 50px;
-  }
+    #library-content {
+        margin-left: 50px;
+        margin-right: 50px;
+    }
 }
 
 @media (max-width: 600px) {
-  #library-content {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
+    #library-content {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
 }
 
 @media (max-width: 800px) {
-  #library-content {
-    margin-left: 50px;
-    margin-right: 50px;
-  }
+    #library-content {
+        margin-left: 50px;
+        margin-right: 50px;
+    }
 }
 
 @media (max-width: 600px) {
-  #library-content {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
+    #library-content {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
 }
 
 #logo-menu {
-  width: 20%;
-  height: 100%;
-  position: fixed;
-  margin-top: 0px;
-  text-align: right;
+    background-color: lightgray;
+    width: 20%;
+    height: 100%;
+    position: fixed;
+    padding-top: 20px;
+    text-align: right;
 }
 
-#tableHeader{
-  background-color: #8fd19e;
+#tableHeader {
+    background-color: #8fd19e;
 }
 
-.space-top{
-  padding-top:5px;
+.padding-top {
+    padding-top: 20px;
 }
 
-.space-bottom{
-  padding-bottom:5px;
+.space-top {
+    padding-top: 5px;
 }
 
-.margin-bottom{
-  margin-bottom: 5px;
+.space-bottom {
+    padding-bottom: 5px;
 }
 
-.text-size{
-  font-size: 12px;
+.margin-bottom {
+    margin-bottom: 5px;
 }
 
-.height{
-  height: 23px;
+.text-size {
+    font-size: 12px;
 }
 
-.button{
-  background:ghostwhite;
-  border-radius: 20%;
+.height {
+    height: 23px;
 }
 
-.col-width-height{
-  width: inherit;
-  height: 23px;
+.button {
+    background: ghostwhite;
+    border-radius: 20%;
+}
+
+.col-width-height {
+    width: inherit;
+    height: 23px;
 }
 
 

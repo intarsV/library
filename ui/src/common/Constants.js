@@ -10,3 +10,7 @@ export const pageRoutes = {
 export const genres=[
     'POETRY','NOVEL','PROSE',
 ];
+
+export const returned=[
+  "true", "false",
+];
