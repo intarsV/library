@@ -1,6 +1,7 @@
 package com.accenture.library.service.authorSrv;
 
 import com.accenture.library.domain.Author;
+import com.accenture.library.dto.AuthorDTO;
 import com.accenture.library.exceptions.LibraryException;
 import com.accenture.library.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,8 @@ public class AuthorSrvImpl implements AuthorSrv {
     }
 
     @Override
-    public List<Author> authorList() {
-        return repository.findAll();
+    public List<AuthorDTO> authorList() {
+        return repository.getAllAuthors();
     }
 
     @Override

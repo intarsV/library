@@ -1,9 +1,7 @@
 package com.accenture.library.dto;
 
-import javax.validation.constraints.NotEmpty;
-
 public class AuthorDTO {
-    @NotEmpty(message = "Name must be not blank")
+
     private Long id;
     private String name;
     private boolean deleted;
@@ -11,7 +9,7 @@ public class AuthorDTO {
     public AuthorDTO() {
     }
 
-    public AuthorDTO(@NotEmpty(message = "Name must be not blank") Long id, String name, boolean deleted) {
+    public AuthorDTO( Long id, String name, boolean deleted) {
         this.id = id;
         this.name = name;
         this.deleted = deleted;

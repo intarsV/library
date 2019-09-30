@@ -6,8 +6,8 @@ class LoginPage extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            username: 'ritvars',
-            password: 'ritvars000',
+            username: 'initex',
+            password: 'initex000',
             hasLoginFailed: false,
             showSuccessMessage: false
         };
@@ -26,9 +26,14 @@ class LoginPage extends Component{
     loginClicked() {
         AuthenticationService
             .executeBasicAuthenticationService(this.state.username, this.state.password)
-            .then(() => {
-                AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password);
-                this.props.history.push('/books/search')
+            .then(response => {
+                if (response.data.message === "ADMIN") {
+                    AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password);
+                    this.props.history.push('/admin/page')
+                } else {
+                    AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password);
+                    this.props.history.push('/user/page');
+                }
             }).catch(() => {
             this.setState({showSuccessMessage: false});
             this.setState({hasLoginFailed: true});

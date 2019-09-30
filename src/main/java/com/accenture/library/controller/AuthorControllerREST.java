@@ -24,7 +24,7 @@ public class AuthorControllerREST {
     }
 
     @GetMapping
-    public List<Author> getAllAuthors() {
+    public List<AuthorDTO> getAllAuthors() {
         return authorSrv.authorList();
     }
 
@@ -40,7 +40,7 @@ public class AuthorControllerREST {
         return new ResponseEntity<>(authorDto, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PostMapping(value="/delete")
     public ResponseEntity<AuthorDTO> deleteAuthor(@RequestBody AuthorDTO authorDto) {
         final boolean isDeleted = authorSrv.deleteAuthor(authorDto.getId());
         authorDto.setDeleted(isDeleted);

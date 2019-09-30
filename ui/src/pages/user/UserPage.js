@@ -6,6 +6,7 @@ class UserPage extends Component {
     render() {
         return (
             <>
+                <br/>
                 <BookReservations/>
                 <br/>
                 <BookSearch/>

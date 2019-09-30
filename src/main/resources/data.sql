@@ -69,4 +69,4 @@ insert into reservations (reservation_date, book, user, hand_out, returned, dele
 insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 4, 2, true, true, false);
 insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 4, 3, true, false, false);
 insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 2, 2, true, false, false);
-insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 1, 2, true, false, false);
+insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 1, 2, false, false, false);

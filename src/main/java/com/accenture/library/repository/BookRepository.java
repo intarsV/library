@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Query("SELECT new com.accenture.library.dto.BookDTO(b.id, b.title, b.author.name, b.genre, b.copies, b.available, b.deleted) FROM Book b")
+    @Query("SELECT new com.accenture.library.dto.BookDTO(b.id, b.title, b.author.name, b.genre, b.copies, b.available, b.deleted) FROM Book b WHERE b.deleted=false")
     List<BookDTO> getAllBooks();
 
     @Query("SELECT new com.accenture.library.dto.BookDTO(b.id, b.title, b.author.name, b.genre, b.copies, b.available, b.deleted)" +

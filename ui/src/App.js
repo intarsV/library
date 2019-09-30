@@ -7,7 +7,9 @@ import AuthenticatedRoute from './common/AuthenticatedRoute';
 import BookSearch from "./pages/user/BookSearch";
 import {pageRoutes} from "./common/Constants";
 import UserPage from "./pages/user/UserPage";
+import AdminPage from "./pages/admin/AdminPage";
 import BookReservations from "./pages/user/BookReservations";
+import AdminService from "./common/services/AdminService";
 
 class App extends Component {
 
@@ -24,8 +26,8 @@ class App extends Component {
                         <Route path="/" exact component={LoginPage}/>
                         <Route  path='/login' exact component={LoginPage}/>
                         <AuthenticatedRoute path='pageRoutes.logoutPage'  exact component={LogoutPage}/>
-                        <AuthenticatedRoute path="/books/search" exact component={UserPage}/>
-
+                        <AuthenticatedRoute path="/admin/page" exact component={AdminPage}/>
+                        <AuthenticatedRoute path="/user/page" exact component={UserPage}/>
                         {/*<Route exact path={pageRoutes.loginPage} component={LoginPage}/>*/}
                         {/*<AuthenticatedRoute exact path={pageRoutes.logoutPage} component={LogoutPage}/>*/}
                         {/*<AuthenticatedRoute exact path={pageRoutes.bookSearch} component={BookSearch}/>*/}

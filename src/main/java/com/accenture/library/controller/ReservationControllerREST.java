@@ -26,7 +26,6 @@ public class ReservationControllerREST {
 
     @PostMapping(value="/user/list-reservation")
     public List<ReservationDTO> getReservations(@RequestBody ReservationDTO reservationDTO, Authentication authentication){
-        System.out.println("this is called");
         final String userName = authentication.getName();
         final String bookTitle = reservationDTO.getBookTitle();
         final Boolean returned = reservationDTO.isReturned();
@@ -50,21 +49,21 @@ public class ReservationControllerREST {
     }
 
     //Library ADMIN hands out the book
-    @PutMapping(value = "/admin/hand-out")
+    @PostMapping(value = "/admin/hand-out")
     public ResponseEntity handOut(@RequestBody ReservationDTO reservationDto) {
         reservationService.handOut(reservationDto.getId());
         return new ResponseEntity<>(reservationDto, HttpStatus.CREATED);
     }
 
     //Library ADMIN take in the book
-    @PutMapping(value = "/admin/take-in")
+    @PostMapping(value = "/admin/take-in")
     public ResponseEntity takeIn(@RequestBody Reservation reservationDto) {
         reservationService.takeIn(reservationDto.getId());
         return new ResponseEntity<>(reservationDto, HttpStatus.OK);
     }
 
     //Library ADMIN search by parameters
-    @GetMapping(value = "/admin/search")
+    @PostMapping(value = "/admin/search")
     public List<ReservationDTO> searchByParameters(@RequestBody ReservationDTO reservationDTO) {
         final String bookTitle = reservationDTO.getBookTitle();
         final String userName = reservationDTO.getUserName();

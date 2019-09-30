@@ -1,10 +1,10 @@
 package com.accenture.library.domain;
 
-public class AuthenticationBean {
+public class AuthenticationResponse {
 
     private String message;
 
-    public AuthenticationBean(String message) {
+    public AuthenticationResponse(String message) {
         this.message = message;
     }
 
@@ -18,6 +18,6 @@ public class AuthenticationBean {
 
     @Override
     public String toString() {
-        return String.format("HelloWorldBean [message=%s]", message);
+        return String.format("[message=%s]", message);
     }
 }

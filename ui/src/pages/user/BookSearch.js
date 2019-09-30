@@ -63,7 +63,7 @@ class BookSearch extends Component{
             .then(
                 response => {
                     console.log(response);
-                    //this.setState({books: response.data})
+                    //TODO: inform user
                 }
             )
     }
@@ -72,7 +72,7 @@ class BookSearch extends Component{
         return (
             <Card>
                 <div className='text-size padding-top'>
-                    <h2>Search books</h2>
+                    <h4>Search books</h4>
                     <Row className='space-top'>
                         <Col md={3} sm={5} lg={2} xs={3}>
                             Book title:
@@ -113,11 +113,6 @@ class BookSearch extends Component{
                         defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
                         data={this.state.books}
                         columns={[
-                            {
-                                show: false,
-                                Header: "Id",
-                                accessor: "id"
-                            },
                             {
                                 minWidth: 200,
                                 Header: "Title",

@@ -11,6 +11,7 @@ export const genres=[
     'POETRY','NOVEL','PROSE',
 ];
 
-export const returned=[
-  "true", "false",
+export const returned = [
+    {key: 'active', value: 'false'},
+    {key: 'finished', value: 'true'}
 ];

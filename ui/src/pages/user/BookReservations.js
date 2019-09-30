@@ -44,14 +44,14 @@ class BookReservations extends Component {
 
     render() {
         return (
-            <Card>
+            <Card md={3}>
                 <div className='text-size padding-top'>
-                    <h2>User reservations</h2>
+                    <h4>User reservations</h4>
                     <Row className='space-top margin-bottom'>
-                        <Col md={5} sm={7} lg={2} xs={3}>
+                        <Col md={5} sm={7} lg={3} xs={5}>
                             Reservation status:
                         </Col>
-                        <Col xl={3}>
+                        <Col md={5} sm={7} lg={2} xs={5}>
                             <label>
                                 <input type="radio"  value='false' name='returned'
                                        checked={this.state.returned === 'false'}
@@ -59,7 +59,7 @@ class BookReservations extends Component {
                                 Active
                             </label>
                         </Col>
-                        <Col xl={3}>
+                        <Col md={5} sm={7} lg={2} xs={5}>
                             <label>
                                 <input type="radio"  value='true' name='returned'
                                        checked={this.state.returned === 'true'}
@@ -72,11 +72,6 @@ class BookReservations extends Component {
                         defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
                         data={this.state.reservations}
                         columns={[
-                            {
-                                show: false,
-                                Header: "Id",
-                                accessor: "id"
-                            },
                             {
                                 minWidth: 200,
                                 maxWidth: 200,
