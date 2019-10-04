@@ -8,11 +8,11 @@ import BookSearch from "./pages/user/BookSearch";
 import {pageRoutes} from "./common/Constants";
 import UserPage from "./pages/user/UserPage";
 import AdminPage from "./pages/admin/AdminPage";
+import AuthService from './common/services/AuthenticationService';
 import BookReservations from "./pages/user/BookReservations";
 import AdminService from "./common/services/AdminService";
 
 class App extends Component {
-
 
     render() {
         return (

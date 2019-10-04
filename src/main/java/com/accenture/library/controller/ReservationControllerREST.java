@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/v1/reservations")
 public class ReservationControllerREST {
@@ -24,17 +23,20 @@ public class ReservationControllerREST {
         this.reservationService = bookReservationSvr;
     }
 
-    @PostMapping(value="/user/list-reservation")
-    public List<ReservationDTO> getReservations(@RequestBody ReservationDTO reservationDTO, Authentication authentication){
+    //Library USER reservations
+    @PostMapping(value = "/user/list-reservation")
+    public List<ReservationDTO> getReservations(@RequestBody ReservationDTO reservationDTO, Authentication authentication) {
+        System.out.println("Split");
         final String userName = authentication.getName();
         final String bookTitle = reservationDTO.getBookTitle();
+        final Boolean handOut = reservationDTO.isHandOut();
         final Boolean returned = reservationDTO.isReturned();
-        System.out.println("Request: "+bookTitle+" "+userName+" "+returned);
-        return reservationService.getByParameters( bookTitle, userName, returned);
+        //System.out.println("Request: " + bookTitle + " " + userName + " " + handOut + " " + returned);
+        return reservationService.getByParameters(bookTitle, userName, handOut, returned);
     }
 
-    //User make book reservation
-    @PostMapping(value="/user/make-reservation")
+    //Library USER make book reservation
+    @PostMapping(value = "/user/make-reservation")
     public ResponseEntity makeReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {
         final String userName = authentication.getName();
         Long id = reservationService.makeReservation(reservationDto.getBookId(), userName);
@@ -67,7 +69,8 @@ public class ReservationControllerREST {
     public List<ReservationDTO> searchByParameters(@RequestBody ReservationDTO reservationDTO) {
         final String bookTitle = reservationDTO.getBookTitle();
         final String userName = reservationDTO.getUserName();
+        final Boolean handOut = reservationDTO.isHandOut();
         final Boolean returned = reservationDTO.isReturned();
-        return reservationService.getByParameters(bookTitle, userName, returned);
+        return reservationService.getByParameters(bookTitle, userName, handOut, returned);
     }
 }

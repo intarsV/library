@@ -45,24 +45,20 @@ public class ReservationDTO {
         this.bookId = bookId;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Date getReservationDate() {
-        return reservationDate;
-    }
-
     public String getBookTitle() {
         return bookTitle;
     }
 
     public void setBookTitle(String bookTitle) {
         this.bookTitle = bookTitle;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {
@@ -73,24 +69,20 @@ public class ReservationDTO {
         this.userName = userName;
     }
 
-    public boolean isHandOut() {
-        return handOut;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    public void setHandOut(boolean handOut) {
-        this.handOut = handOut;
+    public Date getReservationDate() {
+        return reservationDate;
     }
 
     public void setReservationDate(Date reservationDate) {
         this.reservationDate = reservationDate;
+    }
+
+    public boolean isHandOut() {
+        return handOut;
+    }
+
+    public void setHandOut(boolean handOut) {
+        this.handOut = handOut;
     }
 
     public boolean isReturned() {
@@ -99,5 +91,13 @@ public class ReservationDTO {
 
     public void setReturned(boolean returned) {
         this.returned = returned;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

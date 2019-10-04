@@ -17,8 +17,17 @@ class AdminService {
     }
 
     //Functions for book
+    getAllBooks() {
+        return axios.get(API_URL + '/api/v1/books');
+    }
 
+    addABook(bookData) {
+        return axios.post(API_URL + '/api/v1/books', bookData);
+    }
 
+    deleteBook(bookData) {
+        return axios.post(API_URL + '/api/v1/books/delete', bookData);
+    }
 
     //Functions for reservations
     getReservationQueue() {

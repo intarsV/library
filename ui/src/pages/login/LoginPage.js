@@ -6,8 +6,8 @@ class LoginPage extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            username: 'initex',
-            password: 'initex000',
+            username: '',
+            password: '',
             hasLoginFailed: false,
             showSuccessMessage: false
         };

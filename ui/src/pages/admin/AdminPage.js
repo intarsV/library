@@ -2,6 +2,7 @@ import React,{Component}  from 'react';
 import ReservationQueue from './ReservationQueue'
 import ReservationSearch from './ReservarionSearch';
 import ManageAuthor from './ManageAuthor';
+import ManageBook from "./ManageBook";
 
 class AdminPage extends Component {
     render() {
@@ -13,6 +14,8 @@ class AdminPage extends Component {
                 <ReservationSearch/>
                 <br/>
                 <ManageAuthor/>
+                <br/>
+                <ManageBook/>
             </>
         )
     }

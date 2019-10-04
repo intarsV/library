@@ -80,8 +80,8 @@ public class ReservationSrvImpl implements ReservationSrv {
     }
 
     @Override
-    public List<ReservationDTO> getByParameters(String bookTitle, String userName, Boolean returned) {
-        return reservationRepository.getByParameters(bookTitle, userName, returned);
+    public List<ReservationDTO> getByParameters(String bookTitle, String userName,Boolean handOut, Boolean returned) {
+        return reservationRepository.getByParameters(bookTitle, userName, handOut, returned);
     }
 
     @Override

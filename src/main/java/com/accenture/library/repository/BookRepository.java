@@ -18,7 +18,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT new com.accenture.library.dto.BookDTO(b.id, b.title, b.author.name, b.genre, b.copies, b.available, b.deleted)" +
             " FROM Book b WHERE (:title IS NULL OR LOWER( b.title) LIKE %:title%) " +
             "AND (:author IS NULL OR LOWER( b.author.name) LIKE %:author%) " +
-            "AND (:genre IS NULL OR b.genre=:genre)")
+            "AND (:genre IS NULL OR b.genre=:genre) AND b.deleted=false")
     List<BookDTO> findByParameters(@Param("title") String title,
                                    @Param("author") String author,
                                    @Param("genre") String genre);

@@ -3,7 +3,6 @@ import {Row, Col} from 'reactstrap';
 import BookService from '../../common/services/UserService'
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
-import {returned} from '../../common/Constants';
 import {Card} from 'react-bootstrap';
 
 class BookReservations extends Component {
@@ -11,21 +10,38 @@ class BookReservations extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            returned: "false",
+            selection:'optionOne',
             reservations: [],
             reservationData: {},
             message: null
         };
         this.refreshReservations = this.refreshReservations.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.prepareRequestData=this.prepareRequestData.bind(this);
     }
 
     componentDidMount() {
         this.refreshReservations();
     }
 
+    prepareRequestData() {
+        this.setState(this.state.reservationData = {});
+        if (this.state.selection === 'optionOne') {
+            //let optionOneData = {handOut: 'false', returned: 'false'};
+            this.setState({reservationData: {handOut: 'false', returned: 'false'}});
+        }
+        if (this.state.selection === 'optionTwo') {
+            // let optionTwoData = {handOut: 'true', returned: 'false'};
+            this.setState({reservationData: {handOut: 'true', returned: 'false'}});
+        }
+        if (this.state.selection === 'optionThree') {
+            // let optionThreeData = {handOut: 'true', returned: 'true'};
+            this.setState({reservationData: {handOut: 'true', returned: 'true'}});
+        }
+    }
+
     refreshReservations() {
-        this.state.reservationData['returned'] = this.state.returned;
+        this.prepareRequestData();
         BookService.getReservations(this.state.reservationData)
             .then(
                 response => {
@@ -37,7 +53,7 @@ class BookReservations extends Component {
     handleChange(event) {
         this.setState(
             {
-                [event.target.name]: event.target.value
+               selection: event.target.value
             },()=>this.refreshReservations()
         );
     }
@@ -53,16 +69,24 @@ class BookReservations extends Component {
                         </Col>
                         <Col md={5} sm={7} lg={2} xs={5}>
                             <label>
-                                <input type="radio"  value='false' name='returned'
-                                       checked={this.state.returned === 'false'}
+                                <input type="radio" value='optionOne' name={this.state.selection}
+                                       checked={this.state.selection==='optionOne'}
+                                       onChange={this.handleChange}/>
+                                Queue
+                            </label>
+                        </Col>
+                        <Col md={5} sm={7} lg={2} xs={5}>
+                            <label>
+                                <input type="radio" value='optionTwo' name={this.state.selection}
+                                       checked={this.state.selection==='optionTwo'}
                                        onChange={this.handleChange}/>
                                 Active
                             </label>
                         </Col>
                         <Col md={5} sm={7} lg={2} xs={5}>
                             <label>
-                                <input type="radio"  value='true' name='returned'
-                                       checked={this.state.returned === 'true'}
+                                <input type="radio" value='optionThree' name={this.state.selection}
+                                       checked={this.state.selection==='optionThree'}
                                        onChange={this.handleChange}/>
                                 History
                             </label>

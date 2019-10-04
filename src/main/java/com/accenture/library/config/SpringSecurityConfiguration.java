@@ -2,6 +2,7 @@ package com.accenture.library.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,8 +10,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -40,6 +45,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .and()
                 .csrf().disable()//need for React port 3000 - should be removed on prod
                 .headers().frameOptions().disable()// need for H2 console - should be removed on prod
                 .and()
@@ -47,13 +54,25 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2/**").permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/basicauth").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/authors/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/v1/authors/**").hasAuthority("ADMIN")
+                .antMatchers("/api/v1/reservations/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/api/v1/reservations/users/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/books/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/v1/books/search").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/v1/books/**").hasAuthority("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin()
                 .and()
                 .httpBasic();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
 

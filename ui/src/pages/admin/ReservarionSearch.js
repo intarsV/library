@@ -13,6 +13,7 @@ class ReservationSearch extends Component{
         this.state = {
             bookTitle: "",
             userName: "",
+            handOut: "",
             returned: "",
             reservations: [],
             searchData: {},
@@ -30,6 +31,7 @@ class ReservationSearch extends Component{
         if(this.state.userName!==''){
             this.state.searchData['userName']=this.state.userName;
         }
+        this.state.searchData['handOut']=true;
         if(this.state.returned!==''){
             this.state.searchData['returned']=this.state.returned;
         }

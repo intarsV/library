@@ -11,7 +11,7 @@ public interface ReservationSrv {
 
     Long takeIn(Long reservationId);
 
-    List<ReservationDTO> getByParameters(String bookTitle, String userName, Boolean returned);
+    List<ReservationDTO> getByParameters(String bookTitle, String userName, Boolean handOut, Boolean returned);
 
     List<ReservationDTO> getReservationQueue();
 }

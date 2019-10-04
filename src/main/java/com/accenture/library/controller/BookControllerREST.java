@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-//@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
 @RestController
 @RequestMapping("/api/v1/books")
 public class BookControllerREST {
@@ -22,6 +20,7 @@ public class BookControllerREST {
     public BookControllerREST(BookSrvImpl bookSrv) {
         this.bookSrv = bookSrv;
     }
+
 
     @GetMapping
     public List<BookDTO> getAllBooks() {
