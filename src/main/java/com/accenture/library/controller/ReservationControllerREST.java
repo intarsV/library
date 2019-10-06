@@ -26,12 +26,10 @@ public class ReservationControllerREST {
     //Library USER reservations
     @PostMapping(value = "/user/list-reservation")
     public List<ReservationDTO> getReservations(@RequestBody ReservationDTO reservationDTO, Authentication authentication) {
-        System.out.println("Split");
         final String userName = authentication.getName();
         final String bookTitle = reservationDTO.getBookTitle();
         final Boolean handOut = reservationDTO.isHandOut();
         final Boolean returned = reservationDTO.isReturned();
-        //System.out.println("Request: " + bookTitle + " " + userName + " " + handOut + " " + returned);
         return reservationService.getByParameters(bookTitle, userName, handOut, returned);
     }
 

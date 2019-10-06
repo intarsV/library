@@ -1,100 +1,73 @@
-import React, {Component} from 'react';
-import AdminService from '../../common/services/AdminService';
-import {Card, Alert} from 'react-bootstrap';
-import ReactTable from 'react-table';
+import React,  {useState } from 'react';
+import {Card, Col, Row} from 'react-bootstrap';
+import ReactTable from "react-table";
 import 'react-table/react-table.css';
-import {Row, Col} from 'react-bootstrap';
+import AdminService from "../../common/services/AdminService";
 
-class ManageAuthor extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: '',
-            authorName: '',
-            authorData: [],
-            requestData: {},
-            message: null
-        };
-        this.getAllAuthors = this.getAllAuthors.bind(this);
-        this.deleteAuthor = this.deleteAuthor.bind(this);
-        this.addAuthor = this.addAuthor.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.prepareRequest = this.prepareRequest.bind(this);
-    }
+const ManageAuthor = () => {
 
-    componentDidMount() {
-        this.getAllAuthors();
-    }
+    const [authorName, setAuthorName]=useState('');
+    const [authorData, setAuthorData]=useState([]);
+    const [firstLoad, setFirstLoad] = useState(true);
 
-    handleChange(event) {
-        this.setState(
-            {
-                [event.target.name]: event.target.value
-            }
-        );
-    }
+    const isFirstLoad = () => {
+        if (firstLoad) {
+            getAllAuthors()
+        }
+    };
 
-    getAllAuthors() {
+    const getAllAuthors = () => {
         AdminService.getAllAuthors()
             .then(
                 response => {
-                    this.setState({authorData: response.data});
+                    setAuthorData(response.data);
+                    setFirstLoad(false)
                 }
             )
-    }
+    };
 
-    deleteAuthor(id) {
-        this.state.requestData['id'] = id;
-        AdminService.deleteAuthor(this.state.requestData)
-            .then(
-                response => {
-                    let filteredArray = this.state.authorData.filter(item => item.id !== id);
-                    this.setState({authorData: filteredArray});
-                }
-            )
-    }
-
-    prepareRequest() {
-        this.setState(this.state.requestData = {});
-        if (this.state.authorName !== '') {
-            this.state.requestData['name'] = this.state.authorName;
-        }
-
-    }
-
-    addAuthor() {
-        let filteredArray = this.state.authorData.filter(item => item.name === this.state.authorName);
+    const addAuthor = () => {
+        let filteredArray = authorData.filter(item => item.name === authorName);
         if (filteredArray.length > 0) {
             alert("There is already author with name!");
         } else {
-            this.prepareRequest();
-            AdminService.addAuthor(this.state.requestData)
+            AdminService.addAuthor({name: authorName})
                 .then(
                     response => {
-                        let newAuthorData = this.state.authorData.push(response.data);
-                        this.setState({newAuthorData: newAuthorData});
+                        setAuthorData([...authorData, response.data]);
                     })
         }
-    }
 
-    render() {
+    };
+
+    const deleteAuthor = (id) => {
+        AdminService.deleteAuthor({id: id})
+            .then(
+                response => {
+                    let filteredArray = authorData.filter(item => item.id !== id);
+                    setAuthorData(filteredArray);
+                }
+            )
+    };
+
         return (
             <Card>
                 <div className='text-size padding-top'>
+                    {isFirstLoad()}
                     <h4>Authors</h4>
                     <Row>
                         <Col xl={3}>
                             <input className='col-width-height ' type='text' name='authorName'
-                                   value={this.state.authorName} onChange={this.handleChange}/>
+                                   value={authorName} onChange={(event) => setAuthorName(event.target.value)}/>
                         </Col>
                         <Col>
-                            <button className=' button ' onClick={this.addAuthor}>Add author</button>
+                            <button className=' button ' onClick={() => addAuthor()}>Add author</button>
                         </Col>
                     </Row>
                     <br/>
                     <ReactTable
                         defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
-                        data={this.state.authorData}
+                        data={authorData}
                         columns={[
                             {
                                 Header: "Author name",
@@ -103,7 +76,7 @@ class ManageAuthor extends Component {
                             {
                                 accessor: "id",
                                 Cell: ({value}) => (
-                                    <button onClick={() => this.deleteAuthor(value)}>Delete</button>
+                                    <button onClick={() =>deleteAuthor(value)}>Delete</button>
                                 )
                             }
                         ]}
@@ -112,7 +85,6 @@ class ManageAuthor extends Component {
                 </div>
             </Card>
         )
-    }
-}
+};
 
-export default ManageAuthor;
+export default ManageAuthor

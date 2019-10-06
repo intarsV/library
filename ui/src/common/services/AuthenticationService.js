@@ -16,7 +16,6 @@ class AuthenticationService{
 
     registerSuccessfulLogin(username, password) {
         sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME,  this.createBasicAuthToken(username, password));
-        this.setupAxiosInterceptors(this.createBasicAuthToken(username, password))
     }
 
     logout() {
@@ -25,23 +24,8 @@ class AuthenticationService{
 
     isUserLoggedIn() {
         let user = sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
-        if (user == null) {
-            return false;
-        }
-        this.setupAxiosInterceptors(user);
+        if (user === null)  return false;
         return true;
     }
-
-    setupAxiosInterceptors(token) {
-        axios.interceptors.request.use(
-            (config) => {
-                if (this.isUserLoggedIn()) {
-                    config.headers.authorization = token
-                }
-                return config
-            }
-        )
-    }
-
 }
 export default new AuthenticationService()

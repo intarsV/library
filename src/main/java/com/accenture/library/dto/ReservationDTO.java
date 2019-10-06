@@ -100,4 +100,19 @@ public class ReservationDTO {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+    @Override
+    public String toString() {
+        return "ReservationDTO{" +
+                "id=" + id +
+                ", bookId=" + bookId +
+                ", bookTitle='" + bookTitle + '\'' +
+                ", userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", reservationDate=" + reservationDate +
+                ", handOut=" + handOut +
+                ", returned=" + returned +
+                ", deleted=" + deleted +
+                '}';
+    }
 }

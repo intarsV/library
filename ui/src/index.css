@@ -89,7 +89,7 @@ body {
 }
 
 #logo-menu {
-    background-color: lightgray;
+    background-image: linear-gradient(to right, darkgray , transparent);;
     width: 20%;
     height: 100%;
     position: fixed;
@@ -107,6 +107,8 @@ body {
 
 .space-top {
     padding-top: 5px;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 .space-bottom {

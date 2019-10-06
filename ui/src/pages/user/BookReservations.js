@@ -1,100 +1,52 @@
-import React, {Component} from 'react';
-import {Row, Col} from 'reactstrap';
+import React, {Component, useState } from 'react';
+import {Row, Col, Card,Form, FormCheck, FormControl} from 'react-bootstrap';
 import BookService from '../../common/services/UserService'
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
-import {Card} from 'react-bootstrap';
+import {userReservation} from '../../common/Constants'
 
-class BookReservations extends Component {
+const BookReservations =()=> {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            selection:'optionOne',
-            reservations: [],
-            reservationData: {},
-            message: null
+    const [selection, setSelection] = useState('optionActive');
+    const [reservationsData, setReservationData] = useState([]);
+    const [firstLoad, setFirstLoad] = useState(true);
+
+    const isFirstLoad=()=>{
+        if(firstLoad){
+            getReservationData  ({handOut: "true", returned: "false"}, "optionActive")}
         };
-        this.refreshReservations = this.refreshReservations.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.prepareRequestData=this.prepareRequestData.bind(this);
-    }
 
-    componentDidMount() {
-        this.refreshReservations();
-    }
-
-    prepareRequestData() {
-        this.setState(this.state.reservationData = {});
-        if (this.state.selection === 'optionOne') {
-            //let optionOneData = {handOut: 'false', returned: 'false'};
-            this.setState({reservationData: {handOut: 'false', returned: 'false'}});
-        }
-        if (this.state.selection === 'optionTwo') {
-            // let optionTwoData = {handOut: 'true', returned: 'false'};
-            this.setState({reservationData: {handOut: 'true', returned: 'false'}});
-        }
-        if (this.state.selection === 'optionThree') {
-            // let optionThreeData = {handOut: 'true', returned: 'true'};
-            this.setState({reservationData: {handOut: 'true', returned: 'true'}});
-        }
-    }
-
-    refreshReservations() {
-        this.prepareRequestData();
-        BookService.getReservations(this.state.reservationData)
-            .then(
-                response => {
-                    this.setState({reservations: response.data})
+    const getReservationData = (requestData, selectedOption) => {
+        BookService.getReservations(requestData)
+            .then(response => {
+                    setReservationData(response.data);
+                    setSelection(selectedOption);
+                    setFirstLoad(false)
                 }
-            )
-    }
+            );
+    };
 
-    handleChange(event) {
-        this.setState(
-            {
-               selection: event.target.value
-            },()=>this.refreshReservations()
-        );
-    }
-
-    render() {
         return (
             <Card md={3}>
                 <div className='text-size padding-top'>
+                    {isFirstLoad()}
                     <h4>User reservations</h4>
                     <Row className='space-top margin-bottom'>
-                        <Col md={5} sm={7} lg={3} xs={5}>
-                            Reservation status:
-                        </Col>
-                        <Col md={5} sm={7} lg={2} xs={5}>
-                            <label>
-                                <input type="radio" value='optionOne' name={this.state.selection}
-                                       checked={this.state.selection==='optionOne'}
-                                       onChange={this.handleChange}/>
-                                Queue
-                            </label>
-                        </Col>
-                        <Col md={5} sm={7} lg={2} xs={5}>
-                            <label>
-                                <input type="radio" value='optionTwo' name={this.state.selection}
-                                       checked={this.state.selection==='optionTwo'}
-                                       onChange={this.handleChange}/>
-                                Active
-                            </label>
-                        </Col>
-                        <Col md={5} sm={7} lg={2} xs={5}>
-                            <label>
-                                <input type="radio" value='optionThree' name={this.state.selection}
-                                       checked={this.state.selection==='optionThree'}
-                                       onChange={this.handleChange}/>
-                                History
-                            </label>
-                        </Col>
+                        <label> Reservation status:</label>
+                        {userReservation.map((reservation) =>
+                            <Col md={2} sm={2} lg={2} xs={2}>
+                                    <input type="radio" value='optionOne'
+                                           checked={selection === reservation.optionName}
+                                           onClick={() => {
+                                               getReservationData(reservation.data, reservation.optionName)
+                                           }}/>
+                                <label>{reservation.optionHeader}</label>
+                            </Col>
+                        )}
                     </Row>
                     <ReactTable
                         defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
-                        data={this.state.reservations}
+                        data={reservationsData}
                         columns={[
                             {
                                 minWidth: 200,
@@ -114,7 +66,6 @@ class BookReservations extends Component {
                 </div>
             </Card>
         )
-    }
-}
+};
 
 export default BookReservations;

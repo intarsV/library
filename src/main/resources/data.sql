@@ -6,6 +6,7 @@ author_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 author_name VARCHAR(100) NOT NULL,
 deleted TINYINT
  );
+CREATE INDEX author_name ON authors(author_name);
 
 create table authorities(
 authority_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -21,6 +22,9 @@ copies INTEGER,
 available INTEGER,
 deleted TINYINT
 );
+CREATE INDEX book_title ON books(book_title);
+CREATE INDEX book_author ON books(book_author);
+CREATE INDEX book_genre ON books(book_genre);
 
 create table users(
 user_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -28,6 +32,7 @@ user_name VARCHAR(100) NOT NULL,
 password VARCHAR(100) NOT NULL,
 enabled TINYINT
 );
+CREATE INDEX user_name ON users(user_name);
 
 create table reservations (
 reservation_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -37,8 +42,11 @@ user BIGINT, foreign key (user) references users(user_id),
 hand_out INTEGER,
 returned INTEGER,
 deleted TINYINT
-
 );
+CREATE INDEX book ON reservations(book);
+CREATE INDEX user ON reservations(user);
+CREATE INDEX hand_out ON reservations(hand_out);
+CREATE INDEX returned ON reservations(returned);
 
 insert into authors (author_id, author_name, deleted) values
 (1, 'Rainis', false),
@@ -65,8 +73,8 @@ insert into books ( book_title, book_author, book_genre, copies, available, dele
 insert into books ( book_title, book_author, book_genre, copies, available, deleted) values ( 'Trīs musketieri', 4, 'NOVEL', 3, 3, false);
 insert into books ( book_title, book_author, book_genre, copies, available, deleted) values ( 'Baltais Ilknis', 5, 'NOVEL', 4, 4, false);
 
-insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 1, 3, true, true, false);
-insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 4, 2, true, true, false);
-insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 4, 3, true, false, false);
-insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 2, 2, true, false, false);
-insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( NOW(), 1, 2, false, false, false);
+insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( '2017-12-17', 1, 3, true, true, false);
+insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( '2018-06-22', 4, 2, true, true, false);
+insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( '2019-01-11', 4, 3, true, false, false);
+insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( '2019-08-07', 2, 2, true, false, false);
+insert into reservations (reservation_date, book, user, hand_out, returned, deleted)values ( '2019-09-05', 1, 2, false, false, false);

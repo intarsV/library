@@ -38,4 +38,13 @@ public class AuthorDTO {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+    @Override
+    public String toString() {
+        return "AuthorDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", deleted=" + deleted +
+                '}';
+    }
 }

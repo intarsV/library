@@ -6,7 +6,7 @@ import 'react-table/react-table.css';
 import {genres} from '../../common/Constants';
 import {Card} from 'react-bootstrap';
 
-class BookSearch extends Component{
+class BookSearch_OLD_WithState extends Component{
 
     constructor(props) {
         super(props);
@@ -153,4 +153,4 @@ class BookSearch extends Component{
     }
 }
 
-export default BookSearch;
+export default BookSearch_OLD_WithState;

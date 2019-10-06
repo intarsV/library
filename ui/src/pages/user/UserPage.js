@@ -1,6 +1,6 @@
 import React,{Component}  from 'react';
 import BookReservations from "./BookReservations";
-import BookSearch from './BookSearch';
+import UserBookSearch from "./UserBookSearch";
 
 class UserPage extends Component {
     render() {
@@ -9,7 +9,7 @@ class UserPage extends Component {
                 <br/>
                 <BookReservations/>
                 <br/>
-                <BookSearch/>
+                <UserBookSearch/>
             </>
         )
     }
