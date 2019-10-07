@@ -24,6 +24,12 @@ public class Author {
     public Author() {
     }
 
+    public Author(Long id, @NotNull(message = "Should enter some name!") String name, boolean deleted) {
+        this.id=id;
+        this.name = name;
+        this.deleted = deleted;
+    }
+
     public Author(@NotNull(message = "Should enter some name!") String name, boolean deleted) {
         this.name = name;
         this.deleted = deleted;

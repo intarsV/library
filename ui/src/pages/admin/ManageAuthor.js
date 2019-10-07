@@ -20,8 +20,10 @@ const ManageAuthor = () => {
         AdminService.getAllAuthors()
             .then(
                 response => {
-                    setAuthorData(response.data);
-                    setFirstLoad(false)
+                    if (response.status === 200) {
+                        setAuthorData(response.data);
+                        setFirstLoad(false)
+                    }
                 }
             )
     };

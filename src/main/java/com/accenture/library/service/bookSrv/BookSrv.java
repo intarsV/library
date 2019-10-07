@@ -8,7 +8,7 @@ import java.util.List;
 public interface BookSrv {
     List<BookDTO> getAllBooks();
 
-    Long addBook(String title, String author, String genre, Integer copies) throws Exception;
+    Long addBook(String title, String author, String genre, int copies) throws Exception;
 
     Boolean deleteBook(Long id);
 

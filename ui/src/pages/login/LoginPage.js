@@ -43,7 +43,7 @@ class LoginPage extends Component{
     render() {
         return (
             <div>
-            <h1>Login</h1>
+            <h4>Login</h4>
         <div className='container'>
             {this.state.hasLoginFailed && <div className='alert alert-warning'>Invalid Credentials</div>}
             {this.state.showSuccessMessage && <div>login Successful</div>}

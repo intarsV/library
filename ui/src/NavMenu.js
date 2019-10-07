@@ -9,7 +9,7 @@ class NavMenu extends Component{
 
         return (
             <header>
-                <nav className="navbar navbar-expand-md navbar-dark bg-dark">
+                <nav className="navbar navbar-expand-md navbar-light ">
 
                     <ul className="navbar-nav">
                         <li><Link className="nav-link" to="/courses">Courses</Link></li>

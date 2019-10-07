@@ -4,13 +4,8 @@ import './App.css';
 import LoginPage from './pages/login/LoginPage';
 import LogoutPage from './pages/login/LoginPage';
 import AuthenticatedRoute from './common/AuthenticatedRoute';
-import BookSearch_OLD_WithState from "./pages/toDelete/BookSearch_OLD_WithState";
-import {pageRoutes} from "./common/Constants";
 import UserPage from "./pages/user/UserPage";
 import AdminPage from "./pages/admin/AdminPage";
-import AuthService from './common/services/AuthenticationService';
-import BookReservations from "./pages/user/BookReservations";
-import AdminService from "./common/services/AdminService";
 import UserReservationQueue from "./pages/user/UserResevationQueue";
 
 class App extends Component {
@@ -18,15 +13,15 @@ class App extends Component {
     render() {
         return (
             <Router>
-                    <div id='logo-menu'>
-                        <h4>Super Library </h4>
-                        <h6>by Initex</h6>
-                        <span>
-                            <AuthenticatedRoute path="/user/page" render={()=><UserReservationQueue/>}/>
+                <div id='logo-menu'>
+                    <h4>Super Library </h4>
+                    <h6>by Initex</h6>
+                    <span>
+                            <AuthenticatedRoute path="/user/page" render={() => <UserReservationQueue/>}/>
                         </span>
-                    </div>
-                    <div id='library-content'>
-                        <Switch>
+                </div>
+                <div id='library-content'>
+                    <Switch>
                         <Route path="/" exact component={LoginPage}/>
                         <Route path='/login' exact component={LoginPage}/>
                         <AuthenticatedRoute path='pageRoutes.logoutPage' exact component={LogoutPage}/>
@@ -35,8 +30,8 @@ class App extends Component {
                         {/*<Route exact path={pageRoutes.loginPage} component={LoginPage}/>*/}
                         {/*<AuthenticatedRoute exact path={pageRoutes.logoutPage} component={LogoutPage}/>*/}
                         {/*<AuthenticatedRoute exact path={pageRoutes.bookSearch} component={BookSearch}/>*/}
-                        </Switch>
-                    </div>
+                    </Switch>
+                </div>
             </Router>
 
         )

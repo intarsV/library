@@ -1,6 +1,5 @@
 package com.accenture.library.controller;
 
-import com.accenture.library.domain.Reservation;
 import com.accenture.library.dto.ReservationDTO;
 import com.accenture.library.service.reservationSrv.ReservationSrv;
 import com.accenture.library.service.reservationSrv.ReservationSrvImpl;
@@ -57,7 +56,7 @@ public class ReservationControllerREST {
 
     //Library ADMIN take in the book
     @PostMapping(value = "/admin/take-in")
-    public ResponseEntity takeIn(@RequestBody Reservation reservationDto) {
+    public ResponseEntity takeIn(@RequestBody ReservationDTO reservationDto) {
         reservationService.takeIn(reservationDto.getId());
         return new ResponseEntity<>(reservationDto, HttpStatus.OK);
     }

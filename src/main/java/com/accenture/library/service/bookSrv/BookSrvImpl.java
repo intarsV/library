@@ -31,7 +31,7 @@ public class BookSrvImpl implements BookSrv {
      }
 
     @Override
-    public Long addBook(String title, String authorName, String genre, Integer copies) {
+    public Long addBook(String title, String authorName, String genre, int copies) {
         Author bookAuthor = authorSrv.findByName(authorName);
         Book book = new Book(title, bookAuthor, genre, copies, copies, false);
         return bookRepository.save(book).getId();

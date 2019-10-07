@@ -28,7 +28,7 @@ public class AuthorControllerREST {
     }
 
     @GetMapping("/search")
-    public Author getByName(@RequestBody AuthorDTO name) throws Exception {
+    public Author getByName(@RequestBody AuthorDTO name)  {
         return authorSrv.findByName(name.getName());
     }
 
