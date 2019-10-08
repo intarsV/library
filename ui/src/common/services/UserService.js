@@ -13,7 +13,7 @@ class UserService {
     }
 
     getReservations(reservationData) {
-        return axios.post(API_URL + '/api/v1/reservations/user/list-reservation',
+        return axios.post(API_URL + '/api/v1/reservations/user/queue',
             reservationData, {headers: {authorization: this.getToken()}});
     }
 

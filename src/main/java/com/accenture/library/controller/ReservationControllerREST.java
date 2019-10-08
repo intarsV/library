@@ -23,7 +23,7 @@ public class ReservationControllerREST {
     }
 
     //Library USER reservations
-    @PostMapping(value = "/user/list-reservation")
+    @PostMapping(value = "/user/queue")
     public List<ReservationDTO> getReservations(@RequestBody ReservationDTO reservationDTO, Authentication authentication) {
         final String userName = authentication.getName();
         final String bookTitle = reservationDTO.getBookTitle();

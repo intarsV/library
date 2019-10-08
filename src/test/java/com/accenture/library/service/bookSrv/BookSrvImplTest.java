@@ -5,18 +5,15 @@ import com.accenture.library.domain.Book;
 import com.accenture.library.dto.BookDTO;
 import com.accenture.library.exceptions.LibraryException;
 import com.accenture.library.repository.BookRepository;
-import com.accenture.library.service.authorSrv.AuthorSrv;
 import com.accenture.library.service.authorSrv.AuthorSrvImpl;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.internal.runners.JUnit4ClassRunner;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +63,17 @@ public class BookSrvImplTest {
     }
 
     @Test
+    public void shouldThrowErrorOnSaveIsParamMissing(){
+        String title="";
+        int copies = 0;
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Bad request - require all field");
+        service.addBook(title, AUTHOR_NAME,null, copies);
+    }
+
+    @Test
     public void shouldDeleteBook() {
-        Author author = createAuthor();
+        final Author author = createAuthor();
         Book book = new Book( TITLE, author, GENRE, COPIES, COPIES, false);
         when(bookRepository.findById(ID)).thenReturn(Optional.of(book));
         assertTrue(service.deleteBook(ID));
@@ -82,7 +88,15 @@ public class BookSrvImplTest {
     }
 
     @Test
-    public void getByParameters() {
+    public void shouldReturnListOnParameterSearch() {
+        final List<BookDTO> mockList = createList();
+        when(bookRepository.findByParameters(null, AUTHOR_NAME, null)).thenReturn(mockList);
+        Assert.assertEquals(mockList, service.getByParameters(null, AUTHOR_NAME, null));
+    }
+
+    @Test
+    public void shouldReturnEmptyListOnParameterSearchWithoutAnyValidParam() {
+        Assert.assertEquals(new ArrayList<>(), service.getByParameters(null, null, null));
     }
 
 

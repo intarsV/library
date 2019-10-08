@@ -22,7 +22,7 @@ public class AuthorSrvImpl implements AuthorSrv {
 
 
     @Override
-    public Long saveAuthor(String name) throws LibraryException {
+    public Long saveAuthor(String name) {
         final Optional<Author> foundAuthor = repository.findByName(name);
         if (foundAuthor.isPresent()) {
             throw new LibraryException("Duplicate name exists!");
@@ -36,7 +36,7 @@ public class AuthorSrvImpl implements AuthorSrv {
     }
 
     @Override
-    public Author findByName(String name) throws LibraryException {
+    public Author findByName(String name) {
         final Optional<Author> foundAuthor = repository.findByName(name);
         if (!foundAuthor.isPresent()) {
             throw new LibraryException("No such author found!");

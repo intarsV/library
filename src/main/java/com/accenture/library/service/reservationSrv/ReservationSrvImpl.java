@@ -11,7 +11,9 @@ import com.accenture.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +26,8 @@ public class ReservationSrvImpl implements ReservationSrv {
     private UserRepository userRepository;
 
     @Autowired
-    public ReservationSrvImpl(ReservationRepository reservationRepository, BookRepository bookRepository, UserRepository userRepository) {
+    public ReservationSrvImpl(ReservationRepository reservationRepository
+            , BookRepository bookRepository, UserRepository userRepository) {
         this.reservationRepository = reservationRepository;
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
@@ -32,8 +35,12 @@ public class ReservationSrvImpl implements ReservationSrv {
 
     @Override
     public Long makeReservation(Long bookId, String userName) {
-        User user = userRepository.findByUserName(userName);
-        Reservation reservation = new Reservation(new Book(bookId), user, new Date());
+        final User user = userRepository.findByUserName(userName);
+        final Optional<Book> bookFound = bookRepository.findById(bookId);
+        if (!bookFound.isPresent()) {
+            throw new LibraryException("No book with such ID");
+        }
+        final Reservation reservation = new Reservation(new Book(bookId), user, new Date());
         try {
             return reservationRepository.save(reservation).getId();
         } catch (Exception e) {
@@ -45,12 +52,12 @@ public class ReservationSrvImpl implements ReservationSrv {
     @Override
     @Transactional
     public Long handOut(Long reservationId) {
-        Optional<Reservation> findReservation = reservationRepository.findById(reservationId);
+        final Optional<Reservation> findReservation = reservationRepository.findById(reservationId);
         if (!findReservation.isPresent()) {
             throw new LibraryException("No reservation with id: " + reservationId);
         }
-        Reservation reservation = findReservation.get();
-        Book book = reservation.getBook();
+        final Reservation reservation = findReservation.get();
+        final Book book = reservation.getBook();
         if (book.getAvailable() == 0) {
             throw new LibraryException("Book with id: " + book.getId() + " is not available");
         }
@@ -65,13 +72,13 @@ public class ReservationSrvImpl implements ReservationSrv {
     @Override
     @Transactional
     public Long takeIn(Long reservationId) {
-        Optional<Reservation> findReservation = reservationRepository.findById(reservationId);
+        final Optional<Reservation> findReservation = reservationRepository.findById(reservationId);
         if (!findReservation.isPresent()) {
             throw new LibraryException("No reservation with id: " + reservationId);
         }
-        Reservation reservation = findReservation.get();
+        final Reservation reservation = findReservation.get();
 
-        Book book = reservation.getBook();
+        final Book book = reservation.getBook();
         book.setAvailable(book.getAvailable() + 1);
         bookRepository.save(book);
 
@@ -80,7 +87,10 @@ public class ReservationSrvImpl implements ReservationSrv {
     }
 
     @Override
-    public List<ReservationDTO> getByParameters(String bookTitle, String userName,Boolean handOut, Boolean returned) {
+    public List<ReservationDTO> getByParameters(String bookTitle, String userName, Boolean handOut, Boolean returned) {
+        if (StringUtils.isEmpty(bookTitle) && StringUtils.isEmpty(userName) && handOut == null && returned == null) {
+            return new ArrayList<>();
+        }
         return reservationRepository.getByParameters(bookTitle, userName, handOut, returned);
     }
 
