@@ -44,7 +44,7 @@ public class ReservationSrvImpl implements ReservationSrv {
         try {
             return reservationRepository.save(reservation).getId();
         } catch (Exception e) {
-            String message = "Unable to save to database " + "bookId:" + bookId + " userId:" + user.getId();
+            String message = "Unable to save to database bookId:" + bookId + " userId:" + user.getId();
             throw new LibraryException(message, e);
         }
     }
@@ -52,11 +52,7 @@ public class ReservationSrvImpl implements ReservationSrv {
     @Override
     @Transactional
     public Long handOut(Long reservationId) {
-        final Optional<Reservation> findReservation = reservationRepository.findById(reservationId);
-        if (!findReservation.isPresent()) {
-            throw new LibraryException("No reservation with id: " + reservationId);
-        }
-        final Reservation reservation = findReservation.get();
+        final Reservation reservation = verifyReservationId(reservationId);
         final Book book = reservation.getBook();
         if (book.getAvailable() == 0) {
             throw new LibraryException("Book with id: " + book.getId() + " is not available");
@@ -72,12 +68,7 @@ public class ReservationSrvImpl implements ReservationSrv {
     @Override
     @Transactional
     public Long takeIn(Long reservationId) {
-        final Optional<Reservation> findReservation = reservationRepository.findById(reservationId);
-        if (!findReservation.isPresent()) {
-            throw new LibraryException("No reservation with id: " + reservationId);
-        }
-        final Reservation reservation = findReservation.get();
-
+        final Reservation reservation = verifyReservationId(reservationId);
         final Book book = reservation.getBook();
         book.setAvailable(book.getAvailable() + 1);
         bookRepository.save(book);
@@ -99,4 +90,11 @@ public class ReservationSrvImpl implements ReservationSrv {
         return reservationRepository.getQueue();
     }
 
+    private Reservation verifyReservationId(Long reservationId) {
+        final Optional<Reservation> findReservation = reservationRepository.findById(reservationId);
+        if (!findReservation.isPresent()) {
+            throw new LibraryException("No reservation with id: " + reservationId);
+        }
+        return findReservation.get();
+    }
 }

@@ -1,6 +1,5 @@
 package com.accenture.library.controller;
 
-import com.accenture.library.domain.Author;
 import com.accenture.library.dto.AuthorDTO;
 import com.accenture.library.service.authorSrv.AuthorSrv;
 import com.accenture.library.service.authorSrv.AuthorSrvImpl;
@@ -27,10 +26,10 @@ public class AuthorControllerREST {
         return authorSrv.authorList();
     }
 
-    @GetMapping("/search")
-    public Author getByName(@RequestBody AuthorDTO name)  {
-        return authorSrv.findByName(name.getName());
-    }
+//    @GetMapping("/search")
+//    public Author getByName(@RequestBody AuthorDTO name)  {
+//        return authorSrv.findByName(name.getName());
+//    }
 
     @PostMapping
     public ResponseEntity<AuthorDTO> saveAuthor(@RequestBody AuthorDTO authorDto) {
