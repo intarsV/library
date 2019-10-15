@@ -78,4 +78,17 @@ public class BookDTO {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+    @Override
+    public String toString() {
+        return "BookDTO{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", authorName='" + authorName + '\'' +
+                ", genre='" + genre + '\'' +
+                ", copies=" + copies +
+                ", available=" + available +
+                ", deleted=" + deleted +
+                '}';
+    }
 }

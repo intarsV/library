@@ -13,8 +13,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
@@ -52,36 +50,62 @@ public class AuthorControllerRESTTest {
     }
 
     //For ANY user
-    @WithMockUser(username="vilnis")
+    @WithMockUser(username = "vilnis")
     @Test
     public void shouldReturnAuthorDTOList() throws Exception {
-        List<AuthorDTO> mockList = createList();
+        final List<AuthorDTO> mockList = createAuthorDTOList();
         when(service.authorList()).thenReturn(mockList);
         mvc.perform(get("/api/v1/authors"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{'id': 1,'name':'Janka','deleted': false}]"));
+                .andExpect(content().json("[{'id': " + ID + ",'name':'"
+                        + AUTHOR_NAME + "','deleted': false}]"));
     }
 
     //Only for ADMIN user
-    @WithMockUser(username = "initex", password = "initex000", authorities = "ADMIN")
+    @WithMockUser(username = "karlis", password = "karlis000", authorities = "ADMIN")
     @Test
-    public void shouldSaveAuthor ()throws Exception{
-        String requestBody = "{\"name\": \"Janka\"}";
-        when(service.saveAuthor("Janka")).thenReturn(ID);
+    public void shouldSaveAuthor() throws Exception {
+        final String requestBody = "{\"name\": \"" + AUTHOR_NAME + "\"}";
+        System.out.println(requestBody);
+        when(service.saveAuthor(AUTHOR_NAME)).thenReturn(ID);
         mvc.perform(post("/api/v1/authors")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
                 .andExpect(status().isCreated())
-                .andExpect(content().json("{'id': 1,'name':'Janka','deleted': false}"));
+                .andExpect(content().json("{'id': " + ID + ",'name':'" + AUTHOR_NAME + "','deleted': false}"));
     }
 
 
-    @WithMockUser(username = "ivars", password = "ivars000", authorities = "USER")
+    @WithMockUser(username = "janis", password = "janis000", authorities = "USER")
     @Test
     public void shouldReturnUnauthorisedRequestSaveAuthor() throws Exception {
-        String requestBody = "{\"name\": \"Janka\"}";
-        when(service.saveAuthor("Janka")).thenReturn(ID);
+        final String requestBody = "{\"name\": " + AUTHOR_NAME + "\"}";
+        when(service.saveAuthor(AUTHOR_NAME)).thenReturn(ID);
         mvc.perform(post("/api/v1/authors")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestBody))
+                .andExpect(status().is(403));
+    }
+
+    //Only for ADMIN user
+    @WithMockUser(username = "vilnis", password = "vilnis000", authorities = "ADMIN")
+    @Test
+    public void shouldDeleteBookDTO() throws Exception {
+        final String requestBody = "{\"id\":\"" + ID + "\"}";
+        when(service.deleteAuthor(ID)).thenReturn(true);
+        mvc.perform(post("/api/v1/authors/delete")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestBody))
+                .andExpect(status().isAccepted())
+                .andExpect(content().json("{'id':" + ID +  ", 'deleted': " + true + "}"));
+    }
+
+    //Only for ADMIN user
+    @WithMockUser(username = "vilnis", password = "vilnis000", authorities = "User")
+    @Test
+    public void shouldReturnExceptionDeleteBookDTO() throws Exception {
+        final String requestBody = "{\"id\":\"" + ID + "\"}";
+        mvc.perform(post("/api/v1/authors/delete")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
                 .andExpect(status().is(403));
@@ -89,17 +113,17 @@ public class AuthorControllerRESTTest {
 
     //Auxiliary methods
 
-    private AuthorDTO createDTO() {
+    private AuthorDTO createAuthorDTO() {
         return new AuthorDTO(ID, AUTHOR_NAME, false);
     }
 
-    private List<AuthorDTO> createList(){
-        List<AuthorDTO> list=new ArrayList<>();
-        list.add(createDTO());
+    private List<AuthorDTO> createAuthorDTOList() {
+        final List<AuthorDTO> list = new ArrayList<>();
+        list.add(createAuthorDTO());
         return list;
     }
 
     private Author createAuthor() {
-        return new Author( ID, AUTHOR_NAME, false);
+        return new Author(ID, AUTHOR_NAME, false);
     }
 }

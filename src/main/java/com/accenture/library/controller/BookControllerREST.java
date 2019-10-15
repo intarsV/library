@@ -42,7 +42,7 @@ public class BookControllerREST {
         return new ResponseEntity<>(bookDto, HttpStatus.CREATED);
     }
 
-    @PostMapping(value="/delete")
+    @PostMapping(value = "/delete")
     public ResponseEntity<BookDTO> deleteBook(@RequestBody BookDTO bookDto) {
         final boolean isDeleted = bookSrv.deleteBook(bookDto.getId());
         bookDto.setDeleted(isDeleted);
