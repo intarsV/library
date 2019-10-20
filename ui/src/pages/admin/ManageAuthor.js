@@ -1,37 +1,31 @@
-import React,  {useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Card, Col, Row} from 'react-bootstrap';
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import AdminService from "../../common/services/AdminService";
+import {Context} from "../../common/Context";
 
 const ManageAuthor = () => {
 
     const [authorName, setAuthorName]=useState('');
-    const [authorData, setAuthorData]=useState([]);
-    const [firstLoad, setFirstLoad] = useState(true);
+    const {adminAuthorData: [authorData, setAuthorData]} = useContext(Context);
 
-    const isFirstLoad = () => {
-        if (firstLoad) {
-            getAllAuthors()
-        }
-    };
-
-    const getAllAuthors = () => {
-        AdminService.getAllAuthors()
-            .then(
-                response => {
-                    if (response.status === 200) {
-                        setAuthorData(response.data);
-                        setFirstLoad(false)
+    useEffect(() => {
+            AdminService.getAllAuthors()
+                .then(
+                    response => {
+                        if (response.status === 200) {
+                            setAuthorData(response.data);
+                        }
                     }
-                }
-            )
-    };
+                )
+        }, []
+    );
 
     const addAuthor = () => {
         let filteredArray = authorData.filter(item => item.name === authorName);
         if (filteredArray.length > 0) {
-            alert("There is already author with name!");
+             alert("There is already author with name!");
         } else {
             AdminService.addAuthor({name: authorName})
                 .then(
@@ -44,8 +38,7 @@ const ManageAuthor = () => {
 
     const deleteAuthor = (id) => {
         AdminService.deleteAuthor({id: id})
-            .then(
-                response => {
+            .then(response => {
                     let filteredArray = authorData.filter(item => item.id !== id);
                     setAuthorData(filteredArray);
                 }
@@ -53,9 +46,8 @@ const ManageAuthor = () => {
     };
 
         return (
-            <Card>
-                <div className='text-size padding-top'>
-                    {isFirstLoad()}
+            <div className="small-card-padding">
+                <Card>
                     <h4>Authors</h4>
                     <Row>
                         <Col xl={3}>
@@ -78,14 +70,14 @@ const ManageAuthor = () => {
                             {
                                 accessor: "id",
                                 Cell: ({value}) => (
-                                    <button onClick={() =>deleteAuthor(value)}>Delete</button>
+                                    <button onClick={() => deleteAuthor(value)}>Delete</button>
                                 )
                             }
                         ]}
                         className="-striped -highlight text-size"
                     />
-                </div>
-            </Card>
+                </Card>
+            </div>
         )
 };
 

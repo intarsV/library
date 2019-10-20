@@ -1,51 +1,47 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect } from 'react';
 import {Card} from "react-bootstrap";
 import ReactTable from "react-table";
 import AdminService from "../../common/services/AdminService";
+import {Context} from "../../common/Context";
 
 const ReservationQueue=()=>{
 
-    const[queue, setQueue]=useState([]);
-    const [firstLoad, setFirstLoad] = useState(true);
+    const{adminReservationQueue:[adminReservationQueue, setAdminReservationQueue]}=useContext(Context);
 
-    const isFirstLoad = () => {
-        if (firstLoad) {
-            refreshReservations()
-        }
-    };
+    useEffect(() => {
+        refreshReservations();
+        }, []
+    );
 
     const refreshReservations = () => {
         AdminService.getReservationQueue()
             .then(
                 response => {
-                    setQueue(response.data);
-                    setFirstLoad(false)
+                    setAdminReservationQueue(response.data);
                 }
             )
     };
 
     const handOut = (id) => {
         AdminService.handOut({id: id})
-            .then(
-                response => {
-                    let filteredArray = queue.filter(item => item.id !== id);
-                    setQueue(filteredArray);
+            .then(response => {
+                    let filteredArray = adminReservationQueue.filter(item => item.id !== id);
+                    setAdminReservationQueue(filteredArray);
                 }
             )
     };
 
     return (
-        <Card md={3}>
-            <div className='text-size padding-top'>
-                {isFirstLoad()}
+        <div className="small-card-padding">
+            <Card md={3}>
                 <h4>User reservations Queue</h4>
                 <br/>
-                <button onClick={()=>refreshReservations()}>Refresh</button>
-                <br/>
-                <br/>
+                <div className="row-format">
+                <button className="button" onClick={() => refreshReservations()}>Refresh</button>
+                </div>
                 <ReactTable
                     defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
-                    data={queue}
+                    data={adminReservationQueue}
                     columns={[
                         {
                             minWidth: 200,
@@ -55,7 +51,7 @@ const ReservationQueue=()=>{
                         },
                         {
                             Header: "User",
-                            accessor:"userName"
+                            accessor: "userName"
                         },
                         {
                             id: 'reservationDate',
@@ -67,13 +63,15 @@ const ReservationQueue=()=>{
                             Header: '',
                             accessor: 'id',
                             Cell: ({value}) => (
-                                <button onClick={() => {handOut(value)}}>Hand out</button>)
+                                <button onClick={() => {
+                                    handOut(value)
+                                }}>Hand out</button>)
                         }
                     ]}
                     className="-striped -highlight text-size"
                 />
-            </div>
-        </Card>
+            </Card>
+        </div>
     )
 };
 

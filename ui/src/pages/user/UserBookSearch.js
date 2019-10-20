@@ -1,9 +1,10 @@
-import React,  {useState } from 'react';
+import React, {useContext, useState} from 'react';
 import {Card, Col, Row} from 'react-bootstrap';
 import BookService from '../../common/services/UserService'
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import {genres} from "../../common/Constants";
+import {Context} from "../../common/Context";
 
 const UserBookSearch = () => {
 
@@ -12,6 +13,7 @@ const UserBookSearch = () => {
     const [genre, setGenre] = useState('');
     const [books, setBooks] = useState([]);
     const [searchData, setSearchData] = useState({});
+    const {userReservationQueue:[reservationQueue, setReservationQueue]} = useContext(Context);
 
     const prepareRequest = () => {
         setSearchData({});
@@ -40,15 +42,14 @@ const UserBookSearch = () => {
         BookService.makeReservation({bookId: bookId})
             .then(
                 response => {
-                    console.log(response);
-                    //TODO: inform user
+                    setReservationQueue([...reservationQueue, response.data])
                 }
             )
     };
 
     return (
-        <Card>
-            <div className='text-size padding-top'>
+        <div className="small-card-padding">
+            <Card>
                 <h4>Search books</h4>
                 <Row className='space-top'>
                     <Col md={3} sm={5} lg={2} xs={3}>
@@ -69,7 +70,7 @@ const UserBookSearch = () => {
                                onChange={(event) => setAuthorName(event.target.value)}/>
                     </Col>
                     <Col>
-                        <button className=' button ' onClick={() => {
+                        <button className="button" onClick={() => {
                             searchBooks()
                         }}> Search
                         </button>
@@ -127,8 +128,8 @@ const UserBookSearch = () => {
                     ]}
                     className="-striped -highlight text-size"
                 />
-            </div>
-        </Card>
+            </Card>
+        </div>
     )
 };
 

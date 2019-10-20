@@ -1,24 +1,22 @@
-import React,{Component}  from 'react';
-import ReservationQueue from './ReservationQueue'
-import ReservationSearch from './ReservationSearch';
-import ManageAuthor from "./ManageAuthor";
-import ManageBook from "./ManageBook";
+import React from 'react';
 
-class AdminPage extends Component {
-    render() {
-        return (
-            <>
-                <br/>
-                <ReservationQueue/>
-                <br/>
-                <ReservationSearch/>
-                <br/>
-                <ManageAuthor/>
-                <br/>
-                <ManageBook/>
-            </>
-        )
-    }
-}
+const AdminPage = () => {
+    return (
+        <>
+            <h1 className="text-size">
+                This is ADMIN section.<br/>
+                Menu options (on the left side)<br/>
+                "Add author" -> You can add/delete authors;<br/>
+                "Add book" -> You can add/delete book;<br/>
+                "Search reservations" -> You can search active/history reservations by parameters;<br/>
+                "Queue" -> You view and hand out books;<br/>
+            </h1>
+        </>
+    )
+};
 
 export default AdminPage;
+
+
+
+

@@ -34,7 +34,7 @@ public class ReservationSrvImpl implements ReservationSrv {
     }
 
     @Override
-    public Long makeReservation(Long bookId, String userName) {
+    public ReservationDTO makeReservation(Long bookId, String userName) {
         final User user = userRepository.findByUserName(userName);
         final Optional<Book> bookFound = bookRepository.findById(bookId);
         if (!bookFound.isPresent()) {
@@ -42,7 +42,12 @@ public class ReservationSrvImpl implements ReservationSrv {
         }
         final Reservation reservation = new Reservation(new Book(bookId), user, new Date());
         try {
-            return reservationRepository.save(reservation).getId();
+            Long savedId=reservationRepository.save(reservation).getId();
+            final ReservationDTO reservationDTO=new ReservationDTO();
+            reservationDTO.setId(savedId);
+            reservationDTO.setBookTitle(bookFound.get().getTitle());
+            reservationDTO.setReservationDate(reservation.getReservationDate());
+            return reservationDTO;
         } catch (Exception e) {
             String message = "Unable to save to database bookId:" + bookId + " userId:" + user.getId();
             throw new LibraryException(message, e);

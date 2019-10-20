@@ -5,7 +5,7 @@ import com.accenture.library.dto.ReservationDTO;
 import java.util.List;
 
 public interface ReservationSrv {
-    Long makeReservation(Long bookId, String userName);
+    ReservationDTO makeReservation(Long bookId, String userName);
 
     Long handOut(Long reservationId);
 

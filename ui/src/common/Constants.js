@@ -7,6 +7,20 @@ export const pageRoutes = {
     logoutPage: '/logout',
 };
 
+export const adminMenu = [
+    {key: 'Main', value: '/admin'},
+    {key: 'Add author', value: '/admin/add/author'},
+    {key: 'Add book', value: '/admin/add/book'},
+    {key: 'Search reservations', value: '/admin/reservations'},
+    {key: 'Users queue', value: '/admin/queue'}
+];
+
+export const userMenu = [
+    {key: 'Main', value: '/user'},
+    {key: 'My reservations', value: '/user/reservations'},
+    {key: 'Search book', value: '/user/search'}
+];
+
 export const genres = [
     'POETRY', 'NOVEL', 'PROSE',
 ];
@@ -22,5 +36,3 @@ export const userReservation = [
     {data: {handOut: "true", returned: "false"}, optionName: "optionActive", optionHeader: "Active"},
     {data: {handOut: "true", returned: "true"}, optionName: "optionReturned", optionHeader: "History"}
 ];
-
-export const xxx={data: {handOut: "false", returned: "false"}, optionName: "optionOne", optionHeader: "Queue"};

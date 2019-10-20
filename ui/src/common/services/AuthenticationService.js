@@ -24,8 +24,7 @@ class AuthenticationService{
 
     isUserLoggedIn() {
         let user = sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
-        if (user === null)  return false;
-        return true;
+        return user !== null;
     }
 }
 export default new AuthenticationService()

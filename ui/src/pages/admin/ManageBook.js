@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Card, Col, Row} from "react-bootstrap";
 import {genres} from "../../common/Constants";
 import ReactTable from "react-table";
 import AdminService from "../../common/services/AdminService";
+import {Context} from "../../common/Context";
 
 const ManageBook=()=>{
 
@@ -10,43 +11,36 @@ const ManageBook=()=>{
     const [authorName, setAuthorName] = useState('');
     const [genre, setGenre] = useState('');
     const [copies, setCopies] = useState('');
-    const [booksData, setBooksData] = useState([]);
-    const [authorsData, setAuthorsData] = useState([]);
-    const [firstLoad, setFirstLoad] = useState(true);
+    const{adminBookData: [booksData, setBooksData]}=useContext(Context);
+    const {adminAuthorData: [authorData, setAuthorData]} = useContext(Context);
+    const [error, setError]=useState('');
 
-    const isFirstLoad=()=>{
-        if(firstLoad){
-            getAllBooks();
-            getAllAuthors()}
-    };
+    useEffect(() => {
+            AdminService.getAllBooks()
+                .then(
+                    response => {
+                        setBooksData(response.data)
 
-    const getAllBooks = () => {
-        AdminService.getAllBooks()
-            .then(
-                response => (
-                    setBooksData(response.data)
+                    }
+                );
+            AdminService.getAllAuthors()
+                .then(
+                    response => {
+                        if (response.status === 200) {
+                            setAuthorData(response.data);
+                        }
+                    }
                 )
-            )
-    };
-
-    const getAllAuthors = () => {
-        AdminService.getAllAuthors()
-            .then(
-                response => {
-                    setAuthorsData(response.data);
-                    setFirstLoad(false)
-                }
-            )
-    };
+        }, []
+    );
 
     const addBook = () => {
         let filteredArray = booksData.filter(item => item.title === title);
         if (filteredArray.length > 0) {
-            alert("There is already author with name!");
+            setError("There is already book with such title!");
         } else {
             AdminService.addABook({title: title, authorName: authorName, genre: genre, copies: copies})
-                .then(
-                    response => {
+                .then(response => {
                         setBooksData([...booksData, response.data]);
                     })
         }
@@ -54,8 +48,7 @@ const ManageBook=()=>{
 
     const deleteBook = (id) => {
         AdminService.deleteBook({id: id})
-            .then(
-                response => {
+            .then(response => {
                     let filteredArray =booksData.filter(item => item.id !== id);
                     setBooksData(filteredArray);
                 }
@@ -63,20 +56,20 @@ const ManageBook=()=>{
     };
 
     return(
-        <Card>
-            <div className='text-size padding-top'>
-                {isFirstLoad()}
+        <div className="small-card-padding">
+            <Card>
                 <h4>Books</h4>
                 <Row>
                     <Col xl={3}>
                         <input className='col-width-height ' type='text' name='title'
                                onChange={(event) => setTitle(event.target.value)}/>
+                        <span><div className="error-text">{error}</div></span>
                     </Col>
                     <Col xl={3}>
                         <select className='col-width-height' name='authorName'
                                 onChange={(event) => setAuthorName(event.target.value)}>
                             <option value={''}/>
-                            {authorsData.map(author =>
+                            {authorData.map(author =>
                                 <option value={author.name}>{author.name}</option>)
                             }
                         </select>
@@ -95,7 +88,7 @@ const ManageBook=()=>{
                                onChange={(event) => setCopies(event.target.value)}/>
                     </Col>
                     <Col>
-                        <button className=' button ' onClick={()=>addBook()}>Add book</button>
+                        <button className=' button ' onClick={() => addBook()}>Add book</button>
                     </Col>
                 </Row>
                 <br/>
@@ -117,7 +110,7 @@ const ManageBook=()=>{
                         },
                         {
                             Header: "Copies",
-                            accessor:"copies"
+                            accessor: "copies"
                         },
                         {
                             accessor: "id",
@@ -128,8 +121,8 @@ const ManageBook=()=>{
                     ]}
                     className="-striped -highlight text-size"
                 />
-            </div>
-        </Card>
+            </Card>
+        </div>
     )
 };
 

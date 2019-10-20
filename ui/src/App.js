@@ -1,41 +1,68 @@
-import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import React, {useContext} from 'react';
+import { Router, Route, Switch} from 'react-router-dom'
 import './App.css';
 import LoginPage from './pages/login/LoginPage';
-import LogoutPage from './pages/login/LoginPage';
 import AuthenticatedRoute from './common/AuthenticatedRoute';
 import UserPage from "./pages/user/UserPage";
 import AdminPage from "./pages/admin/AdminPage";
-import UserReservationQueue from "./pages/user/UserResevationQueue";
+import UserQueue from './pages/user/UserQueue'
+import {Context} from './common/Context'
+import history from './common/history';
+import NavMenu from "./menu/NavMenu";
+import UserBookSearch from "./pages/user/UserBookSearch";
+import BookReservations from "./pages/user/BookReservations";
+import ManageAuthor from "./pages/admin/ManageAuthor";
+import ManageBook from "./pages/admin/ManageBook";
+import ReservationSearch from "./pages/admin/ReservationSearch";
+import ReservationQueue from "./pages/admin/ReservationQueue";
+import AuthenticationService from "./common/services/AuthenticationService";
+import MainPage from "./pages/main/MainPage";
 
-class App extends Component {
+const App = () => {
 
-    render() {
-        return (
-            <Router>
-                <div id='logo-menu'>
-                    <h4>Super Library </h4>
-                    <h6>by Initex</h6>
-                    <span>
-                            <AuthenticatedRoute path="/user/page" render={() => <UserReservationQueue/>}/>
-                        </span>
+    const {userAuthority: [userAuthority]} = useContext(Context);
+    const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
+    const {userReservationQueue:[reservationQueue, setReservationQueue]} = useContext(Context);
+
+    return (
+
+        <Router history={history}>
+            <div id="container">
+                <div className='menu-side'>
+                    <div className="logo">
+                        <h4>Super Library </h4>
+                        <h6>by Initex</h6>
+                    </div>
+                    {userAuthority !== null && isUserLoggedIn===true &&
+                    <NavMenu/>}
                 </div>
-                <div id='library-content'>
-                    <Switch>
-                        <Route path="/" exact component={LoginPage}/>
-                        <Route path='/login' exact component={LoginPage}/>
-                        <AuthenticatedRoute path='pageRoutes.logoutPage' exact component={LogoutPage}/>
-                        <AuthenticatedRoute path="/admin/page" exact component={AdminPage}/>
-                        <AuthenticatedRoute path="/user/page" exact component={UserPage}/>
-                        {/*<Route exact path={pageRoutes.loginPage} component={LoginPage}/>*/}
-                        {/*<AuthenticatedRoute exact path={pageRoutes.logoutPage} component={LogoutPage}/>*/}
-                        {/*<AuthenticatedRoute exact path={pageRoutes.bookSearch} component={BookSearch}/>*/}
+                <div className='main'>
+                    <Switch >
+                        <Route path="/" exact render={() => <MainPage/>}/>
+                        <AuthenticatedRoute path="/admin" exact render={() => <AdminPage/>}/>
+                        <AuthenticatedRoute path="/admin/add/author" render={() => <ManageAuthor/>}/>
+                        <AuthenticatedRoute path="/admin/add/book" render={() => <ManageBook/>}/>
+                        <AuthenticatedRoute path="/admin/reservations" render={() => <ReservationSearch/>}/>
+                        <AuthenticatedRoute path="/admin/queue" render={() => <ReservationQueue/>}/>
+                        <AuthenticatedRoute path="/user" exact render={() => <UserPage/>}/>
+                        <AuthenticatedRoute path="/user/reservations" render={() => <BookReservations/>}/>
+                        <AuthenticatedRoute path="/user/search" render={() => <UserBookSearch/>}/>
                     </Switch>
                 </div>
-            </Router>
+                <div className='info-side '>
+                    <h4>Info box</h4>
+                    <div className="login-input">
+                        <Route path="/" exact render={() => <LoginPage/>}/>
+                        <Route path='/login' exact render={() => <LoginPage/>}/>
+                        {userAuthority !== null && userAuthority==='USER'&&
+                        isUserLoggedIn===true && reservationQueue.length!==0 &&
+                        <UserQueue/>}
+                    </div>
+                </div>
+            </div>
+        </Router>
+    )
+};
 
-        )
-    }
-}
 
 export default App;

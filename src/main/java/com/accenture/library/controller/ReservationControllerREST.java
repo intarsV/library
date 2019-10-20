@@ -1,5 +1,6 @@
 package com.accenture.library.controller;
 
+import com.accenture.library.domain.Reservation;
 import com.accenture.library.dto.ReservationDTO;
 import com.accenture.library.service.reservationSrv.ReservationSrv;
 import com.accenture.library.service.reservationSrv.ReservationSrvImpl;
@@ -36,9 +37,8 @@ public class ReservationControllerREST {
     @PostMapping(value = "/user/make-reservation")
     public ResponseEntity makeReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {
         final String userName = authentication.getName();
-        Long id = reservationService.makeReservation(reservationDto.getBookId(), userName);
-        reservationDto.setId(id);
-        return new ResponseEntity<>(reservationDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(reservationService.makeReservation(reservationDto.getBookId(),
+                                                                    userName), HttpStatus.CREATED);
     }
 
     //Library ADMIN reservation queue

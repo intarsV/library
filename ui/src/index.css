@@ -3,97 +3,19 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+    height: 100vh;
 }
 
-#main-content {
-    max-width: 100% !important;
-}
-
-#library-wrapper {
-    max-width: none !important;
-}
-
-#library-content {
-    margin-left: 500px;
-    margin-right: 500px;
-}
-
-@media (max-width: 1693px) {
-    #library-content {
-        margin-left: 420px;
-        margin-right: 420px;
-    }
-}
-
-@media (max-width: 1560px) {
-    #library-content {
-        margin-left: 400px;
-        margin-right: 400px;
-    }
-}
-
-@media (max-width: 1450px) {
-    #library-content {
-        margin-left: 350px;
-        margin-right: 350px;
-    }
-}
-
-@media (max-width: 1300px) {
-    #library-content {
-        margin-left: 300px;
-        margin-right: 300px;
-    }
-}
-
-@media (max-width: 1200px) {
-    #library-content {
-        margin-left: 200px;
-        margin-right: 200px;
-    }
-}
-
-@media (max-width: 1000px) {
-    #library-content {
-        margin-left: 100px;
-        margin-right: 100px;
-    }
-}
-
-@media (max-width: 800px) {
-    #library-content {
-        margin-left: 50px;
-        margin-right: 50px;
-    }
-}
-
-@media (max-width: 600px) {
-    #library-content {
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-}
-
-@media (max-width: 800px) {
-    #library-content {
-        margin-left: 50px;
-        margin-right: 50px;
-    }
-}
-
-@media (max-width: 600px) {
-    #library-content {
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-}
-
-#logo-menu {
-    background-image: linear-gradient(to right, darkgray , transparent);;
-    width: 20%;
-    height: 100%;
-    position: fixed;
+.logo {
     padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 40px;
+    text-align: right;
+}
+
+.info{
+    padding-top: 20px;
+    padding-right: 20px;
     text-align: right;
 }
 
@@ -109,6 +31,15 @@ body {
     padding-top: 5px;
     margin-left: 0 !important;
     margin-right: 0 !important;
+}
+
+.card-padding{
+    padding-right: 40px;
+    padding-left: 40px;
+}
+
+.small-card-padding{
+    padding: 10px 80px;
 }
 
 .space-bottom {
@@ -127,7 +58,14 @@ body {
     height: 23px;
 }
 
+.row-format{
+    margin-left:0;
+    margin-right: 0;
+}
+
 .button {
+    height: 25px;
+    font-size: 12px;
     background: ghostwhite;
     border-radius: 20%;
 }
@@ -136,5 +74,64 @@ body {
     width: inherit;
     height: 23px;
 }
+/*Start here*/
+#container {
+    display: flex;
+    justify-content: space-between;
+    height: 100vh;
+}
+
+.menu-side {
+    background-image: linear-gradient(to right, darkgray , transparent);
+    padding-top: 20px;
+    flex: 0 0 250px;
+}
+
+.info-side{
+    background-image: linear-gradient(to left, darkgray , transparent);
+    padding-top: 40px;
+    flex: 0 0 250px;
+}
+
+.main {
+    flex: 1 60%;
+    align-content: center;
+    padding-top: 40px;
+}
+
+.navLinks{
+    padding-left: 20px;
+    padding-top: 5px;
+    list-style-type: none;
+    font-size: medium;
+    color: gray;
+}
+
+.navLinks:hover{
+    color:black;
+    text-decoration: none;
+}
+
+.login-input{
+    padding-right: 20px;
+    text-align: right;
+    height: 5px;
+}
+
+.input-field{
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+.error-text{
+    font-size: 12px;
+    color: red;
+}
+
+
+
+/*#container > div + div {*/
+/*    border-left: 2px solid rgba(0, 0, 0, 0.12);*/
+/*}*/
 
 

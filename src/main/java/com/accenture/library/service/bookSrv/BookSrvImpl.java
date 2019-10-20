@@ -48,7 +48,9 @@ public class BookSrvImpl implements BookSrv {
         if (!findBook.isPresent()) {
             throw new LibraryException("Book with ID: " + id + "not found");
         } else {
-            bookRepository.delete(findBook.get());
+            Book updateBook=findBook.get();
+            updateBook.setDeleted(true);
+            bookRepository.save(updateBook);
         }
         return true;
     }

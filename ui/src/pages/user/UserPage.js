@@ -1,18 +1,16 @@
-import React,{Component}  from 'react';
-import BookReservations from "./BookReservations";
-import UserBookSearch from "./UserBookSearch";
+import React from 'react';
 
-class UserPage extends Component {
-    render() {
-        return (
-            <>
-                <br/>
-                <BookReservations/>
-                <br/>
-                <UserBookSearch/>
-            </>
-        )
-    }
-}
+const UserPage = () => {
+    return (
+        <>
+            <h1 className="text-size">
+                This is USER section.<br/>
+                Menu options (on the left side)<br/>
+                "My reservations" -> You can view your reservations: active or history;<br/>
+                "Search book" -> You can search books and add to the queue;
+            </h1>
+        </>
+    )
+};
 
 export default UserPage;

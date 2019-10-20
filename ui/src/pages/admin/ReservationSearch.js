@@ -47,8 +47,8 @@ const ReservationSearch=()=>{
     };
 
     return (
-        <Card>
-            <div className='text-size padding-top'>
+        <div className="small-card-padding">
+            <Card>
                 <h4>Search reservations</h4>
                 <Row className='space-top'>
                     <Col md={3} sm={5} lg={2} xs={3}>
@@ -56,7 +56,9 @@ const ReservationSearch=()=>{
                     </Col>
                     <Col xl={3}>
                         <input className='col-width-height ' type='text' name='bookTitle' value={bookTitle}
-                               onChange={(event)=>{setBookTitle(event.target.value)}}/>
+                               onChange={(event) => {
+                                   setBookTitle(event.target.value)
+                               }}/>
                     </Col>
                 </Row>
                 <Row className='space-top'>
@@ -66,10 +68,12 @@ const ReservationSearch=()=>{
                     <Col xl={3}>
                         <input className='col-width-height ' type='text' name='userName'
                                value={userName}
-                               onChange={(event)=>{setUserName(event.target.value)}}/>
+                               onChange={(event) => {
+                                   setUserName(event.target.value)
+                               }}/>
                     </Col>
                     <Col>
-                        <button className=' button ' onClick={()=>searchReservations()}> Search</button>
+                        <button className=' button ' onClick={() => searchReservations()}> Search</button>
                     </Col>
                 </Row>
                 <Row className='space-top margin-bottom'>
@@ -78,7 +82,9 @@ const ReservationSearch=()=>{
                     </Col>
                     <Col xl={3}>
                         <select className='col-width-height' name='returned' value={returned}
-                                onChange={(event)=>{setReturned(event.target.value)}}>
+                                onChange={(event) => {
+                                    setReturned(event.target.value)
+                                }}>
                             <option value={''}/>
                             {returnedOptions.map(option =>
                                 <option value={option.value}>{option.key}</option>)
@@ -113,7 +119,7 @@ const ReservationSearch=()=>{
                         },
                         {
                             Header: "Returned",
-                            accessor:"returned",
+                            accessor: "returned",
                             Cell: Cell => (
                                 <input type="checkbox" defaultChecked={Cell.original.returned}
                                        disabled={(Cell.original.returned)}
@@ -122,8 +128,8 @@ const ReservationSearch=()=>{
                     ]}
                     className="-striped -highlight text-size"
                 />
-            </div>
-        </Card>
+            </Card>
+        </div>
     )
 };
 

@@ -110,13 +110,17 @@ public class ReservationControllerRESTTest {
         final ReservationDTO reservationDTO = new ReservationDTO();
         reservationDTO.setId(RESERVATION_ID);
         reservationDTO.setBookId(BOOK_ID);
+        final ReservationDTO responseReservationDTO=new ReservationDTO();
+        responseReservationDTO.setId(RESERVATION_ID);
+        responseReservationDTO.setBookTitle(BOOK_TITLE);
+        responseReservationDTO.setReservationDate(RESERVATION_DATE);
         final String requestBody = "{\"bookId\": " + BOOK_ID + "}";
-        when(service.makeReservation(BOOK_ID, USER_NAME)).thenReturn(RESERVATION_ID);
+        when(service.makeReservation(BOOK_ID, USER_NAME)).thenReturn(responseReservationDTO);
         mvc.perform(post("/api/v1/reservations/user/make-reservation")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
                 .andExpect(status().isCreated())
-                .andExpect(content().string(mapper.writeValueAsString(reservationDTO)));
+                .andExpect(content().string(mapper.writeValueAsString(responseReservationDTO)));
     }
 
     @WithMockUser(username = USER_NAME, password = "janis000", authorities = "ADMIN")

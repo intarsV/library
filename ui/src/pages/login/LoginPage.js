@@ -1,62 +1,56 @@
-import React, {Component} from 'react';
+import React, { useContext, useState } from 'react';
 import AuthenticationService from '../../common/services/AuthenticationService'
+import {Context} from "../../common/Context";
+import history from '../../common/history';
 
-class LoginPage extends Component{
+const LoginPage=()=> {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-            hasLoginFailed: false,
-            showSuccessMessage: false
-        };
-        this.handleChange = this.handleChange.bind(this);
-        this.loginClicked = this.loginClicked.bind(this);
-    }
+    const {username: [userName, setUserName]} = useContext(Context);
+    const [password, setPassword] = useState('');
+    const {userAuthority: [userAuthority, setUserAuthority]} = useContext(Context);
+    const {hasLoginFailed: [hasLoginFailed, setHasLoginFailed]} = useContext(Context);
+    const {showSuccessMessage: [showSuccessMessage, setShowSuccessMessage]}=useContext(Context);
 
-    handleChange(event) {
-        this.setState(
-            {
-                [event.target.name]: event.target.value
-            }
-        )
-    }
-
-    loginClicked() {
+    const loginClicked=()=> {
         AuthenticationService
-            .executeBasicAuthenticationService(this.state.username, this.state.password)
+            .executeBasicAuthenticationService(userName, password)
             .then(response => {
-                if (response.data.message === "ADMIN") {
-                    AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password);
-                    this.props.history.push('/admin/page')
+                if (response.data.message === 'ADMIN' || response.data.message === 'USER') {
+                    AuthenticationService.registerSuccessfulLogin(userName, password);
+                    setUserAuthority(response.data.message);
+                    history.push('/' + response.data.message.toLowerCase());
+                    sessionStorage.setItem("AUTHORITY", response.data.message);
+                    setHasLoginFailed(false);
                 } else {
-                    AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password);
-                    this.props.history.push('/user/page');
+                    setHasLoginFailed(true);
+                    setShowSuccessMessage(false);
                 }
             }).catch(() => {
-            this.setState({showSuccessMessage: false});
-            this.setState({hasLoginFailed: true});
+            setHasLoginFailed( true);
+            setShowSuccessMessage( false);
         })
-    }
+    };
 
-    render() {
-        return (
-            <div>
+    return (
+        <div>
             <h4>Login</h4>
-        <div className='container'>
-            {this.state.hasLoginFailed && <div className='alert alert-warning'>Invalid Credentials</div>}
-            {this.state.showSuccessMessage && <div>login Successful</div>}
-            User Name: <input type='text' name='username'
-                              onChange={this.handleChange}/>
-            Password: <input type='password' name='password'
-                             onChange={this.handleChange}/>
-            <button className='button' onClick={this.loginClicked}> Login</button>
+            <div>
+                login:
+                <input size="10" type='text' name='username' className="input-field text-size"
+                       onChange={(event) => setUserName(event.target.value)}/>
+                <br/>
+                password:
+                <input size="10" height="5" type='password' name='password' className="input-field text-size"
+                       onChange={(event) => setPassword(event.target.value)}/>
+                       <br/>
+                <button className='button' onClick={loginClicked}> Login</button>
+                <br/>
+                {hasLoginFailed && <div className="error-text">Invalid Credentials!</div>}
+            </div>
         </div>
-        </div>
-        )
-    }
-}
+    )
+    };
+
 export default LoginPage
 
 
