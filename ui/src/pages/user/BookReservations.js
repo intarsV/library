@@ -9,7 +9,7 @@ import {Context} from "../../common/Context";
 const BookReservations =()=> {
 
     const [selection, setSelection] = useState('optionActive');
-    const{userReservationData:[reservationsData, setReservationData]}=useContext(Context);
+    const {userReservationData:[reservationsData, setReservationData]}=useContext(Context);
 
     useEffect(()=>{
             getReservationData({handOut: "true", returned: "false"}, "optionActive")

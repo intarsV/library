@@ -14,6 +14,8 @@ const UserBookSearch = () => {
     const [books, setBooks] = useState([]);
     const [searchData, setSearchData] = useState({});
     const {userReservationQueue:[reservationQueue, setReservationQueue]} = useContext(Context);
+    const {showUserQueue:[showUserQueue, setShowUserQueue]} = useContext(Context);
+
 
     const prepareRequest = () => {
         setSearchData({});
@@ -42,7 +44,8 @@ const UserBookSearch = () => {
         BookService.makeReservation({bookId: bookId})
             .then(
                 response => {
-                    setReservationQueue([...reservationQueue, response.data])
+                    setReservationQueue([...reservationQueue, response.data]);
+                    setShowUserQueue(true)
                 }
             )
     };

@@ -1,6 +1,28 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
+import BookService from "../../common/services/UserService";
+import {Context} from "../../common/Context";
 
 const UserPage = () => {
+
+    const {userReservationQueue:[reservationQueue, setReservationQueue]} = useContext(Context);
+    const {showUserQueue:[showUserQueue, setShowUserQueue]} = useContext(Context);
+
+    useEffect(() => {
+            BookService.getReservations({handOut: "false", returned: "false"})
+                .then(response => {
+                        setReservationQueue(response.data);
+                    }
+                );
+        },[]
+    );
+
+    useEffect(() => {
+            if (reservationQueue.length > 0) {
+                setShowUserQueue(true);
+            }
+        }, [reservationQueue]
+    );
+
     return (
         <>
             <h1 className="text-size">

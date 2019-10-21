@@ -4,15 +4,21 @@ import AuthenticationService from '../common/services/AuthenticationService';
 import {Context} from '../common/Context';
 import {adminMenu, userMenu} from '../common/Constants';
 
-
 const NavMenu = () => {
 
     const {userAuthority: [userAuthority, setUserAuthority]} = useContext(Context);
+    const {showUserQueue:[showUserQueue, setShowUserQueue]} = useContext(Context);
+    const {userReservationQueue:[reservationQueue, setReservationQueue]} = useContext(Context);
 
     const logout = () => {
         AuthenticationService.logout();
-        sessionStorage.clear();
+        clearUserData();
+    };
+
+    const clearUserData=()=>{
         setUserAuthority(null);
+        setShowUserQueue(false);
+        setReservationQueue([]);
     };
 
     return (

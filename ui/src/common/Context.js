@@ -12,6 +12,7 @@ export default ({children}) => {
     /* User data*/
     const [reservationQueue, setReservationQueue] = useState([]);
     const [reservationsData, setReservationData] = useState([]);
+    const [showUserQueue, setShowUserQueue]=useState(false);
 
     /*Admin data*/
     const [adminReservationQueue, setAdminReservationQueue] = useState([]);
@@ -25,6 +26,7 @@ export default ({children}) => {
         showSuccessMessage: [showSuccessMessage, setShowSuccessMessage],
         userReservationQueue: [reservationQueue, setReservationQueue],
         userReservationData: [reservationsData, setReservationData],
+        showUserQueue:[showUserQueue, setShowUserQueue],
         adminReservationQueue: [adminReservationQueue, setAdminReservationQueue],
         adminAuthorData: [authorData, setAuthorData],
         adminBookData: [booksData, setBooksData],

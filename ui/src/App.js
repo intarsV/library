@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import { Router, Route, Switch} from 'react-router-dom'
 import './App.css';
 import LoginPage from './pages/login/LoginPage';
@@ -20,12 +20,11 @@ import MainPage from "./pages/main/MainPage";
 
 const App = () => {
 
-    const {userAuthority: [userAuthority]} = useContext(Context);
+    const {userAuthority: [userAuthority, setAuthority]} = useContext(Context);
+    const {showUserQueue:[showUserQueue, setShowUserQueue]} = useContext(Context);
     const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
-    const {userReservationQueue:[reservationQueue, setReservationQueue]} = useContext(Context);
 
     return (
-
         <Router history={history}>
             <div id="container">
                 <div className='menu-side'>
@@ -33,11 +32,11 @@ const App = () => {
                         <h4>Super Library </h4>
                         <h6>by Initex</h6>
                     </div>
-                    {userAuthority !== null && isUserLoggedIn===true &&
+                    {userAuthority !== null && isUserLoggedIn === true &&
                     <NavMenu/>}
                 </div>
                 <div className='main'>
-                    <Switch >
+                    <Switch>
                         <Route path="/" exact render={() => <MainPage/>}/>
                         <AuthenticatedRoute path="/admin" exact render={() => <AdminPage/>}/>
                         <AuthenticatedRoute path="/admin/add/author" render={() => <ManageAuthor/>}/>
@@ -54,8 +53,7 @@ const App = () => {
                     <div className="login-input">
                         <Route path="/" exact render={() => <LoginPage/>}/>
                         <Route path='/login' exact render={() => <LoginPage/>}/>
-                        {userAuthority !== null && userAuthority==='USER'&&
-                        isUserLoggedIn===true && reservationQueue.length!==0 &&
+                        {showUserQueue &&
                         <UserQueue/>}
                     </div>
                 </div>

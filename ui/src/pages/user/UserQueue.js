@@ -1,6 +1,5 @@
-import React, {useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Card } from 'react-bootstrap';
-import BookService from '../../common/services/UserService'
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import {Context} from "../../common/Context";
@@ -8,15 +7,6 @@ import {Context} from "../../common/Context";
 const UserQueue = () => {
 
     const {userReservationQueue:[reservationQueue, setReservationQueue]} = useContext(Context);
-
-    useEffect(() => {
-            BookService.getReservations({handOut: "false", returned: "false"})
-                .then(response => {
-                        setReservationQueue(response.data);
-                    }
-                );
-        }, []
-    );
 
     return (
         <Card>
