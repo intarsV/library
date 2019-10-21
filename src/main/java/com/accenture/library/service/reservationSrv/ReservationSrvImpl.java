@@ -42,8 +42,8 @@ public class ReservationSrvImpl implements ReservationSrv {
         }
         final Reservation reservation = new Reservation(new Book(bookId), user, new Date());
         try {
-            Long savedId=reservationRepository.save(reservation).getId();
-            final ReservationDTO reservationDTO=new ReservationDTO();
+            final Long savedId = reservationRepository.save(reservation).getId();
+            final ReservationDTO reservationDTO = new ReservationDTO();
             reservationDTO.setId(savedId);
             reservationDTO.setBookTitle(bookFound.get().getTitle());
             reservationDTO.setReservationDate(reservation.getReservationDate());
@@ -52,6 +52,14 @@ public class ReservationSrvImpl implements ReservationSrv {
             String message = "Unable to save to database bookId:" + bookId + " userId:" + user.getId();
             throw new LibraryException(message, e);
         }
+    }
+
+    @Override
+    public Long deleteReservation(Long reservationId) {
+        final Reservation reservation = verifyReservationId(reservationId);
+        reservation.setDeleted(true);
+        reservationRepository.save(reservation);
+        return reservationId;
     }
 
     @Override
@@ -94,6 +102,8 @@ public class ReservationSrvImpl implements ReservationSrv {
     public List<ReservationDTO> getReservationQueue() {
         return reservationRepository.getQueue();
     }
+
+    //Auxiliary methods
 
     private Reservation verifyReservationId(Long reservationId) {
         final Optional<Reservation> findReservation = reservationRepository.findById(reservationId);

@@ -64,10 +64,12 @@ const ManageAuthor = () => {
                         data={authorData}
                         columns={[
                             {
+                                maxWidth: 500,
                                 Header: "Author name",
                                 accessor: "name"
                             },
                             {
+                                className:"columnAlignCenter",
                                 accessor: "id",
                                 Cell: ({value}) => (
                                     <button onClick={() => deleteAuthor(value)}>Delete</button>

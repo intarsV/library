@@ -19,8 +19,12 @@ body {
     text-align: right;
 }
 
-#tableHeader {
-    background-color: #8fd19e;
+.columnAlignCenter{
+    text-align:center ;
+}
+
+.columnAlignLeft{
+    text-align:left ;
 }
 
 .padding-top {

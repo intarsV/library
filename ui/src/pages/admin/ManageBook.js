@@ -105,14 +105,17 @@ const ManageBook=()=>{
                             accessor: "authorName"
                         },
                         {
+                            className:"columnAlignCenter",
                             Header: "Genre",
                             accessor: "genre"
                         },
                         {
+                            className:"columnAlignCenter",
                             Header: "Copies",
                             accessor: "copies"
                         },
                         {
+                            className:"columnAlignCenter",
                             accessor: "id",
                             Cell: ({value}) => (
                                 <button onClick={() => deleteBook(value)}>Delete</button>

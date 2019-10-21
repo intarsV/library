@@ -54,12 +54,14 @@ const ReservationQueue=()=>{
                             accessor: "userName"
                         },
                         {
+                            className:"columnAlignCenter",
                             id: 'reservationDate',
                             Header: "Reservation date",
                             accessor: 'reservationDate',
                             Cell: props => new Date(props.value).toLocaleDateString()
                         },
                         {
+                            className:"columnAlignCenter",
                             Header: '',
                             accessor: 'id',
                             Cell: ({value}) => (

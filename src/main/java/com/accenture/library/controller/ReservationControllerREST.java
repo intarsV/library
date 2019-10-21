@@ -33,6 +33,12 @@ public class ReservationControllerREST {
         return reservationService.getByParameters(bookTitle, userName, handOut, returned);
     }
 
+    //Library USER remove reservation
+    @PostMapping(value = "/user/remove-reservation")
+    public ResponseEntity removeReservation(@RequestBody ReservationDTO reservationDto) {
+        return new ResponseEntity<>(reservationService.deleteReservation(reservationDto.getId()), HttpStatus.ACCEPTED);
+    }
+
     //Library USER make book reservation
     @PostMapping(value = "/user/make-reservation")
     public ResponseEntity makeReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {

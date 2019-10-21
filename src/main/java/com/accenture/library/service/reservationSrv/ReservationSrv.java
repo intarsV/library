@@ -7,6 +7,8 @@ import java.util.List;
 public interface ReservationSrv {
     ReservationDTO makeReservation(Long bookId, String userName);
 
+    Long deleteReservation(Long id);
+
     Long handOut(Long reservationId);
 
     Long takeIn(Long reservationId);

@@ -108,21 +108,19 @@ const UserBookSearch = () => {
                             accessor: "authorName"
                         },
                         {
+                            className:"columnAlignCenter",
                             minWidth: 60,
                             Header: "Genre",
                             accessor: "genre"
                         },
                         {
-                            show: false,
-                            Header: "Copies",
-                            accessor: "copies"
-                        },
-                        {
+                            className:"columnAlignCenter",
                             minWidth: 70,
                             Header: "Available",
                             accessor: "available"
                         },
                         {
+                            className:"columnAlignCenter",
                             Header: '',
                             accessor: 'id',
                             Cell: ({value}) => (

@@ -48,11 +48,12 @@ const BookReservations =()=> {
                         columns={[
                             {
                                 minWidth: 200,
-                                maxWidth: 200,
+                                maxWidth: 500,
                                 Header: "Title",
                                 accessor: "bookTitle"
                             },
                             {
+                                className:"columnAlignCenter",
                                 id: 'reservationDate',
                                 Header: "Reservation date",
                                 accessor: 'reservationDate',

@@ -112,12 +112,14 @@ const ReservationSearch=()=>{
                             accessor: "userName"
                         },
                         {
+                            className:"columnAlignCenter",
                             id: 'reservationDate',
                             Header: "Date",
                             accessor: 'reservationDate',
                             Cell: props => new Date(props.value).toLocaleDateString()
                         },
                         {
+                            className:"columnAlignCenter",
                             Header: "Returned",
                             accessor: "returned",
                             Cell: Cell => (

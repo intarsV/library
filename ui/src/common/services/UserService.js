@@ -21,6 +21,11 @@ class UserService {
         return axios.post(API_URL + '/api/v1/reservations/user/make-reservation',
             reservationData, {headers: {authorization: this.getToken()}});
     }
+
+    removeReservation(reservationData){
+        return axios.post(API_URL + '/api/v1/reservations/user/remove-reservation',
+            reservationData, {headers: {authorization: this.getToken()}});
+    }
 }
 
 export default new UserService();
