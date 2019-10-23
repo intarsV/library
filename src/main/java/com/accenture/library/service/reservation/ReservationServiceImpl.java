@@ -1,4 +1,4 @@
-package com.accenture.library.service.reservationSrv;
+package com.accenture.library.service.reservation;
 
 import com.accenture.library.domain.Book;
 import com.accenture.library.domain.Reservation;
@@ -19,14 +19,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ReservationSrvImpl implements ReservationSrv {
+public class ReservationServiceImpl implements ReservationService {
 
     private ReservationRepository reservationRepository;
     private BookRepository bookRepository;
     private UserRepository userRepository;
 
     @Autowired
-    public ReservationSrvImpl(ReservationRepository reservationRepository
+    public ReservationServiceImpl(ReservationRepository reservationRepository
             , BookRepository bookRepository, UserRepository userRepository) {
         this.reservationRepository = reservationRepository;
         this.bookRepository = bookRepository;
@@ -55,8 +55,12 @@ public class ReservationSrvImpl implements ReservationSrv {
     }
 
     @Override
-    public Long deleteReservation(Long reservationId) {
+    public Long deleteReservation(Long reservationId, String userName) {
         final Reservation reservation = verifyReservationId(reservationId);
+        final User user = reservation.getUser();
+        if (!user.getUserName().equals(userName)) {
+            throw new LibraryException("User " + userName + " dont have such reservation");
+        }
         reservation.setDeleted(true);
         reservationRepository.save(reservation);
         return reservationId;

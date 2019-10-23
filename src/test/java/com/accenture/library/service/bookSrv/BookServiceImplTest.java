@@ -5,7 +5,8 @@ import com.accenture.library.domain.Book;
 import com.accenture.library.dto.BookDTO;
 import com.accenture.library.exceptions.LibraryException;
 import com.accenture.library.repository.BookRepository;
-import com.accenture.library.service.authorSrv.AuthorSrvImpl;
+import com.accenture.library.service.author.AuthorServiceImpl;
+import com.accenture.library.service.book.BookServiceImpl;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,7 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BookSrvImplTest {
+public class BookServiceImplTest {
 
     private static final Long ID=1L;
     private static final String TITLE = "SuperBook";
@@ -40,10 +41,10 @@ public class BookSrvImplTest {
     private BookRepository bookRepository;
 
     @Mock
-    private AuthorSrvImpl authorSrv;
+    private AuthorServiceImpl authorSrv;
 
     @InjectMocks
-    BookSrvImpl service;
+    BookServiceImpl service;
 
     @Test
     public void getAllBooks() {

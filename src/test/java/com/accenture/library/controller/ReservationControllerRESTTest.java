@@ -4,7 +4,7 @@ import com.accenture.library.domain.Author;
 import com.accenture.library.domain.Book;
 import com.accenture.library.domain.User;
 import com.accenture.library.dto.ReservationDTO;
-import com.accenture.library.service.reservationSrv.ReservationSrvImpl;
+import com.accenture.library.service.reservation.ReservationServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +51,7 @@ public class ReservationControllerRESTTest {
     private ObjectMapper mapper;
 
     @MockBean
-    private ReservationSrvImpl service;
+    private ReservationServiceImpl service;
 
     private MockMvc mvc;
 

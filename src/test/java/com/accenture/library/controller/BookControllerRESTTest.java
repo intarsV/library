@@ -1,7 +1,7 @@
 package com.accenture.library.controller;
 
 import com.accenture.library.dto.BookDTO;
-import com.accenture.library.service.bookSrv.BookSrvImpl;
+import com.accenture.library.service.book.BookServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +45,7 @@ public class BookControllerRESTTest {
     private ObjectMapper mapper;
 
     @MockBean
-    private BookSrvImpl service;
+    private BookServiceImpl service;
 
     private MockMvc mvc;
 

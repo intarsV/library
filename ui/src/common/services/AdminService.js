@@ -49,6 +49,15 @@ class AdminService {
     takeIn(reservationData){
         return axios.post(API_URL + '/api/v1/reservations/admin/take-in', reservationData, {headers: {authorization: this.getToken()}});
     }
+
+    /* functions for users*/
+    getUsers() {
+        return axios.get(API_URL + '/api/v1/admin/users', {headers: {authorization: this.getToken()}});
+    }
+
+    addUser(userData) {
+        return axios.post(API_URL + '/api/v1/admin/users/add-user', userData, {headers: {authorization: this.getToken()}});
+    }
 }
 
 export default new AdminService();

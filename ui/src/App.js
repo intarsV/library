@@ -17,6 +17,7 @@ import ReservationSearch from "./pages/admin/ReservationSearch";
 import ReservationQueue from "./pages/admin/ReservationQueue";
 import AuthenticationService from "./common/services/AuthenticationService";
 import MainPage from "./pages/main/MainPage";
+import ManageUsers from "./pages/admin/ManageUsers";
 
 const App = () => {
 
@@ -43,6 +44,7 @@ const App = () => {
                         <AuthenticatedRoute path="/admin/add/book" render={() => <ManageBook/>}/>
                         <AuthenticatedRoute path="/admin/reservations" render={() => <ReservationSearch/>}/>
                         <AuthenticatedRoute path="/admin/queue" render={() => <ReservationQueue/>}/>
+                        <AuthenticatedRoute path="/admin/users" render={() => <ManageUsers/>}/>
                         <AuthenticatedRoute path="/user" exact render={() => <UserPage/>}/>
                         <AuthenticatedRoute path="/user/reservations" render={() => <BookReservations/>}/>
                         <AuthenticatedRoute path="/user/search" render={() => <UserBookSearch/>}/>

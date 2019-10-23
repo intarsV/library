@@ -9,6 +9,7 @@ import com.accenture.library.exceptions.LibraryException;
 import com.accenture.library.repository.BookRepository;
 import com.accenture.library.repository.ReservationRepository;
 import com.accenture.library.repository.UserRepository;
+import com.accenture.library.service.reservation.ReservationServiceImpl;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -24,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ReservationSrvImplTest {
+public class ReservationServiceImplTest {
     private static final Long RESERVATION_ID = 1L;
 
     private static final Long BOOK_ID = 2L;
@@ -50,7 +51,7 @@ public class ReservationSrvImplTest {
     private UserRepository userRepository;
 
     @InjectMocks
-    ReservationSrvImpl service;
+    ReservationServiceImpl service;
 
     @Test
     public void makeReservationShouldReturnSavedReservationId() {

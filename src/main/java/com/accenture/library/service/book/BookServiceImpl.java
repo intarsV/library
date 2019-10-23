@@ -1,12 +1,12 @@
-package com.accenture.library.service.bookSrv;
+package com.accenture.library.service.book;
 
 import com.accenture.library.domain.Author;
 import com.accenture.library.domain.Book;
 import com.accenture.library.dto.BookDTO;
 import com.accenture.library.exceptions.LibraryException;
 import com.accenture.library.repository.BookRepository;
-import com.accenture.library.service.authorSrv.AuthorSrv;
-import com.accenture.library.service.authorSrv.AuthorSrvImpl;
+import com.accenture.library.service.author.AuthorService;
+import com.accenture.library.service.author.AuthorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -16,15 +16,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BookSrvImpl implements BookSrv {
+public class BookServiceImpl implements BookService {
 
     private BookRepository bookRepository;
-    private AuthorSrv authorSrv;
+    private AuthorService authorService;
 
     @Autowired
-    public BookSrvImpl(BookRepository bookRepository, AuthorSrvImpl authorSrv) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorServiceImpl authorSrv) {
         this.bookRepository = bookRepository;
-        this.authorSrv = authorSrv;
+        this.authorService = authorSrv;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class BookSrvImpl implements BookSrv {
         if (StringUtils.isEmpty(title) || StringUtils.isEmpty(authorName) || StringUtils.isEmpty(genre) || copies == 0) {
             throw new LibraryException("Bad request - require all field");
         }
-        final Author bookAuthor = authorSrv.findByName(authorName);
+        final Author bookAuthor = authorService.findByName(authorName);
         final Book book = new Book(title, bookAuthor, genre, copies, copies, false);
         return bookRepository.save(book).getId();
     }

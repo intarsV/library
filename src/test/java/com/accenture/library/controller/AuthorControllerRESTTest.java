@@ -2,7 +2,7 @@ package com.accenture.library.controller;
 
 import com.accenture.library.domain.Author;
 import com.accenture.library.dto.AuthorDTO;
-import com.accenture.library.service.authorSrv.AuthorSrvImpl;
+import com.accenture.library.service.author.AuthorServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +37,7 @@ public class AuthorControllerRESTTest {
     private WebApplicationContext context;
 
     @MockBean
-    private AuthorSrvImpl service;
+    private AuthorServiceImpl service;
 
     private MockMvc mvc;
 

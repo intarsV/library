@@ -1,4 +1,4 @@
-package com.accenture.library.service.authorSrv;
+package com.accenture.library.service.author;
 
 import com.accenture.library.domain.Author;
 import com.accenture.library.dto.AuthorDTO;
@@ -6,7 +6,7 @@ import org.springframework.dao.DataRetrievalFailureException;
 
 import java.util.List;
 
-public interface AuthorSrv {
+public interface AuthorService {
 
     Long saveAuthor(String name);
     List<AuthorDTO> authorList();

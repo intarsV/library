@@ -1,9 +1,8 @@
 package com.accenture.library.controller;
 
-import com.accenture.library.domain.Reservation;
 import com.accenture.library.dto.ReservationDTO;
-import com.accenture.library.service.reservationSrv.ReservationSrv;
-import com.accenture.library.service.reservationSrv.ReservationSrvImpl;
+import com.accenture.library.service.reservation.ReservationService;
+import com.accenture.library.service.reservation.ReservationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +15,10 @@ import java.util.List;
 @RequestMapping("/api/v1/reservations")
 public class ReservationControllerREST {
 
-    private ReservationSrv reservationService;
+    private ReservationService reservationService;
 
     @Autowired
-    public ReservationControllerREST(ReservationSrvImpl bookReservationSvr) {
+    public ReservationControllerREST(ReservationServiceImpl bookReservationSvr) {
         this.reservationService = bookReservationSvr;
     }
 
@@ -35,8 +34,10 @@ public class ReservationControllerREST {
 
     //Library USER remove reservation
     @PostMapping(value = "/user/remove-reservation")
-    public ResponseEntity removeReservation(@RequestBody ReservationDTO reservationDto) {
-        return new ResponseEntity<>(reservationService.deleteReservation(reservationDto.getId()), HttpStatus.ACCEPTED);
+    public ResponseEntity removeReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {
+        final Long reservationId=reservationDto.getId();
+        final String userName = authentication.getName();
+        return new ResponseEntity<>(reservationService.deleteReservation(reservationId, userName), HttpStatus.ACCEPTED);
     }
 
     //Library USER make book reservation

@@ -1,11 +1,10 @@
-package com.accenture.library.service.bookSrv;
+package com.accenture.library.service.book;
 
-import com.accenture.library.domain.Book;
 import com.accenture.library.dto.BookDTO;
 
 import java.util.List;
 
-public interface BookSrv {
+public interface BookService {
     List<BookDTO> getAllBooks();
 
     Long addBook(String title, String author, String genre, int copies) throws Exception;

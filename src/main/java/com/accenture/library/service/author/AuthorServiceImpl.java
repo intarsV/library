@@ -1,4 +1,4 @@
-package com.accenture.library.service.authorSrv;
+package com.accenture.library.service.author;
 
 import com.accenture.library.domain.Author;
 import com.accenture.library.dto.AuthorDTO;
@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AuthorSrvImpl implements AuthorSrv {
+public class AuthorServiceImpl implements AuthorService {
 
     private AuthorRepository repository;
 
     @Autowired
-    public AuthorSrvImpl(AuthorRepository repository) {
+    public AuthorServiceImpl(AuthorRepository repository) {
         this.repository = repository;
     }
 

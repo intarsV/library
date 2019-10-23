@@ -4,6 +4,7 @@ import com.accenture.library.domain.Author;
 import com.accenture.library.dto.AuthorDTO;
 import com.accenture.library.exceptions.LibraryException;
 import com.accenture.library.repository.AuthorRepository;
+import com.accenture.library.service.author.AuthorServiceImpl;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -11,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AuthorSrvImplTest {
+public class AuthorServiceImplTest {
 
     private static final Long ID = 1L;
     private static final String AUTHOR_NAME = "Janka";
@@ -35,7 +35,7 @@ public class AuthorSrvImplTest {
     private AuthorRepository repository;
 
     @InjectMocks
-    private AuthorSrvImpl service;
+    private AuthorServiceImpl service;
 
     @Test
     public void shouldReturnAuthorList() {

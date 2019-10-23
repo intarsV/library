@@ -18,6 +18,7 @@ export default ({children}) => {
     const [adminReservationQueue, setAdminReservationQueue] = useState([]);
     const [authorData, setAuthorData]=useState([]);
     const [booksData, setBooksData] = useState([]);
+    const [userData, setUserData] = useState([]);
 
     const context = {
         username: [userName, setUserName],
@@ -30,6 +31,7 @@ export default ({children}) => {
         adminReservationQueue: [adminReservationQueue, setAdminReservationQueue],
         adminAuthorData: [authorData, setAuthorData],
         adminBookData: [booksData, setBooksData],
+        adminUserData: [userData, setUserData],
     };
 
     return <Context.Provider value={context}>{children}</Context.Provider>
