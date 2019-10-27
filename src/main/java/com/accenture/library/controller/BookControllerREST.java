@@ -35,7 +35,7 @@ public class BookControllerREST {
         return bookService.getByParameters(title, author, genre);
     }
 
-    @PostMapping
+    @PostMapping(value = "/add")
     public ResponseEntity<BookDTO> saveBook(@RequestBody BookDTO bookDto) throws Exception {
         Long id = bookService.addBook(bookDto.getTitle(), bookDto.getAuthorName(), bookDto.getGenre(), bookDto.getCopies());
         bookDto.setId(id);

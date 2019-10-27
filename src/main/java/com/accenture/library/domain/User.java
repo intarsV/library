@@ -11,12 +11,11 @@ public class User {
 
     @Id
     @Column(name = "user_id")
-    @SequenceGenerator(name = "seqUserName", initialValue = 3, allocationSize = 100)
+    @SequenceGenerator(name = "seqUserName", initialValue = 4, allocationSize = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqUserName")
     private Long id;
 
     @Column(name = "user_name")
-    @NotNull(message = "Should enter some name!")
     private String userName;
 
     @Column(name = "password")
@@ -32,10 +31,16 @@ public class User {
     public User() {
     }
 
-    public User(@NotNull(message = "Should enter some name!") String userName, String password, boolean enabled, Set<Authority> authorities) {
+    public User( String userName, String password, boolean enabled, Set<Authority> authorities) {
         this.userName = userName;
         this.password = password;
         this.enabled = enabled;
+        this.authorities = authorities;
+    }
+
+    public User(String userName, String password, Set<Authority> authorities) {
+        this.userName = userName;
+        this.password = password;
         this.authorities = authorities;
     }
 

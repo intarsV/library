@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -20,6 +21,8 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private static final String ADMIN = "ADMIN";
 
     @Value("${spring.queries.users-query}")
     private String usersQuery;
@@ -55,13 +58,15 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/basicauth").permitAll()
+                .antMatchers("/api/v1/users/**").permitAll()
+                .antMatchers("/api/v1/users/admin/**").hasAuthority(ADMIN)
                 .antMatchers(HttpMethod.GET,"/api/v1/authors/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/v1/authors/**").hasAuthority("ADMIN")
-                .antMatchers("/api/v1/reservations/admin/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/v1/authors/**").hasAuthority(ADMIN)
+                .antMatchers("/api/v1/reservations/admin/**").hasAuthority(ADMIN)
                 .antMatchers("/api/v1/reservations/users/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/v1/books/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/v1/books/search").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/v1/books/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/v1/books/**").hasAuthority(ADMIN)
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -73,6 +78,13 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public JdbcUserDetailsManager jdbcUserDetailsManager() throws Exception {
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
+        jdbcUserDetailsManager.setDataSource(dataSource);
+        return jdbcUserDetailsManager;
     }
 }
 

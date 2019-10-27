@@ -15,7 +15,6 @@ public class Author {
     private Long id;
 
     @Column(name = "author_name")
-    @NotNull(message = "Should enter some name!")
     private String name;
 
     @Column(name = "deleted", columnDefinition = "TINYINT", length = 1)
@@ -24,7 +23,7 @@ public class Author {
     public Author() {
     }
 
-    public Author(Long id, @NotNull(message = "Should enter some name!") String name, boolean deleted) {
+    public Author(Long id, String name, boolean deleted) {
         this.id=id;
         this.name = name;
         this.deleted = deleted;

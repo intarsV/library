@@ -46,6 +46,10 @@ body {
     padding: 10px 80px;
 }
 
+.super-small-padding{
+    padding: 10px 120px;
+}
+
 .space-bottom {
     padding-bottom: 5px;
 }
@@ -74,7 +78,7 @@ body {
     border-radius: 20%;
 }
 
-.col-width-height {
+.col-width-height{
     width: inherit;
     height: 23px;
 }
@@ -127,9 +131,32 @@ body {
     margin-bottom: 5px;
 }
 
+.info-text{
+    font-size: 14px;
+    color: forestgreen;
+}
+
 .error-text{
-    font-size: 12px;
+    font-size: 14px;
     color: red;
+}
+
+input:focus{
+    outline:none;
+    width: inherit;
+    height: 23px;
+}
+
+select:focus{
+    outline:none;
+    width: inherit;
+    height: 23px;
+}
+
+.input-field-error-state{
+    width: inherit;
+    height: 23px;
+    border: 1px solid red;
 }
 
 

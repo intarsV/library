@@ -15,16 +15,13 @@ public class Book {
     private Long id;
 
     @Column(name = "book_title")
-    @NotNull(message = "Should add some title!")
     private String title;
 
     @ManyToOne
     @JoinColumn(name = "book_author")
-    @NotNull(message = "Should add some author!")
     private Author author;
 
     @Column(name = "book_genre")
-    @NotNull(message = "Select genre!")
     private String genre;
 
     @Column(name = "copies")
@@ -39,7 +36,7 @@ public class Book {
     public Book() {
     }
 
-    public Book(@NotNull(message = "Should add some title!") String title, @NotNull(message = "Should add some author!") Author author, @NotNull(message = "Select genre!") String genre, int copies, int available, boolean deleted) {
+    public Book(String title, Author author, String genre, int copies, int available, boolean deleted) {
         this.title = title;
         this.author = author;
         this.genre = genre;
@@ -50,7 +47,7 @@ public class Book {
 
     public Book(Long bookId) {
 
-        this.id=bookId;
+        this.id = bookId;
     }
 
     public Long getId() {

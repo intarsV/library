@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/admin/users")
+@RequestMapping("/api/v1/users")
 public class UserControllerREST {
 
     private UserService userService;
@@ -22,23 +22,25 @@ public class UserControllerREST {
         this.userService = userService;
     }
 
-
     @GetMapping
     public List<UserResponseDTO> getAllBooks() {
         return userService.getUsers();
     }
 
-    @PostMapping(value = "/add-user")
-    public ResponseEntity<> addUser(@RequestBody UserDTO userDTO) {
-        System.out.println(userDTO);
-        System.out.println("here");
-
-        final String encryptedUserName = userDTO.getUserName();
-        final String encryptedPassword = userDTO.getPassword();
-        return new ResponseEntity<>(userService.addUser(encryptedUserName, encryptedPassword), HttpStatus.CREATED);
+    @PostMapping(value = "/add")
+    public ResponseEntity addUser(@RequestBody UserDTO userDTO) {
+        final String encodedUserName = userDTO.getUserName();
+        final String encodedPassword = userDTO.getPassword();
+        return new ResponseEntity<>(userService.addUser(encodedUserName, encodedPassword), HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/remove-user")
+    @PostMapping(value = "/admin/enable")
+    public ResponseEntity enableUser(@RequestBody UserDTO userDTO) {
+        final Long userId = userDTO.getId();
+        return new ResponseEntity<>(userService.enableUser(userId), HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping(value = "/admin/disable")
     public ResponseEntity disableUser(@RequestBody UserDTO userDTO) {
         final Long userId = userDTO.getId();
         return new ResponseEntity<>(userService.disableUser(userId), HttpStatus.ACCEPTED);

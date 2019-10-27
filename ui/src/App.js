@@ -18,6 +18,7 @@ import ReservationQueue from "./pages/admin/ReservationQueue";
 import AuthenticationService from "./common/services/AuthenticationService";
 import MainPage from "./pages/main/MainPage";
 import ManageUsers from "./pages/admin/ManageUsers";
+import Registration from "./pages/registration/Registration";
 
 const App = () => {
 
@@ -39,6 +40,7 @@ const App = () => {
                 <div className='main'>
                     <Switch>
                         <Route path="/" exact render={() => <MainPage/>}/>
+                        <Route path="/register" exact render={() => <Registration/>}/>
                         <AuthenticatedRoute path="/admin" exact render={() => <AdminPage/>}/>
                         <AuthenticatedRoute path="/admin/add/author" render={() => <ManageAuthor/>}/>
                         <AuthenticatedRoute path="/admin/add/book" render={() => <ManageBook/>}/>
@@ -55,6 +57,7 @@ const App = () => {
                     <div className="login-input">
                         <Route path="/" exact render={() => <LoginPage/>}/>
                         <Route path='/login' exact render={() => <LoginPage/>}/>
+                        <Route path='/register' exact render={() => <LoginPage/>}/>
                         {showUserQueue &&
                         <UserQueue/>}
                     </div>

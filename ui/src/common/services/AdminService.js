@@ -13,7 +13,7 @@ class AdminService {
     }
 
     addAuthor(authorData) {
-        return axios.post(API_URL + '/api/v1/authors', authorData,{headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/authors/add', authorData,{headers: {authorization: this.getToken()}});
     }
 
     deleteAuthor(authorData) {
@@ -26,7 +26,7 @@ class AdminService {
     }
 
     addABook(bookData) {
-        return axios.post(API_URL + '/api/v1/books', bookData, {headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/books/add', bookData, {headers: {authorization: this.getToken()}});
     }
 
     deleteBook(bookData) {
@@ -39,7 +39,7 @@ class AdminService {
     }
 
     handOut(reservationData) {
-        return axios.post(API_URL + '/api/v1/reservations/admin/hand-out', reservationData, {headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/reservations/admin/handout', reservationData, {headers: {authorization: this.getToken()}});
     }
 
     searchReservations(reservationData) {
@@ -47,16 +47,20 @@ class AdminService {
     }
 
     takeIn(reservationData){
-        return axios.post(API_URL + '/api/v1/reservations/admin/take-in', reservationData, {headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/reservations/admin/take', reservationData, {headers: {authorization: this.getToken()}});
     }
 
     /* functions for users*/
     getUsers() {
-        return axios.get(API_URL + '/api/v1/admin/users', {headers: {authorization: this.getToken()}});
+        return axios.get(API_URL + '/api/v1/users', {headers: {authorization: this.getToken()}});
     }
 
-    addUser(userData) {
-        return axios.post(API_URL + '/api/v1/admin/users/add-user', userData, {headers: {authorization: this.getToken()}});
+    enableUser(userData) {
+        return axios.post(API_URL + '/api/v1/users/admin/enable', userData, {headers: {authorization: this.getToken()}});
+    }
+
+    disableUser(userData) {
+        return axios.post(API_URL + '/api/v1/users/admin/disable', userData, {headers: {authorization: this.getToken()}});
     }
 }
 

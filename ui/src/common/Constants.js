@@ -37,3 +37,8 @@ export const userReservation = [
     {data: {handOut: "true", returned: "false"}, optionName: "optionActive", optionHeader: "Active"},
     {data: {handOut: "true", returned: "true"}, optionName: "optionReturned", optionHeader: "History"}
 ];
+
+//fieldList for forms
+export const AuthorFieldList=[{id: 'Author name', type:'text'}];
+export const BookFieldlist=[{id: 'Book title', type:'text'}, {id:'Author', type:'text'},
+                            {id: 'Genre', type:'text'}, {id: 'Copies',type:'number'}];

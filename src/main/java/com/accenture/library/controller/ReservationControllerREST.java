@@ -33,16 +33,16 @@ public class ReservationControllerREST {
     }
 
     //Library USER remove reservation
-    @PostMapping(value = "/user/remove-reservation")
-    public ResponseEntity removeReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {
+    @PostMapping(value = "/user/delete")
+    public ResponseEntity deleteReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {
         final Long reservationId=reservationDto.getId();
         final String userName = authentication.getName();
         return new ResponseEntity<>(reservationService.deleteReservation(reservationId, userName), HttpStatus.ACCEPTED);
     }
 
     //Library USER make book reservation
-    @PostMapping(value = "/user/make-reservation")
-    public ResponseEntity makeReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {
+    @PostMapping(value = "/user/add")
+    public ResponseEntity saveReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {
         final String userName = authentication.getName();
         return new ResponseEntity<>(reservationService.makeReservation(reservationDto.getBookId(),
                                                                     userName), HttpStatus.CREATED);
@@ -55,14 +55,14 @@ public class ReservationControllerREST {
     }
 
     //Library ADMIN hands out the book
-    @PostMapping(value = "/admin/hand-out")
+    @PostMapping(value = "/admin/handout")
     public ResponseEntity handOut(@RequestBody ReservationDTO reservationDto) {
         reservationService.handOut(reservationDto.getId());
         return new ResponseEntity<>(reservationDto, HttpStatus.CREATED);
     }
 
     //Library ADMIN take in the book
-    @PostMapping(value = "/admin/take-in")
+    @PostMapping(value = "/admin/take")
     public ResponseEntity takeIn(@RequestBody ReservationDTO reservationDto) {
         reservationService.takeIn(reservationDto.getId());
         return new ResponseEntity<>(reservationDto, HttpStatus.OK);

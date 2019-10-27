@@ -6,13 +6,16 @@ public class UserResponseDTO {
 
     private String userName;
 
+    private boolean enabled;
+
     public UserResponseDTO(Long id) {
         this.id = id;
     }
 
-    public UserResponseDTO(Long id, String userName) {
+    public UserResponseDTO(Long id, String userName, boolean enabled) {
         this.id = id;
         this.userName = userName;
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -29,5 +32,13 @@ public class UserResponseDTO {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

@@ -37,6 +37,9 @@ public class BookServiceImpl implements BookService {
         if (StringUtils.isEmpty(title) || StringUtils.isEmpty(authorName) || StringUtils.isEmpty(genre) || copies == 0) {
             throw new LibraryException("Bad request - require all field");
         }
+        if (!getByParameters(title.toLowerCase(), authorName.toLowerCase(), genre).isEmpty()) {
+            throw new LibraryException("Duplicate book exists!");
+        }
         final Author bookAuthor = authorService.findByName(authorName);
         final Book book = new Book(title, bookAuthor, genre, copies, copies, false);
         return bookRepository.save(book).getId();

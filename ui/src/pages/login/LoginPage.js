@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import AuthenticationService from '../../common/services/AuthenticationService'
 import {Context} from "../../common/Context";
 import history from '../../common/history';
+import {Link} from "react-router-dom";
 
 const LoginPage=()=> {
 
@@ -46,6 +47,8 @@ const LoginPage=()=> {
                 <button className='button' onClick={loginClicked}> Login</button>
                 <br/>
                 {hasLoginFailed && <div className="error-text">Invalid Credentials!</div>}
+                <li className="navLinks"><Link  to='/register'>register</Link>
+                </li>
             </div>
         </div>
     )

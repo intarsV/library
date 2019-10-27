@@ -14,14 +14,14 @@ public class Authority {
     private Long id;
 
     @Column(name = "authority_name")
-    private String authority;
+    private String authorityName;
 
     public Authority() {
     }
 
-    public Authority(Long id, String authority) {
+    public Authority(Long id, String authorityName) {
         this.id = id;
-        this.authority = authority;
+        this.authorityName = authorityName;
     }
 
     public Long getId() {
@@ -32,12 +32,12 @@ public class Authority {
         this.id = id;
     }
 
-    public String getAuthority() {
-        return authority;
+    public String getAuthorityName() {
+        return authorityName;
     }
 
-    public void setAuthority(String authority) {
-        this.authority = authority;
+    public void setAuthorityName(String authorityName) {
+        this.authorityName = authorityName;
     }
 
     @Override
@@ -48,13 +48,13 @@ public class Authority {
         Authority authorities1 = (Authority) o;
 
         if (!Objects.equals(id, authorities1.id)) return false;
-        return Objects.equals(authority, authorities1.authority);
+        return Objects.equals(authorityName, authorities1.authorityName);
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (authority != null ? authority.hashCode() : 0);
+        result = 31 * result + (authorityName != null ? authorityName.hashCode() : 0);
         return result;
     }
 }

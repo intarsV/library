@@ -26,7 +26,7 @@ public class AuthorControllerREST {
         return authorService.authorList();
     }
 
-    @PostMapping
+    @PostMapping(value="/add")
     public ResponseEntity<AuthorDTO> saveAuthor(@RequestBody AuthorDTO authorDto) {
         final Long id = authorService.saveAuthor(authorDto.getName());
         authorDto.setId(id);

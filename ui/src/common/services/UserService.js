@@ -18,14 +18,19 @@ class UserService {
     }
 
     makeReservation(reservationData) {
-        return axios.post(API_URL + '/api/v1/reservations/user/make-reservation',
+        return axios.post(API_URL + '/api/v1/reservations/user/add',
             reservationData, {headers: {authorization: this.getToken()}});
     }
 
     removeReservation(reservationData){
-        return axios.post(API_URL + '/api/v1/reservations/user/remove-reservation',
+        return axios.post(API_URL + '/api/v1/reservations/user/delete',
             reservationData, {headers: {authorization: this.getToken()}});
     }
+
+    register(userData) {
+        return axios.post(API_URL + '/api/v1/users/add', userData, {headers: {authorization: this.getToken()}});
+    }
+
 }
 
 export default new UserService();
