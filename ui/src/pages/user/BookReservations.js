@@ -27,12 +27,12 @@ const BookReservations =()=> {
 
         return (
             <div className="small-card-padding">
-                <Card md={3}>
+                <Card >
                     <h4>User reservations</h4>
                     <Row className='space-top margin-bottom'>
                         <label> Reservation status:</label>
                         {userReservation.map((reservation, i) =>
-                            <Col  key={i} md={2} sm={2} lg={2} xs={2}>
+                            <Col  key={i} >
                                 <input type="radio" value='optionOne'
                                        checked={selection === reservation.optionName}
                                        onClick={() => {
@@ -43,7 +43,7 @@ const BookReservations =()=> {
                         )}
                     </Row>
                     <ReactTable
-                        defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
+                        defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={reservationsData>10}
                         data={reservationsData}
                         columns={[
                             {

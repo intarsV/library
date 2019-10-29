@@ -14,11 +14,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT new com.accenture.library.dto.ReservationDTO(r.id, r.book.id, r.book.title, r.user.id" +
             ", r.user.userName, r.reservationDate, r.handOut, r.returned, r.deleted) " +
-            "FROM Reservation r WHERE  (:bookTitle IS NULL OR LOWER( r.book.title) LIKE %:bookTitle%)" +
-            " AND (:usrName IS NULL OR LOWER( r.user.userName) LIKE %:usrName%) " +
+            "FROM Reservation r WHERE (:bookTitle IS NULL OR LOWER( r.book.title) LIKE LOWER(concat('%',:bookTitle,'%')))" +
+            " AND (:userName IS NULL OR LOWER( r.user.userName) LIKE LOWER(concat('%',:userName,'%'))) " +
             "AND (:handOut IS NULL OR r.handOut=:handOut) AND(:returned IS NULL OR r.returned=:returned) AND (r.deleted=false)")
     List<ReservationDTO> getByParameters(@Param("bookTitle") String bookTitle,
-                                         @Param("usrName") String userName,
+                                         @Param("userName") String userName,
                                          @Param("handOut")Boolean handOut,
                                          @Param("returned") Boolean returned);
 

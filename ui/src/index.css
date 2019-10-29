@@ -159,6 +159,18 @@ select:focus{
     border: 1px solid red;
 }
 
+.error-field-hide{
+    display: none;
+    font-size: 12px;
+    color: red;
+}
+
+.error-field-show{
+    display: inline;
+    font-size: 12px;
+    color: red;
+}
+
 
 
 /*#container > div + div {*/

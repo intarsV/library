@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
@@ -24,6 +25,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                                    @Param("author") String author,
                                    @Param("genre") String genre);
 
+    Optional<Book> findByTitleAndAuthor_Name(String title, String authorName );
 
 }
 

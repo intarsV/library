@@ -39,6 +39,6 @@ export const userReservation = [
 ];
 
 //fieldList for forms
-export const AuthorFieldList=[{id: 'Author name', type:'text'}];
-export const BookFieldlist=[{id: 'Book title', type:'text'}, {id:'Author', type:'text'},
-                            {id: 'Genre', type:'text'}, {id: 'Copies',type:'number'}];
+export const AuthorFieldList=[{id: 'authorName', type:'text'}];
+export const BookFieldList=[{id: 'bookTitle', type:'text'}, {id:'author', type:'text'},
+                            {id: 'genre', type:'text'}, {id: 'copies',type:'number'}];

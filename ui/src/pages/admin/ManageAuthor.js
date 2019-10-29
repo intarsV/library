@@ -25,7 +25,7 @@ const ManageAuthor = () => {
     );
 
     const addAuthor = () => {
-        if ( Validate.validateForm(AuthorFieldList,  message)) {
+        if (Validate.validateForm(AuthorFieldList, setInfoMessage)) {
             AdminService.addAuthor({name: authorName})
                 .then(response => {
                     setAuthorData([...authorData, response.data]);
@@ -60,11 +60,12 @@ const ManageAuthor = () => {
                 <h4>Manage Authors</h4>
                 <Row>
                     <Col >
-                        <input className='col-width-height' type='text' id='Author name'
+                        <input className='col-width-height' type='text' id='authorName'
                                value={authorName} onChange={(event) => {
-                            Validate.validateInput(event.target.id, message, "text");
+                            Validate.validateInput(event.target.id,"text", setInfoMessage);
                             setAuthorName(event.target.value);}}
                         />
+                        <div id="authorName_error" className="error-field-hide">Author name field not valid!</div>
                     </Col>
                     <Col>
                         <button className='button' onClick={() => addAuthor()}>Add author</button>
@@ -77,7 +78,7 @@ const ManageAuthor = () => {
                 </Row>
                 <br/>
                 <ReactTable
-                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
+                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={authorData.length > 10}
                     data={authorData}
                     columns={[
                         {

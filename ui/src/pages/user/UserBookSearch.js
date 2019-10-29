@@ -94,7 +94,7 @@ const UserBookSearch = () => {
                     </Col>
                 </Row>
                 <ReactTable
-                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
+                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={books>10}
                     data={books}
                     columns={[
                         {

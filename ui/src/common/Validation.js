@@ -1,14 +1,16 @@
 class Validation{
 
-    validateInput(id, message, type) {
+    validateInput(id, type, setInfoMessage) {
         if (this.rules(id, type)) {
+            setInfoMessage('', '');
             document.getElementById(id).className = "col-width-height";
-            message('', '');
-            return {isValid: true, errorField: id};
+            document.getElementById(id + "_error").className = "error-field-hide";
+            return true;
         } else {
+            setInfoMessage('', '');
             document.getElementById(id).className = "input-field-error-state";
-            message('error', (id + ' field is empty!'));
-            return {isValid: false, errorField: id};
+            document.getElementById(id + "_error").className = "error-field-show";
+            return false;
         }
     }
 
@@ -21,19 +23,14 @@ class Validation{
         }
     }
 
-    validateForm(list, message) {
-        let check = {isValid: true, errors: []};
+    validateForm(list, setInfoMessage) {
+        let check = true;
         list.forEach(item => {
-            let filedCheck = this.validateInput(item.id, message, item.type);
-            if (filedCheck.isValid === false) {
-                check.isValid = false;
-                check.errors.push(filedCheck.errorField);
+            if (this.validateInput(item.id, item.type, setInfoMessage) === false) {
+                check = false;
             }
         });
-        check.errors.forEach(item => {
-            message('error', (item + ' field is empty!'));
-        });
-        return check.isValid;
+        return check;
     }
 }
 

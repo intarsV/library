@@ -50,7 +50,7 @@ const ManageUsers=()=>{
                 <h4>Users</h4>
                 <br/>
                 <ReactTable
-                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
+                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={userData>10}
                     data={userData}
                     columns={[
                         {
