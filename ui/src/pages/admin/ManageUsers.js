@@ -1,5 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
-import Card from "react-bootstrap/Card";
+import React, {useContext, useEffect} from 'react';
 import {Context} from "../../common/Context";
 import ReactTable from "react-table";
 import AdminService from "../../common/services/AdminService";
@@ -45,38 +44,36 @@ const ManageUsers=()=>{
     };
 
     return(
-        <div className="super-small-padding">
-            <Card>
-                <h4>Users</h4>
-                <br/>
-                <ReactTable
-                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={userData>10}
-                    data={userData}
-                    columns={[
-                        {
-                            Header: "User name",
-                            accessor: "userName"
-                        },
-                        {
-                            maxWidth: 100,
-                            className: "columnAlignCenter",
-                            Header: "Status",
-                            accessor: "enabled",
-                            Cell: props => props.value === true ? "Active" : "Disabled"
-                        },
-                        {
-                            maxWidth: 70,
-                            className: "columnAlignCenter",
-                            accessor: "id",
-                            Cell: Cell => Cell.original.enabled === true ?
-                                <button onClick={() => disableUser(Cell.original.id)}>Disable</button>
-                                :
-                                <button onClick={() => enableUser(Cell.original.id)}>Enable</button>
-                        }
-                    ]}
-                    className="-striped -highlight text-size"
-                />
-            </Card>
+        <div class="card">
+            <h4>Users</h4>
+            <br/>
+            <ReactTable
+                defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={userData > 10}
+                data={userData}
+                columns={[
+                    {
+                        Header: "User name",
+                        accessor: "userName"
+                    },
+                    {
+                        maxWidth: 100,
+                        className: "columnAlignCenter",
+                        Header: "Status",
+                        accessor: "enabled",
+                        Cell: props => props.value === true ? "Active" : "Disabled"
+                    },
+                    {
+                        maxWidth: 70,
+                        className: "columnAlignCenter",
+                        accessor: "id",
+                        Cell: Cell => Cell.original.enabled === true ?
+                            <button onClick={() => disableUser(Cell.original.id)}>Disable</button>
+                            :
+                            <button onClick={() => enableUser(Cell.original.id)}>Enable</button>
+                    }
+                ]}
+                className="-striped -highlight text-size"
+            />
         </div>
     )
 };

@@ -28,8 +28,9 @@ const App = () => {
 
     return (
         <Router history={history}>
-            <div id="container">
-                <div className='menu-side'>
+            <div class="container">
+                <div className="row">
+                <div class="col-md-2 menu-side">
                     <div className="logo">
                         <h4>Super Library </h4>
                         <h6>by Initex</h6>
@@ -37,7 +38,7 @@ const App = () => {
                     {userAuthority !== null && isUserLoggedIn === true &&
                     <NavMenu/>}
                 </div>
-                <div className='main'>
+                <div class="col-md-8 card-padding">
                     <Switch>
                         <Route path="/" exact render={() => <MainPage/>}/>
                         <Route path="/register" exact render={() => <Registration/>}/>
@@ -52,8 +53,7 @@ const App = () => {
                         <AuthenticatedRoute path="/user/search" render={() => <UserBookSearch/>}/>
                     </Switch>
                 </div>
-                <div className='info-side '>
-                    <h4>Info box</h4>
+                <div class="col-md-2 info-side">
                     <div className="login-input">
                         <Route path="/" exact render={() => <LoginPage/>}/>
                         <Route path='/login' exact render={() => <LoginPage/>}/>
@@ -61,6 +61,7 @@ const App = () => {
                         {showUserQueue &&
                         <UserQueue/>}
                     </div>
+                </div>
                 </div>
             </div>
         </Router>

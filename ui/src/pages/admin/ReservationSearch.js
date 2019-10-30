@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {Card, Col, Row} from "react-bootstrap";
 import {returnedOptions} from "../../common/Constants";
 import ReactTable from "react-table";
 import AdminService from "../../common/services/AdminService";
@@ -47,90 +46,88 @@ const ReservationSearch=()=>{
     };
 
     return (
-        <div className="small-card-padding">
-            <Card>
-                <h4>Search reservations</h4>
-                <Row className='space-top'>
-                    <Col md={3} sm={5} lg={2} xs={3}>
-                        Book title:
-                    </Col>
-                    <Col xl={3}>
-                        <input className='col-width-height ' type='text' name='bookTitle' value={bookTitle}
-                               onChange={(event) => {
-                                   setBookTitle(event.target.value)
-                               }}/>
-                    </Col>
-                </Row>
-                <Row className='space-top'>
-                    <Col md={3} sm={5} lg={2} xs={3}>
-                        User name:
-                    </Col>
-                    <Col xl={3}>
-                        <input className='col-width-height ' type='text' name='userName'
-                               value={userName}
-                               onChange={(event) => {
-                                   setUserName(event.target.value)
-                               }}/>
-                    </Col>
-                    <Col>
-                        <button className=' button ' onClick={() => searchReservations()}> Search</button>
-                    </Col>
-                </Row>
-                <Row className='space-top margin-bottom'>
-                    <Col md={3} sm={5} lg={2} xs={3}>
-                        Return status :
-                    </Col>
-                    <Col xl={3}>
-                        <select className='col-width-height' name='returned' value={returned}
-                                onChange={(event) => {
-                                    setReturned(event.target.value)
-                                }}>
-                            <option value={''}/>
-                            {returnedOptions.map(option =>
-                                <option value={option.value}>{option.key}</option>)
-                            }
-                        </select>
-                    </Col>
-                </Row>
-                <ReactTable
-                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
-                    data={reservationsData}
-                    columns={[
-                        {
-                            show: false,
-                            Header: "Id",
-                            accessor: "id"
-                        },
-                        {
-                            minWidth: 200,
-                            Header: "Title",
-                            accessor: "bookTitle"
-                        },
-                        {
-                            minWidth: 200,
-                            Header: "User",
-                            accessor: "userName"
-                        },
-                        {
-                            className:"columnAlignCenter",
-                            id: 'reservationDate',
-                            Header: "Date",
-                            accessor: 'reservationDate',
-                            Cell: props => new Date(props.value).toLocaleDateString()
-                        },
-                        {
-                            className:"columnAlignCenter",
-                            Header: "Returned",
-                            accessor: "returned",
-                            Cell: Cell => (
-                                <input type="checkbox" defaultChecked={Cell.original.returned}
-                                       disabled={(Cell.original.returned)}
-                                       onClick={() => returnBook(Cell.original.id)}/>)
+        <div className="card">
+            <h4>Search reservations</h4>
+            <div className="row">
+                <div className="col-3">
+                    Book title:
+                </div>
+                <div className="col-3">
+                    <input className='col-width-height ' type='text' name='bookTitle' value={bookTitle}
+                           onChange={(event) => {
+                               setBookTitle(event.target.value)
+                           }}/>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-3">
+                    User name:
+                </div>
+                <div className="col-3">
+                    <input className='col-width-height ' type='text' name='userName'
+                           value={userName}
+                           onChange={(event) => {
+                               setUserName(event.target.value)
+                           }}/>
+                </div>
+                <div className="col-3">
+                    <button className=' button ' onClick={() => searchReservations()}> Search</button>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-3">
+                    Return status :
+                </div>
+                <div className="col-3">
+                    <select className='col-width-height' name='returned' value={returned}
+                            onChange={(event) => {
+                                setReturned(event.target.value)
+                            }}>
+                        <option value={''}/>
+                        {returnedOptions.map(option =>
+                            <option value={option.value}>{option.key}</option>)
                         }
-                    ]}
-                    className="-striped -highlight text-size"
-                />
-            </Card>
+                    </select>
+                </div>
+            </div>
+            <ReactTable
+                defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
+                data={reservationsData}
+                columns={[
+                    {
+                        show: false,
+                        Header: "Id",
+                        accessor: "id"
+                    },
+                    {
+                        minWidth: 200,
+                        Header: "Title",
+                        accessor: "bookTitle"
+                    },
+                    {
+                        minWidth: 200,
+                        Header: "User",
+                        accessor: "userName"
+                    },
+                    {
+                        className: "columnAlignCenter",
+                        id: 'reservationDate',
+                        Header: "Date",
+                        accessor: 'reservationDate',
+                        Cell: props => new Date(props.value).toLocaleDateString()
+                    },
+                    {
+                        className: "columnAlignCenter",
+                        Header: "Returned",
+                        accessor: "returned",
+                        Cell: Cell => (
+                            <input type="checkbox" defaultChecked={Cell.original.returned}
+                                   disabled={(Cell.original.returned)}
+                                   onClick={() => returnBook(Cell.original.id)}/>)
+                    }
+                ]}
+                className="-striped -highlight text-size"
+            />
         </div>
     )
 };

@@ -1,5 +1,4 @@
 import React, {useContext, useEffect } from 'react';
-import {Card} from "react-bootstrap";
 import ReactTable from "react-table";
 import AdminService from "../../common/services/AdminService";
 import {Context} from "../../common/Context";
@@ -32,8 +31,7 @@ const ReservationQueue=()=>{
     };
 
     return (
-        <div className="small-card-padding">
-            <Card md={3}>
+        <div className="card">
                 <h4>User reservations Queue</h4>
                 <br/>
                 <div className="row-format">
@@ -72,8 +70,7 @@ const ReservationQueue=()=>{
                     ]}
                     className="-striped -highlight text-size"
                 />
-            </Card>
-        </div>
+            </div>
     )
 };
 

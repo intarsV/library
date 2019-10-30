@@ -1,5 +1,4 @@
 import React, {useContext, useEffect} from 'react';
-import { Card } from 'react-bootstrap';
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import {Context} from "../../common/Context";
@@ -29,7 +28,7 @@ const UserQueue = () => {
 
 
     return (
-        <Card>
+        <div className="card">
             <div className='text-size'>
                 <h6>Queue</h6>
                 <ReactTable
@@ -37,23 +36,23 @@ const UserQueue = () => {
                     data={reservationQueue}
                     columns={[
                         {
-                            className:"columnAlignLeft",
+                            className: "columnAlignLeft",
                             Header: "Title",
                             accessor: "bookTitle"
                         },
                         {
-                            className:"columnAlignCenter",
+                            className: "columnAlignCenter",
                             Header: "Delete",
                             maxWidth: 55,
-                            accessor:'id',
+                            accessor: 'id',
                             Cell: ({value}) => (
-                                <input type="checkbox" onClick={() =>removeReservation(value)}/>)
+                                <input type="checkbox" onClick={() => removeReservation(value)}/>)
                         }
                     ]}
                     className="-striped -highlight text-size"
                 />
             </div>
-        </Card>
+        </div>
     )
 };
 

@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Card, Col, Row} from 'react-bootstrap';
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import AdminService from "../../common/services/AdminService";
@@ -55,48 +54,46 @@ const ManageAuthor = () => {
     };
 
     return (
-        <div className="small-card-padding">
-            <Card>
-                <h4>Manage Authors</h4>
-                <Row>
-                    <Col >
-                        <input className='col-width-height' type='text' id='authorName'
-                               value={authorName} onChange={(event) => {
-                            Validate.validateInput(event.target.id,"text", setInfoMessage);
-                            setAuthorName(event.target.value);}}
-                        />
-                        <div id="authorName_error" className="error-field-hide">Author name field not valid!</div>
-                    </Col>
-                    <Col>
-                        <button className='button' onClick={() => addAuthor()}>Add author</button>
-                    </Col>
-                    <Col className={infoMessage.type === 'error' ? "error-text" : "info-text"}>
-                    <span>
+        <div class="card">
+            <h4>Manage Authors</h4>
+            <div className="row">
+                <div className="col-sm">
+                    <input className='col-width-height' type='text' id='authorName'
+                           value={authorName} onChange={(event) => {
+                        Validate.validateInput(event.target.id, "text", setInfoMessage);
+                        setAuthorName(event.target.value);
+                    }}
+                    />
+                    <div id="authorName_error" className="error-field-hide">Author name field not valid!</div>
+                </div>
+                <div className="col-sm padding-bottom">
+                    <button className='button' onClick={() => addAuthor()}>Add author</button>
+                </div>
+                <div className={infoMessage.type === 'error' ? " col-sm error-text" : " col-sm info-text"}>
+                       <span>
                        {infoMessage.msg}
-                    </span>
-                    </Col>
-                </Row>
-                <br/>
-                <ReactTable
-                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={authorData.length > 10}
-                    data={authorData}
-                    columns={[
-                        {
-                            maxWidth: 500,
-                            Header: "Author name",
-                            accessor: "name"
-                        },
-                        {
-                            className: "columnAlignCenter",
-                            accessor: "id",
-                            Cell: ({value}) => (
-                                <button onClick={() => deleteAuthor(value)}>Delete</button>
-                            )
-                        }
-                    ]}
-                    className="-striped -highlight text-size"
-                />
-            </Card>
+                       </span>
+                </div>
+            </div>
+            <ReactTable
+                defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={authorData.length > 10}
+                data={authorData}
+                columns={[
+                    {
+                        maxWidth: 500,
+                        Header: "Author name",
+                        accessor: "name"
+                    },
+                    {
+                        className: "columnAlignCenter",
+                        accessor: "id",
+                        Cell: ({value}) => (
+                            <button onClick={() => deleteAuthor(value)}>Delete</button>
+                        )
+                    }
+                ]}
+                className="-striped -highlight text-size"
+            />
         </div>
     )
 };

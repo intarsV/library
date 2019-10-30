@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {Row, Col, Card} from 'react-bootstrap';
 import BookService from '../../common/services/UserService'
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import {userReservation} from '../../common/Constants'
 import {Context} from "../../common/Context";
 
-const BookReservations =()=> {
+const BookReservations = () => {
 
     const [selection, setSelection] = useState('optionActive');
     const {userReservationData:[reservationsData, setReservationData]}=useContext(Context);
@@ -26,43 +25,41 @@ const BookReservations =()=> {
     };
 
         return (
-            <div className="small-card-padding">
-                <Card >
-                    <h4>User reservations</h4>
-                    <Row className='space-top margin-bottom'>
-                        <label> Reservation status:</label>
-                        {userReservation.map((reservation, i) =>
-                            <Col  key={i} >
-                                <input type="radio" value='optionOne'
-                                       checked={selection === reservation.optionName}
-                                       onClick={() => {
-                                           getReservationData(reservation.data, reservation.optionName)
-                                       }}/>
-                                <label>{reservation.optionHeader}</label>
-                            </Col>
-                        )}
-                    </Row>
-                    <ReactTable
-                        defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={reservationsData>10}
-                        data={reservationsData}
-                        columns={[
-                            {
-                                minWidth: 200,
-                                maxWidth: 500,
-                                Header: "Title",
-                                accessor: "bookTitle"
-                            },
-                            {
-                                className:"columnAlignCenter",
-                                id: 'reservationDate',
-                                Header: "Reservation date",
-                                accessor: 'reservationDate',
-                                Cell: props => new Date(props.value).toLocaleDateString()
-                            }
-                        ]}
-                        className="-striped -highlight text-size"
-                    />
-                </Card>
+            <div className="card ">
+                <h4>User reservations</h4>
+                <div className="row card-body">
+                    <label>Reservation status:</label>
+                    {userReservation.map((reservation, i) =>
+                        <div className="col-sm" key={i}>
+                            <input type="radio"
+                                   checked={selection === reservation.optionName}
+                                   onClick={() => {
+                                       getReservationData(reservation.data, reservation.optionName)
+                                   }}/>
+                            <label>{reservation.optionHeader}</label>
+                        </div>
+                    )}
+                </div>
+                <ReactTable
+                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={reservationsData > 10}
+                    data={reservationsData}
+                    columns={[
+                        {
+                            minWidth: 200,
+                            maxWidth: 500,
+                            Header: "Title",
+                            accessor: "bookTitle"
+                        },
+                        {
+                            className: "columnAlignCenter",
+                            id: 'reservationDate',
+                            Header: "Reservation date",
+                            accessor: 'reservationDate',
+                            Cell: props => new Date(props.value).toLocaleDateString()
+                        }
+                    ]}
+                    className="-striped -highlight text-size"
+                />
             </div>
         )
 };

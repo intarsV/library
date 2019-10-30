@@ -4,11 +4,11 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import StoreProvider from './common/Context'
+import ContextProvider from './common/Context'
 
 ReactDOM.render(
-    <StoreProvider>
+    <ContextProvider>
     <App />
-    </StoreProvider>,
+    </ContextProvider>,
     document.getElementById('root')
 );

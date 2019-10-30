@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Card, Col, Row} from "react-bootstrap";
 import {genres, BookFieldList} from "../../common/Constants";
 import ReactTable from "react-table";
 import AdminService from "../../common/services/AdminService";
@@ -69,91 +68,104 @@ const ManageBook=()=>{
     };
 
     return(
-        <div className="small-card-padding">
-            <Card>
-                <h4>Books</h4>
-                <Row>
-                    <Col xl={3}>
-                        <input className='col-width-height' id='bookTitle' value={title}
-                               onChange={(event) =>{
-                                   Validate.validateInput(event.target.id, "text", setInfoMessage);
-                                   setTitle(event.target.value)}}/>
-                        <div id="bookTitle_error" className="error-field-hide">Title field not valid!</div>
-                    </Col>
-                    <Col xl={3}>
-                        <select className='col-width-height' id='author' value={authorName}
-                                onChange={(event) =>{
-                                    Validate.validateInput(event.target.id, "text", setInfoMessage);
-                                    setAuthorName(event.target.value)}}>
-                            <option value={''}/>
-                            {authorData.map(author =>
-                                <option value={author.name}>{author.name}</option>)
-                            }
-                        </select>
-                        <div id="author_error" className="error-field-hide">Author field not valid!</div>
-                    </Col>
-                    <Col xl={3}>
-                        <select className='col-width-height' id='genre' value={genre}
-                                onChange={(event) =>{
-                                    Validate.validateInput(event.target.id, "text", setInfoMessage);
-                                    setGenre(event.target.value)}}>
-                            <option value={''}/>
-                            {genres.map(genre =>
-                                <option value={genre}>{genre}</option>)
-                            }
-                        </select>
-                        <div id="genre_error" className="error-field-hide">Genre field not valid!</div>
-                    </Col>
-                    <Col xl={3}>
-                        <input className='col-width-height ' id='copies' value={copies}
-                               onChange={(event) =>{
-                                   Validate.validateInput(event.target.id, "number", setInfoMessage);
-                                   setCopies(event.target.value)}}/>
-                        <div id="copies_error" className="error-field-hide">Copies field not valid!</div>
-                    </Col>
-                    <Col>
-                        <button className=' button ' onClick={() => addBook()}>Add book</button>
-                    </Col>
-                    <Col className={infoMessage.type === 'error' ? "error-text" : "info-text"}>
+        <div class="card">
+            <h4>Books</h4>
+            <div className="row row-format">
+                <div className="col-3">
+                    <input className='col-width-height' id='bookTitle' value={title} type="text"
+                           onChange={(event) => {
+                               Validate.validateInput(event.target.id, "text", setInfoMessage);
+                               setTitle(event.target.value)
+                           }}/>
+
+                </div>
+                <div id="bookTitle_error" className="error-field-hide">Title field not valid!</div>
+            </div>
+            <div className="row row-format">
+                <div className="col-3">
+                    <select className='col-width-height' id='author' value={authorName}
+                            onChange={(event) => {
+                                Validate.validateInput(event.target.id, "text", setInfoMessage);
+                                setAuthorName(event.target.value)
+                            }}>
+                        <option value={''}/>
+                        {authorData.map(author =>
+                            <option value={author.name}>{author.name}</option>)
+                        }
+                    </select>
+                </div>
+                <div id="author_error" className="error-field-hide">Author field not valid!</div>
+            </div>
+            <div className="row row-format">
+                <div className="col-3">
+                    <select className='col-width-height' id='genre' value={genre}
+                            onChange={(event) => {
+                                Validate.validateInput(event.target.id, "text", setInfoMessage);
+                                setGenre(event.target.value)
+                            }}>
+                        <option value={''}/>
+                        {genres.map(genre =>
+                            <option value={genre}>{genre}</option>)
+                        }
+                    </select>
+                </div>
+                <div id="genre_error" className="error-field-hide">Genre field not valid!</div>
+            </div>
+            <div className="row row-format">
+                <div className="col-3">
+                    <input className='col-width-height ' id='copies' value={copies} type="text"
+                           onChange={(event) => {
+                               Validate.validateInput(event.target.id, "number", setInfoMessage);
+                               setCopies(event.target.value)
+                           }}/>
+                </div>
+                <div id="copies_error" className="error-field-hide">Copies field not valid!</div>
+            </div>
+            <div className="row row-format">
+                <div className="col-sm">
+                    <button className="button" onClick={() => addBook()}>Add book</button>
+                </div>
+                <div className="col-sm">
+                    <div className={infoMessage.type === 'error' ? "col-sm error-text" : "col-sm info-text"}>
                     <span>
                        {infoMessage.msg}
                     </span>
-                    </Col>
-                </Row>
-                <br/>
-                <ReactTable
-                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={booksData.length > 10}
-                    data={booksData}
-                    columns={[
-                        {
-                            Header: "Book Title",
-                            accessor: "title"
-                        },
-                        {
-                            Header: "Author",
-                            accessor: "authorName"
-                        },
-                        {
-                            className:"columnAlignCenter",
-                            Header: "Genre",
-                            accessor: "genre"
-                        },
-                        {
-                            className:"columnAlignCenter",
-                            Header: "Copies",
-                            accessor: "copies"
-                        },
-                        {
-                            className:"columnAlignCenter",
-                            accessor: "id",
-                            Cell: ({value}) => (
-                                <button onClick={() => deleteBook(value)}>Delete</button>
-                            )
-                        }
-                    ]}
-                    className="-striped -highlight text-size"
-                />
-            </Card>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <ReactTable
+                defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={booksData.length > 10}
+                data={booksData}
+                columns={[
+                    {
+                        Header: "Book Title",
+                        accessor: "title"
+                    },
+                    {
+                        Header: "Author",
+                        accessor: "authorName"
+                    },
+                    {
+                        className: "columnAlignCenter",
+                        Header: "Genre",
+                        accessor: "genre"
+                    },
+                    {
+                        className: "columnAlignCenter",
+                        Header: "Copies",
+                        accessor: "copies"
+                    },
+                    {
+                        className: "columnAlignCenter",
+                        accessor: "id",
+                        Cell: ({value}) => (
+                            <button onClick={() => deleteBook(value)}>Delete</button>
+                        )
+                    }
+                ]}
+                className="-striped -highlight text-size"
+            />
         </div>
     )
 };

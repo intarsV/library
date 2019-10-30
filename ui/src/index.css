@@ -1,9 +1,17 @@
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-    height: 100vh;
+.container {
+    max-width: 100% !important;
+}
+
+.menu-side {
+    min-height: 100vh;
+    background-image: linear-gradient(to right, darkgray , transparent);
+    padding-top: 20px;
+}
+
+.info-side {
+    background-image: linear-gradient(to left, darkgray , transparent);
+    padding-top: 20px;
 }
 
 .logo {
@@ -11,6 +19,13 @@ body {
     padding-right: 20px;
     padding-bottom: 40px;
     text-align: right;
+}
+
+.login-input{
+    padding-top: 20px;
+    padding-right: 20px;
+    text-align: right;
+    height: 5px;
 }
 
 .info{
@@ -38,24 +53,25 @@ body {
 }
 
 .card-padding{
+    padding-top: 40px;
     padding-right: 40px;
     padding-left: 40px;
 }
 
-.small-card-padding{
-    padding: 10px 80px;
-}
+/*.small-card-padding{*/
+/*    padding: 10px 80px;*/
+/*}*/
 
-.super-small-padding{
-    padding: 10px 120px;
-}
+/*.super-small-padding{*/
+/*    padding: 10px 120px;*/
+/*}*/
 
-.space-bottom {
-    padding-bottom: 5px;
-}
+/*.space-bottom {*/
+/*    padding-bottom: 15px;*/
+/*}*/
 
-.margin-bottom {
-    margin-bottom: 5px;
+.padding-bottom {
+   padding-bottom: 25px;
 }
 
 .text-size {
@@ -67,6 +83,7 @@ body {
 }
 
 .row-format{
+    margin-bottom: 3px;
     margin-left:0;
     margin-right: 0;
 }
@@ -82,31 +99,6 @@ body {
     width: inherit;
     height: 23px;
 }
-/*Start here*/
-#container {
-    display: flex;
-    justify-content: space-between;
-    height: 100vh;
-}
-
-.menu-side {
-    background-image: linear-gradient(to right, darkgray , transparent);
-    padding-top: 20px;
-    flex: 0 0 250px;
-}
-
-.info-side{
-    background-image: linear-gradient(to left, darkgray , transparent);
-    padding-top: 40px;
-    flex: 0 0 250px;
-}
-
-.main {
-    flex: 1 60%;
-    align-content: center;
-    padding-top: 40px;
-}
-
 .navLinks{
     padding-left: 20px;
     padding-top: 5px;
@@ -118,12 +110,6 @@ body {
 .navLinks:hover{
     color:black;
     text-decoration: none;
-}
-
-.login-input{
-    padding-right: 20px;
-    text-align: right;
-    height: 5px;
 }
 
 .input-field{
@@ -141,7 +127,13 @@ body {
     color: red;
 }
 
-input:focus{
+input[type=text]:focus{
+    outline:none;
+    width: inherit;
+    height: 23px;
+}
+
+select:focus{
     outline:none;
     width: inherit;
     height: 23px;
@@ -170,11 +162,5 @@ select:focus{
     font-size: 12px;
     color: red;
 }
-
-
-
-/*#container > div + div {*/
-/*    border-left: 2px solid rgba(0, 0, 0, 0.12);*/
-/*}*/
 
 
