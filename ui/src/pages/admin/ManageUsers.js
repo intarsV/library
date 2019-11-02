@@ -45,11 +45,11 @@ const ManageUsers=()=>{
 
     return(
         <div class="card">
-            <h4>Users</h4>
-            <br/>
+            <h4 className="header-padding">Users</h4>
             <ReactTable
-                defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={userData > 10}
-                data={userData}
+                minRows={1} noDataText={'No data found'} showPagination={false} data={userData}
+                className={userData.length < 10 ? '-striped -highlight table-format'
+                                                  : '-striped -highlight table-format-large'}
                 columns={[
                     {
                         Header: "User name",
@@ -72,7 +72,6 @@ const ManageUsers=()=>{
                             <button onClick={() => enableUser(Cell.original.id)}>Enable</button>
                     }
                 ]}
-                className="-striped -highlight text-size"
             />
         </div>
     )

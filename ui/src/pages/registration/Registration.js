@@ -20,24 +20,22 @@ const Registration = () => {
 
     return (
         <div className="card">
-            <h4>Registration form</h4>
-            <div className="info">
-                user name:
-                <input size="20" type='text' name='username' className="input-field text-size"
+            <h4 className="header-padding">Registration form</h4>
+            <div className="row row-format">
+                <h5 className="label">User name:</h5>
+                <input type="text" name="username" className="input-field"
                        onChange={(event) => {
                            setUserName(event.target.value);
                            setInfoMessage('')
                        }}/>
-                <br/>
-                password:
-                <input size="20" height="5" type='password' name='password' className="input-field text-size"
-                       onChange={(event) => setPassword(event.target.value)}/>
-                <br/>
-                <button className=' button ' onClick={() => addUser()}>Register</button>
-                <br/>
-                <span>{infoMessage}</span>
-
             </div>
+            <div className="row row-format">
+                <h5 className="label">Password:</h5>
+                <input type="password" name="password" className="input-field"
+                       onChange={(event) => setPassword(event.target.value)}/>
+            </div>
+            <button className="button" onClick={() => addUser()}>Register</button>
+            <span>{infoMessage}</span>
         </div>
     )
 };

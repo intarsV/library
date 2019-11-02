@@ -28,12 +28,13 @@ const UserQueue = () => {
 
 
     return (
-        <div className="card">
-            <div className='text-size'>
-                <h6>Queue</h6>
+        <div className="card-transparent">
+            <div>
+                <h6 className="login-header">Queue</h6>
                 <ReactTable
-                    defaultPageSize={10} minRows={1} noDataText={''} showPagination={false}
-                    data={reservationQueue}
+                    minRows={1} noDataText={''} showPagination={false} data={reservationQueue}
+                    className={reservationQueue.length < 10 ? '-striped -highlight table-format'
+                                                            : '-striped -highlight table-format-large'}
                     columns={[
                         {
                             className: "columnAlignLeft",
@@ -49,7 +50,6 @@ const UserQueue = () => {
                                 <input type="checkbox" onClick={() => removeReservation(value)}/>)
                         }
                     ]}
-                    className="-striped -highlight text-size"
                 />
             </div>
         </div>

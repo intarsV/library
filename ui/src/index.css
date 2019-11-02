@@ -58,20 +58,10 @@
     padding-left: 40px;
 }
 
-/*.small-card-padding{*/
-/*    padding: 10px 80px;*/
-/*}*/
-
-/*.super-small-padding{*/
-/*    padding: 10px 120px;*/
-/*}*/
-
-/*.space-bottom {*/
-/*    padding-bottom: 15px;*/
-/*}*/
-
-.padding-bottom {
-   padding-bottom: 25px;
+.header-padding {
+    padding-left: 10px;
+    padding-top: 25px;
+    padding-bottom: 25px;
 }
 
 .text-size {
@@ -82,23 +72,51 @@
     height: 23px;
 }
 
-.row-format{
+.row-format {
+    align-items: center;
     margin-bottom: 3px;
-    margin-left:0;
-    margin-right: 0;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+}
+.col-padding{
+    padding-left: 0!important;
+    padding-right: 0!important;
 }
 
 .button {
+    width: 100px;
+    margin-left: 230px;
+    margin-top: 5px;
+    margin-bottom: 10px;
     height: 25px;
     font-size: 12px;
     background: ghostwhite;
-    border-radius: 20%;
 }
 
-.col-width-height{
+.button-small-margin {
+    width: 100px;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    height: 25px;
+    font-size: 12px;
+    background: ghostwhite;
+}
+
+.button:focus{
+    outline:none;
+}
+
+.button-small-margin:focus{
+    outline:none;
+}
+
+.input-width-height{
+    outline:none;
     width: inherit;
     height: 23px;
-}
+ }
+
 .navLinks{
     padding-left: 20px;
     padding-top: 5px;
@@ -112,9 +130,36 @@
     text-decoration: none;
 }
 
+.label{
+    margin-top: 3px;
+    width:120px;
+    font-size: 16px;
+}
+
 .input-field{
+    outline:none;
+    width: 200px;
+    height: 23px;
+}
+
+.login-header{
+    margin-right: 10px;
+}
+
+.login-input-field{
     margin-left: 5px;
-    margin-bottom: 5px;
+    font-size: 12px;
+    outline:none;
+    width: 100px;
+    height: 23px;
+}
+
+.login-input-field:focus{
+    margin-left: 5px;
+    font-size: 12px;
+    outline:none;
+    width: 100px;
+    height: 23px;
 }
 
 .info-text{
@@ -129,24 +174,24 @@
 
 input[type=text]:focus{
     outline:none;
-    width: inherit;
+    width: 200px;
     height: 23px;
 }
 
 select:focus{
     outline:none;
-    width: inherit;
+    width: 200px;
     height: 23px;
 }
 
 select:focus{
     outline:none;
-    width: inherit;
+    width: 200px;
     height: 23px;
 }
 
 .input-field-error-state{
-    width: inherit;
+    width: 200px;
     height: 23px;
     border: 1px solid red;
 }
@@ -157,10 +202,32 @@ select:focus{
     color: red;
 }
 
+.radio-label{
+    margin-right: 20px;
+}
+
 .error-field-show{
+    margin-left: 10px;
     display: inline;
     font-size: 12px;
     color: red;
+}
+
+.table-format{
+    font-size: 12px;
+    padding-top: 15px;
+    margin-left: 9px;
+    margin-right: 9px;
+    margin-bottom: 15px;
+}
+
+.table-format-large{
+    height:400px;
+    font-size: 12px;
+    padding-top: 15px;
+    margin-left: 9px;
+    margin-right: 9px;
+    margin-bottom: 15px;
 }
 
 

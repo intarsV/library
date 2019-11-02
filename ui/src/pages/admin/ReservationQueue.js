@@ -32,14 +32,12 @@ const ReservationQueue=()=>{
 
     return (
         <div className="card">
-                <h4>User reservations Queue</h4>
-                <br/>
-                <div className="row-format">
-                <button className="button" onClick={() => refreshReservations()}>Refresh</button>
-                </div>
+                <h4 className="header-padding">User reservations Queue</h4>
+                <button className="button-small-margin" onClick={() => refreshReservations()}>Refresh</button>
                 <ReactTable
-                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
-                    data={adminReservationQueue}
+                    minRows={1} noDataText={'No data found'} showPagination={false} data={adminReservationQueue}
+                    className={adminReservationQueue.length < 10 ? '-striped -highlight table-format'
+                                                                 : '-striped -highlight table-format-large'}
                     columns={[
                         {
                             minWidth: 200,
@@ -68,7 +66,6 @@ const ReservationQueue=()=>{
                                 }}>Hand out</button>)
                         }
                     ]}
-                    className="-striped -highlight text-size"
                 />
             </div>
     )

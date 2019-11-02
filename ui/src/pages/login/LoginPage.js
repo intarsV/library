@@ -37,14 +37,14 @@ const LoginPage=()=> {
             <h4>Login</h4>
             <div>
                 login:
-                <input size="10" type='text' name='username' className="input-field text-size"
+                <input size="10" name='username' className="login-input-field"
                        onChange={(event) => setUserName(event.target.value)}/>
                 <br/>
                 password:
-                <input size="10" height="5" type='password' name='password' className="input-field text-size"
+                <input size="10" height="5" type='password' name='password' className="login-input-field"
                        onChange={(event) => setPassword(event.target.value)}/>
                        <br/>
-                <button className='button' onClick={loginClicked}> Login</button>
+                <button className='button-small-margin' onClick={loginClicked}> Login</button>
                 <br/>
                 {hasLoginFailed && <div className="error-text">Invalid Credentials!</div>}
                 <li className="navLinks"><Link  to='/register'>register</Link>

@@ -46,40 +46,26 @@ const ReservationSearch=()=>{
     };
 
     return (
-        <div className="card">
-            <h4>Search reservations</h4>
-            <div className="row">
-                <div className="col-3">
-                    Book title:
-                </div>
-                <div className="col-3">
-                    <input className='col-width-height ' type='text' name='bookTitle' value={bookTitle}
+        <div class="card">
+            <h4 className="header-padding">Search reservations</h4>
+            <div className="row row-format">
+                    <h5 className="label">Book title:</h5>
+                    <input className='input-field' type='text' name='bookTitle' value={bookTitle}
                            onChange={(event) => {
                                setBookTitle(event.target.value)
                            }}/>
-                </div>
             </div>
-            <div className="row">
-                <div className="col-3">
-                    User name:
-                </div>
-                <div className="col-3">
-                    <input className='col-width-height ' type='text' name='userName'
+            <div className="row row-format">
+                    <h5 className="label">User name:</h5>
+                    <input className='input-field' type='text' name='userName'
                            value={userName}
                            onChange={(event) => {
                                setUserName(event.target.value)
                            }}/>
-                </div>
-                <div className="col-3">
-                    <button className=' button ' onClick={() => searchReservations()}> Search</button>
-                </div>
             </div>
-            <div className="row">
-                <div className="col-3">
-                    Return status :
-                </div>
-                <div className="col-3">
-                    <select className='col-width-height' name='returned' value={returned}
+            <div className="row row-format">
+                    <h5 className="label">Return status :</h5>
+                    <select className='input-field' name='returned' value={returned}
                             onChange={(event) => {
                                 setReturned(event.target.value)
                             }}>
@@ -88,11 +74,12 @@ const ReservationSearch=()=>{
                             <option value={option.value}>{option.key}</option>)
                         }
                     </select>
-                </div>
             </div>
+            <button className='button' onClick={() => searchReservations()}> Search</button>
             <ReactTable
-                defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={false}
-                data={reservationsData}
+                minRows={1} noDataText={'No data found'} showPagination={false} data={reservationsData}
+                className={reservationsData.length < 10 ? '-striped -highlight table-format'
+                                                        : '-striped -highlight table-format-large'}
                 columns={[
                     {
                         show: false,
@@ -100,12 +87,12 @@ const ReservationSearch=()=>{
                         accessor: "id"
                     },
                     {
-                        minWidth: 200,
+                        maxWidth: 150,
                         Header: "Title",
                         accessor: "bookTitle"
                     },
                     {
-                        minWidth: 200,
+                        maxWidth: 100,
                         Header: "User",
                         accessor: "userName"
                     },
@@ -126,7 +113,6 @@ const ReservationSearch=()=>{
                                    onClick={() => returnBook(Cell.original.id)}/>)
                     }
                 ]}
-                className="-striped -highlight text-size"
             />
         </div>
     )

@@ -6,7 +6,7 @@ const MainPage=()=>{
 
     return (
         <div className="card">
-            <h4>Welcome!</h4>
+            <h4 className="header-padding">Welcome!</h4>
             <br/>
             <h5>This is my homework project - Library management.<br/>
                 - techStack -> SpringBoot, Spring Security and React;<br/>

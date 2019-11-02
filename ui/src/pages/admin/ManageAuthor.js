@@ -55,29 +55,25 @@ const ManageAuthor = () => {
 
     return (
         <div class="card">
-            <h4>Manage Authors</h4>
-            <div className="row">
-                <div className="col-sm">
-                    <input className='col-width-height' type='text' id='authorName'
-                           value={authorName} onChange={(event) => {
-                        Validate.validateInput(event.target.id, "text", setInfoMessage);
-                        setAuthorName(event.target.value);
-                    }}
+            <h4 className="header-padding">Manage Authors</h4>
+            <div className="row row-format">
+                <h5 className="label">Author name:</h5>
+                    <input className='input-field' type='text' id='authorName' value={authorName}
+                           onChange={(event) => {
+                               Validate.validateInput(event.target.id, "text", setInfoMessage);
+                               setAuthorName(event.target.value);
+                           }}
                     />
-                    <div id="authorName_error" className="error-field-hide">Author name field not valid!</div>
-                </div>
-                <div className="col-sm padding-bottom">
-                    <button className='button' onClick={() => addAuthor()}>Add author</button>
-                </div>
-                <div className={infoMessage.type === 'error' ? " col-sm error-text" : " col-sm info-text"}>
-                       <span>
+                <span id="authorName_error" className="error-field-hide">Author name field not valid!</span>
+                <span className={infoMessage.type === 'error' ? " col-3 error-text" : " col-3 info-text"}>
                        {infoMessage.msg}
-                       </span>
-                </div>
+                </span>
             </div>
+            <button className="button" onClick={() => addAuthor()}>Add author</button>
             <ReactTable
-                defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={authorData.length > 10}
-                data={authorData}
+                 minRows={1} noDataText={'No data found'} showPagination={false} data={authorData}
+                className={authorData.length < 10 ? '-striped -highlight table-format'
+                                                  : '-striped -highlight table-format-large'}
                 columns={[
                     {
                         maxWidth: 500,
@@ -92,7 +88,6 @@ const ManageAuthor = () => {
                         )
                     }
                 ]}
-                className="-striped -highlight text-size"
             />
         </div>
     )

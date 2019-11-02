@@ -1,13 +1,12 @@
 class Validation{
 
     validateInput(id, type, setInfoMessage) {
+        setInfoMessage('', '');
         if (this.rules(id, type)) {
-            setInfoMessage('', '');
-            document.getElementById(id).className = "col-width-height";
+            document.getElementById(id).className = "input-field";
             document.getElementById(id + "_error").className = "error-field-hide";
             return true;
         } else {
-            setInfoMessage('', '');
             document.getElementById(id).className = "input-field-error-state";
             document.getElementById(id + "_error").className = "error-field-show";
             return false;

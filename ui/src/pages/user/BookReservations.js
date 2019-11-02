@@ -25,24 +25,25 @@ const BookReservations = () => {
     };
 
         return (
-            <div className="card ">
-                <h4>User reservations</h4>
-                <div className="row card-body">
-                    <label>Reservation status:</label>
+            <div class="card">
+                <h4 className="header-padding">User reservations</h4>
+                <div className="row row-format">
+                    <h5 className="label">Status:</h5>
                     {userReservation.map((reservation, i) =>
-                        <div className="col-sm" key={i}>
+                        <div key={i}>
                             <input type="radio"
                                    checked={selection === reservation.optionName}
                                    onClick={() => {
                                        getReservationData(reservation.data, reservation.optionName)
                                    }}/>
-                            <label>{reservation.optionHeader}</label>
+                            <label className="radio-label">{reservation.optionHeader}</label>
                         </div>
                     )}
                 </div>
                 <ReactTable
-                    defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={reservationsData > 10}
-                    data={reservationsData}
+                    minRows={1} noDataText={'No data found'} showPagination={false} data={reservationsData}
+                    className={reservationsData.length < 10 ? '-striped -highlight table-format'
+                                                            : '-striped -highlight table-format-large'}
                     columns={[
                         {
                             minWidth: 200,
@@ -58,7 +59,6 @@ const BookReservations = () => {
                             Cell: props => new Date(props.value).toLocaleDateString()
                         }
                     ]}
-                    className="-striped -highlight text-size"
                 />
             </div>
         )

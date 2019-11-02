@@ -51,49 +51,33 @@ const UserBookSearch = () => {
 
     return (
         <div className="card">
-            <h4>Search books</h4>
-            <div className="row">
-                <div className="col-sm">
-                    Book title:
-                </div>
-                <div className="col-sm">
-                    <input className='col-width-height ' type='text' name='title' value={title}
-                           onChange={(event) => setTitle(event.target.value)}/>
-                </div>
+            <h4 className="header-padding">Search books</h4>
+            <div className="row row-format">
+                <h5 className="label">Book title:</h5>
+                <input className="input-field" type='text' name='title' value={title}
+                       onChange={(event) => setTitle(event.target.value)}/>
             </div>
-            <div className="row">
-                <div className="col-sm">
-                    Book author:
-                </div>
-                <div className="col-sm">
-                    <input className='col-width-height ' type='text' name='authorName'
-                           value={authorName}
-                           onChange={(event) => setAuthorName(event.target.value)}/>
-                </div>
-                <div className="col-sm">
-                    <button className="button" onClick={() => {
-                        searchBooks()
-                    }}> Search
-                    </button>
-                </div>
+            <div className="row row-format">
+                <h5 className="label">Book author:</h5>
+                <input className='input-field' type='text' name='authorName'
+                       value={authorName}
+                       onChange={(event) => setAuthorName(event.target.value)}/>
             </div>
-            <div className="row">
-                <div className="col-sm">
-                    Book genre:
-                </div>
-                <div className="col-sm">
-                    <select className='col-width-height' name='genre' value={genre}
+            <div className="row row-format">
+                <h5 className="label">Book genre:</h5>
+                    <select className="input-field" name='genre' value={genre}
                             onChange={(event) => setGenre(event.target.value)}>
                         <option value={''}/>
                         {genres.map(genre =>
                             <option value={genre}>{genre}</option>)
                         }
                     </select>
-                </div>
             </div>
+            <button className="button" onClick={() => {searchBooks()}}>Search</button>
             <ReactTable
-                defaultPageSize={10} minRows={1} noDataText={'No data found'} showPagination={books > 10}
-                data={books}
+                minRows={1} noDataText={'No data found'} showPagination={false} data={books}
+                className={books.length < 10 ? '-striped -highlight table-format'
+                                                        : '-striped -highlight table-format-large'}
                 columns={[
                     {
                         minWidth: 250,
@@ -125,7 +109,6 @@ const UserBookSearch = () => {
                             <button onClick={() => makeReservation(value)}>Get book</button>)
                     }
                 ]}
-                className="-striped -highlight text-size"
             />
         </div>
     )
