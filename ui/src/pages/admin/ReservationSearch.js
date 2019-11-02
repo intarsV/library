@@ -27,12 +27,13 @@ const ReservationSearch=()=>{
 
     const searchReservations = () => {
         prepareRequest();
+        if (searchData.length > 0) {
         AdminService.searchReservations(searchData)
             .then(
                 response => {
                     setReservationsData(response.data)
                 }
-            )
+            )}
     };
 
     const returnBook = (id) => {

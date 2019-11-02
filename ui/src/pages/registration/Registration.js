@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 import UserService from "../../common/services/UserService";
+import Validate from "../../common/Validation";
+import {registrationFieldList} from "../../common/Constants"
 
 const Registration = () => {
 
@@ -8,6 +10,7 @@ const Registration = () => {
     const [infoMessage, setInfoMessage]=useState('');
 
     const addUser = () => {
+        if (Validate.validateForm(registrationFieldList, setInfoMessage)) {
         UserService.register({userName: btoa(userName), password: btoa(password)})
             .then(response => {
                 setInfoMessage("You have successfully registered!");
@@ -15,7 +18,7 @@ const Registration = () => {
             .catch((error) => {
                     setInfoMessage(error.response.data.message);
                 }
-            )
+            )}
     };
 
     return (
@@ -23,16 +26,20 @@ const Registration = () => {
             <h4 className="header-padding">Registration form</h4>
             <div className="row row-format">
                 <h5 className="label">User name:</h5>
-                <input type="text" name="username" className="input-field"
+                <input type="text" id="userName" className="input-field"
                        onChange={(event) => {
+                           Validate.validateInput(event.target.id, "reg-login", setInfoMessage);
                            setUserName(event.target.value);
-                           setInfoMessage('')
                        }}/>
+                <span id="userName_error" className="error-field-hide">User name field not valid!</span>
             </div>
             <div className="row row-format">
                 <h5 className="label">Password:</h5>
-                <input type="password" name="password" className="input-field"
-                       onChange={(event) => setPassword(event.target.value)}/>
+                <input type="password" id="password" className="input-field"
+                       onChange={(event) => {
+                           Validate.validateInput(event.target.id, "reg-password", setInfoMessage);
+                           setPassword(event.target.value)}}/>
+                <span id="password_error" className="error-field-hide">Password field not valid!</span>
             </div>
             <button className="button" onClick={() => addUser()}>Register</button>
             <span>{infoMessage}</span>

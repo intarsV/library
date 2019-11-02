@@ -25,12 +25,10 @@ const UserPage = () => {
 
     return (
         <>
-            <h1 className="text-size">
-                This is USER section.<br/>
+            <h1 className="header-padding">This is USER section.</h1>
                 Menu options (on the left side)<br/>
                 "My reservations" -> You can view your reservations: active or history;<br/>
                 "Search book" -> You can search books and add to the queue;
-            </h1>
         </>
     )
 };

@@ -3,64 +3,62 @@ import {API_URL, USER_NAME_SESSION_ATTRIBUTE_NAME} from '../Constants'
 
 class AdminService {
 
-    getToken() {
-        return sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
-    }
+    config = {headers: {authorization: sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME)}};
 
     //Functions for author
     getAllAuthors() {
-        return axios.get(API_URL + '/api/v1/authors', {headers: {authorization: this.getToken()}});
+        return axios.get(API_URL + '/api/v1/authors', this.config);
     }
 
     addAuthor(authorData) {
-        return axios.post(API_URL + '/api/v1/authors/add', authorData,{headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/authors/add', authorData, this.config);
     }
 
     deleteAuthor(authorData) {
-        return axios.post(API_URL + '/api/v1/authors/delete', authorData, {headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/authors/delete', authorData, this.config);
     }
 
     //Functions for book
     getAllBooks() {
-        return axios.get(API_URL + '/api/v1/books', {headers: {authorization: this.getToken()}});
+        return axios.get(API_URL + '/api/v1/books', this.config);
     }
 
     addABook(bookData) {
-        return axios.post(API_URL + '/api/v1/books/add', bookData, {headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/books/add', bookData, this.config);
     }
 
     deleteBook(bookData) {
-        return axios.post(API_URL + '/api/v1/books/delete', bookData, {headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/books/delete', bookData, this.config);
     }
 
     //Functions for reservations
     getReservationQueue() {
-        return axios.get(API_URL + '/api/v1/reservations/admin/queue', {headers: {authorization: this.getToken()}});
+        return axios.get(API_URL + '/api/v1/reservations/admin/queue', this.config);
     }
 
     handOut(reservationData) {
-        return axios.post(API_URL + '/api/v1/reservations/admin/handout', reservationData, {headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/reservations/admin/handout', reservationData, this.config);
     }
 
     searchReservations(reservationData) {
-        return axios.post(API_URL + '/api/v1/reservations/admin/search', reservationData, {headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/reservations/admin/search', reservationData, this.config);
     }
 
     takeIn(reservationData){
-        return axios.post(API_URL + '/api/v1/reservations/admin/take', reservationData, {headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/reservations/admin/take', reservationData, this.config);
     }
 
     /* functions for users*/
     getUsers() {
-        return axios.get(API_URL + '/api/v1/users', {headers: {authorization: this.getToken()}});
+        return axios.get(API_URL + '/api/v1/users', this.config);
     }
 
     enableUser(userData) {
-        return axios.post(API_URL + '/api/v1/users/admin/enable', userData, {headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/users/admin/enable', userData, this.config);
     }
 
     disableUser(userData) {
-        return axios.post(API_URL + '/api/v1/users/admin/disable', userData, {headers: {authorization: this.getToken()}});
+        return axios.post(API_URL + '/api/v1/users/admin/disable', userData, this.config);
     }
 }
 

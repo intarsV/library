@@ -14,11 +14,17 @@ class Validation{
     }
 
     rules(id, type) {
+        const testValue = document.getElementById(id).value;
+        const textRegEx = /^[a-zA-Z]+$/;
         switch (type) {
             case 'text':
-                return document.getElementById(id).value !== '';
+                return testValue !== '' && textRegEx.test(testValue);
             case "number":
-                return !isNaN(document.getElementById(id).value) && document.getElementById(id).value !== '';
+                return !isNaN(testValue) && testValue !== '';
+            case 'reg-login':
+                return testValue !== '' && testValue.length >= 3 && textRegEx.test(testValue);
+            case 'reg-password':
+                return testValue !== '' && testValue.length >= 3 && textRegEx.test(testValue);
         }
     }
 

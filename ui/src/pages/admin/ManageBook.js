@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {genres, BookFieldList} from "../../common/Constants";
+import {genres, bookFieldList} from "../../common/Constants";
 import ReactTable from "react-table";
 import AdminService from "../../common/services/AdminService";
 import {Context} from "../../common/Context";
@@ -34,7 +34,7 @@ const ManageBook=()=>{
     );
 
     const addBook = () => {
-        if (Validate.validateForm(BookFieldList, setInfoMessage)) {
+        if (Validate.validateForm(bookFieldList, setInfoMessage)) {
             AdminService.addABook({title: title, authorName: authorName, genre: genre, copies: copies})
                 .then(response => {
                     setBooksData([...booksData, response.data]);

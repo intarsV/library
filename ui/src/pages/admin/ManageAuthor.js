@@ -4,7 +4,7 @@ import 'react-table/react-table.css';
 import AdminService from "../../common/services/AdminService";
 import {Context} from "../../common/Context";
 import Validate from "../../common/Validation";
-import {AuthorFieldList} from "../../common/Constants"
+import {authorFieldList} from "../../common/Constants"
 
 const ManageAuthor = () => {
 
@@ -24,7 +24,7 @@ const ManageAuthor = () => {
     );
 
     const addAuthor = () => {
-        if (Validate.validateForm(AuthorFieldList, setInfoMessage)) {
+        if (Validate.validateForm(authorFieldList, setInfoMessage)) {
             AdminService.addAuthor({name: authorName})
                 .then(response => {
                     setAuthorData([...authorData, response.data]);
