@@ -89,7 +89,6 @@ public class ReservationServiceImpl implements ReservationService {
         final Book book = reservation.getBook();
         book.setAvailable(book.getAvailable() + 1);
         bookRepository.save(book);
-
         reservation.setReturned(true);
         return reservationRepository.save(reservation).getId();
     }
@@ -105,6 +104,14 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<ReservationDTO> getReservationQueue() {
         return reservationRepository.getQueue();
+    }
+
+    @Override
+    public Long deleteUserReservation(Long reservationId) {
+        final Reservation reservation = verifyReservationId(reservationId);
+        reservation.setDeleted(true);
+        reservationRepository.save(reservation);
+        return reservationId;
     }
 
     //Auxiliary methods

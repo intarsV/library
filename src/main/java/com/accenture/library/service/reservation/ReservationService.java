@@ -16,4 +16,6 @@ public interface ReservationService {
     List<ReservationDTO> getByParameters(String bookTitle, String userName, Boolean handOut, Boolean returned);
 
     List<ReservationDTO> getReservationQueue();
+
+    Long deleteUserReservation(Long reservationId);
 }

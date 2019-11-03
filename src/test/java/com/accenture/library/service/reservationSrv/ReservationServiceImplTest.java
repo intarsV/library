@@ -20,14 +20,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReservationServiceImplTest {
     private static final Long RESERVATION_ID = 1L;
-
     private static final Long BOOK_ID = 2L;
     private static final String BOOK_TITLE = "GoodBook";
     private static final Long USER_ID = 3L;
@@ -39,7 +38,6 @@ public class ReservationServiceImplTest {
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
-
 
     @Mock
     private ReservationRepository reservationRepository;
@@ -54,7 +52,7 @@ public class ReservationServiceImplTest {
     ReservationServiceImpl service;
 
     @Test
-    public void makeReservationShouldReturnSavedReservationId() {
+    public void makeReservationShouldReturnSavedReservationDTO() {
         User user = createTestUser();
         Book book = createBook(INITIAL_COPIES);
         final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, false, false, false);
@@ -62,7 +60,11 @@ public class ReservationServiceImplTest {
         when(userRepository.findByUserName(USER_NAME)).thenReturn(user);
         when(bookRepository.findById(BOOK_ID)).thenReturn(Optional.of(book));
         when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
-        assertEquals(RESERVATION_ID, service.makeReservation(BOOK_ID, USER_NAME));
+        ReservationDTO reservationDTO = service.makeReservation(BOOK_ID, USER_NAME);
+        assertEquals("GoodBook", reservationDTO.getBookTitle());
+        assertFalse(reservationDTO.isHandOut());
+        assertFalse(reservationDTO.isReturned());
+        assertFalse(reservationDTO.isDeleted());
     }
 
     @Test
@@ -86,6 +88,32 @@ public class ReservationServiceImplTest {
         exception.expect(LibraryException.class);
         exception.expectMessage("No book with such ID");
         service.makeReservation(BOOK_ID, USER_NAME);
+    }
+
+    @Test
+    public void shouldDeleteReservation() {
+        final Reservation reservation = createReservation();
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
+        when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
+        assertEquals(RESERVATION_ID, service.deleteReservation(RESERVATION_ID, USER_NAME));
+    }
+
+    @Test
+    public void shouldThrowExceptionOnReservationDeleteNoReservation() {
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.empty());
+        exception.expect(LibraryException.class);
+        exception.expectMessage("No reservation with id: " + RESERVATION_ID);
+        service.deleteReservation(RESERVATION_ID, USER_NAME);
+    }
+
+    @Test
+    public void shouldThrowExceptionOnReservationDeleteNoReservationForUser() {
+        final Reservation reservation = createReservation();
+        final String DIFFERENT_USER = "Karlis";
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
+        exception.expect(LibraryException.class);
+        exception.expectMessage("User " + DIFFERENT_USER + " dont have such reservation");
+        service.deleteReservation(RESERVATION_ID, DIFFERENT_USER);
     }
 
     @Test
@@ -181,6 +209,21 @@ public class ReservationServiceImplTest {
         assertEquals(mockList, service.getReservationQueue());
     }
 
+    @Test
+    public void shouldDeleteUserReservation() {
+        final Reservation reservation = createReservation();
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
+        when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
+        assertEquals(RESERVATION_ID, service.deleteUserReservation(RESERVATION_ID));
+    }
+
+    @Test
+    public void shouldThrowExceptionOnUserReservationDeleteNoReservation() {
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.empty());
+        exception.expect(LibraryException.class);
+        exception.expectMessage("No reservation with id: " + RESERVATION_ID);
+        service.deleteUserReservation(RESERVATION_ID);
+    }
 
     ///Auxiliary methods
 
@@ -197,15 +240,25 @@ public class ReservationServiceImplTest {
     }
 
     private Book createBook(int available) {
-        Author author = new Author();
+        final Author author = new Author();
         return new Book(BOOK_TITLE, author, GENRE, INITIAL_COPIES, available, false);
     }
 
     private User createTestUser() {
-        User user = new User();
+        final User user = new User();
         user.setId(USER_ID);
         user.setUserName(USER_NAME);
         return user;
     }
 
+    private Reservation createReservation() {
+        final Reservation reservation = new Reservation();
+        reservation.setId(RESERVATION_ID);
+        reservation.setBook(createBook(BEFORE_TAKE_IN));
+        reservation.setUser(createTestUser());
+        reservation.setHandOut(false);
+        reservation.setReturned(false);
+        reservation.setDeleted(false);
+        return reservation;
+    }
 }

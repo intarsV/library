@@ -16,15 +16,16 @@ class Validation{
     rules(id, type) {
         const testValue = document.getElementById(id).value;
         const textRegEx = /^[a-zA-Z]+$/;
+        const passwordRegex = /^[a-zA-Z0-9]+$/;
         switch (type) {
             case 'text':
                 return testValue !== '' && textRegEx.test(testValue);
-            case "number":
+            case 'number':
                 return !isNaN(testValue) && testValue !== '';
             case 'reg-login':
                 return testValue !== '' && testValue.length >= 3 && textRegEx.test(testValue);
             case 'reg-password':
-                return testValue !== '' && testValue.length >= 3 && textRegEx.test(testValue);
+                return testValue !== '' && testValue.length >= 3 && passwordRegex.test(testValue);
         }
     }
 

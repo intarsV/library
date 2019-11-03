@@ -106,7 +106,7 @@ public class BookControllerRESTTest {
         final String requestBody = "{\"title\": \"" + TITLE + "\",\"authorName\": \"" + AUTHOR_NAME
                 + "\",\"genre\": \"" + GENRE + "\", \"copies\":" + COPIES + "}";
         when(service.addBook(TITLE, AUTHOR_NAME, GENRE, COPIES)).thenReturn(ID);
-        mvc.perform(post("/api/v1/books")
+        mvc.perform(post("/api/v1/books/add")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
                 .andExpect(status().isCreated())

@@ -19,9 +19,9 @@ const LoginPage=()=> {
                 if (response.data.message === 'ADMIN' || response.data.message === 'USER') {
                     AuthenticationService.registerSuccessfulLogin(userName, password);
                     setUserAuthority(response.data.message);
-                    history.push('/' + response.data.message.toLowerCase());
                     sessionStorage.setItem("AUTHORITY", response.data.message);
                     setHasLoginFailed(false);
+                    history.push('/' + response.data.message.toLowerCase());
                 } else {
                     setHasLoginFailed(true);
                     setShowSuccessMessage(false);
@@ -44,7 +44,7 @@ const LoginPage=()=> {
                 <input size="10" height="5" type='password' name='password' className="login-input-field"
                        onChange={(event) => setPassword(event.target.value)}/>
                        <br/>
-                <button className='button-small-margin' onClick={loginClicked}> Login</button>
+                <button className='button-small-margin' onClick={()=>loginClicked()}> Login</button>
                 <br/>
                 {hasLoginFailed && <div className="error-text">Invalid Credentials!</div>}
                 <li className="navLinks"><Link  to='/register'>register</Link>

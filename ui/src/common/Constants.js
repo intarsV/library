@@ -32,7 +32,7 @@ export const userReservation = [
 ];
 
 //fieldList for forms
-export const authorFieldList=[{id: 'authorName', type:'text'}];
-export const bookFieldList=[{id: 'bookTitle', type:'text'}, {id:'author', type:'text'},
-                            {id: 'genre', type:'text'}, {id: 'copies',type:'number'}];
-export const registrationFieldList=[{id: 'userName', type:'reg-login'}, {id: 'password', type:'reg-password'}];
+export const authorFieldList = [{id: 'authorName', type: 'text'}];
+export const bookFieldList = [{id: 'bookTitle', type: 'text'}, {id: 'author', type: 'text'},
+                                {id: 'genre', type: 'text'}, {id: 'copies', type: 'number'}];
+export const registrationFieldList = [{id: 'userName', type: 'reg-login'}, {id: 'password', type: 'reg-password'}];

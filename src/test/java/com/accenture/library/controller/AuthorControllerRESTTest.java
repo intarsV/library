@@ -66,9 +66,8 @@ public class AuthorControllerRESTTest {
     @Test
     public void shouldSaveAuthor() throws Exception {
         final String requestBody = "{\"name\": \"" + AUTHOR_NAME + "\"}";
-        System.out.println(requestBody);
         when(service.saveAuthor(AUTHOR_NAME)).thenReturn(ID);
-        mvc.perform(post("/api/v1/authors")
+        mvc.perform(post("/api/v1/authors/add")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
                 .andExpect(status().isCreated())

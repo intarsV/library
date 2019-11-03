@@ -31,7 +31,7 @@ const UserBookSearch = () => {
 
     const searchBooks = () => {
         prepareRequest();
-        if (searchData.length > 0) {
+        if (Object.keys(searchData).length > 0) {
         BookService.searchBook(searchData)
             .then(
                 response => {

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import { Router, Route, Switch} from 'react-router-dom'
 import './App.css';
 import LoginPage from './pages/login/LoginPage';

@@ -13,13 +13,13 @@ const ReservationSearch=()=>{
 
     const prepareRequest = () => {
         setSearchData({});
+        searchData['handOut'] = true;
         if (bookTitle !== '') {
             searchData['bookTitle'] = bookTitle;
         }
         if (userName !== '') {
             searchData['userName'] = userName;
         }
-        searchData['handOut'] = true;
         if (returned !== '') {
             searchData['returned'] = returned;
         }
@@ -27,13 +27,14 @@ const ReservationSearch=()=>{
 
     const searchReservations = () => {
         prepareRequest();
-        if (searchData.length > 0) {
-        AdminService.searchReservations(searchData)
-            .then(
-                response => {
-                    setReservationsData(response.data)
-                }
-            )}
+        if (Object.keys(searchData).length > 1) {
+            AdminService.searchReservations(searchData)
+                .then(
+                    response => {
+                        setReservationsData(response.data)
+                    }
+                )
+        }
     };
 
     const returnBook = (id) => {

@@ -54,6 +54,13 @@ public class ReservationControllerREST {
         return reservationService.getReservationQueue();
     }
 
+    //Library ADMIN remove reservation
+    @PostMapping(value = "/admin/delete")
+    public ResponseEntity deleteUserReservation(@RequestBody ReservationDTO reservationDto) {
+        final Long reservationId=reservationDto.getId();
+        return new ResponseEntity<>(reservationService.deleteUserReservation(reservationId), HttpStatus.ACCEPTED);
+    }
+
     //Library ADMIN hands out the book
     @PostMapping(value = "/admin/handout")
     public ResponseEntity handOut(@RequestBody ReservationDTO reservationDto) {

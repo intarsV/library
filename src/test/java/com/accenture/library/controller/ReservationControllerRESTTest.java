@@ -40,6 +40,7 @@ public class ReservationControllerRESTTest {
     private static final String BOOK_TITLE = "GoodBook";
     private static final Long USER_ID = 3L;
     private static final String USER_NAME = "Jānis";
+    private static final String PASSWORD = "janis000";
     private static final Date RESERVATION_DATE = Calendar.getInstance().getTime();
     private static final String GENRE = "NOVEL";
     private static final int INITIAL_COPIES = 3;
@@ -63,7 +64,7 @@ public class ReservationControllerRESTTest {
                 .build();
     }
 
-    @WithMockUser(username = USER_NAME, password = "janis000", authorities = "USER")
+    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "USER")
     @Test
     public void shouldReturnUserActiveReservations() throws Exception {
         final String requestBody = "{\"handOut\": \"true\",\"returned\": \"false\"}";
@@ -76,7 +77,7 @@ public class ReservationControllerRESTTest {
                 .andExpect(content().string(mapper.writeValueAsString(mockList)));
     }
 
-    @WithMockUser(username = USER_NAME, password = "janis000", authorities = "USER")
+    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "USER")
     @Test
     public void shouldReturnUserReturnedReservations() throws Exception {
         final String requestBody = "{\"handOut\": \"true\",\"returned\": \"false\"}";
@@ -90,7 +91,7 @@ public class ReservationControllerRESTTest {
                 .andExpect(content().string(mapper.writeValueAsString(mockList)));
     }
 
-    @WithMockUser(username = USER_NAME, password = "janis000", authorities = "USER")
+    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "USER")
     @Test
     public void shouldReturnUserReservationQueue() throws Exception {
         final String requestBody = "{\"handOut\": \"true\",\"returned\": \"false\"}";
@@ -104,26 +105,38 @@ public class ReservationControllerRESTTest {
                 .andExpect(content().string(mapper.writeValueAsString(mockList)));
     }
 
-    @WithMockUser(username = USER_NAME, password = "janis000", authorities = "USER")
+    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "USER")
+    @Test
+    public void shouldDeleteUserReservation() throws Exception {
+        final String requestBody = "{\"id\": " + RESERVATION_ID + "}";
+        when(service.deleteReservation(RESERVATION_ID,USER_NAME)).thenReturn(RESERVATION_ID);
+        mvc.perform(post("/api/v1/reservations/user/delete")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestBody))
+                .andExpect(status().isAccepted())
+                .andExpect(content().string(mapper.writeValueAsString(RESERVATION_ID)));
+    }
+
+    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "USER")
     @Test
     public void shouldAddUserReservation() throws Exception {
         final ReservationDTO reservationDTO = new ReservationDTO();
         reservationDTO.setId(RESERVATION_ID);
         reservationDTO.setBookId(BOOK_ID);
-        final ReservationDTO responseReservationDTO=new ReservationDTO();
+        final ReservationDTO responseReservationDTO = new ReservationDTO();
         responseReservationDTO.setId(RESERVATION_ID);
         responseReservationDTO.setBookTitle(BOOK_TITLE);
         responseReservationDTO.setReservationDate(RESERVATION_DATE);
         final String requestBody = "{\"bookId\": " + BOOK_ID + "}";
         when(service.makeReservation(BOOK_ID, USER_NAME)).thenReturn(responseReservationDTO);
-        mvc.perform(post("/api/v1/reservations/user/make-reservation")
+        mvc.perform(post("/api/v1/reservations/user/add")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
                 .andExpect(status().isCreated())
                 .andExpect(content().string(mapper.writeValueAsString(responseReservationDTO)));
     }
 
-    @WithMockUser(username = USER_NAME, password = "janis000", authorities = "ADMIN")
+    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "ADMIN")
     @Test
     public void shouldReturnAllUserReservationQueue() throws Exception {
         final List<ReservationDTO> mockList = createReservationDTOList(createReservationDTO(false, false));
@@ -134,35 +147,47 @@ public class ReservationControllerRESTTest {
                 .andExpect(content().string(mapper.writeValueAsString(mockList)));
     }
 
-    @WithMockUser(username = USER_NAME, password = "janis000", authorities = "ADMIN")
+    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "ADMIN")
+    @Test
+    public void shouldDeleteUserReservationByAdmin() throws Exception {
+        final String requestBody = "{\"id\": " + RESERVATION_ID + "}";
+        when(service.deleteUserReservation(RESERVATION_ID)).thenReturn(RESERVATION_ID);
+        mvc.perform(post("/api/v1/reservations/admin/delete")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestBody))
+                .andExpect(status().isAccepted())
+                .andExpect(content().string(mapper.writeValueAsString(RESERVATION_ID)));
+    }
+
+    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "ADMIN")
     @Test
     public void shouldHandOutReservation() throws Exception {
         final ReservationDTO reservationDTO = new ReservationDTO();
         reservationDTO.setId(RESERVATION_ID);
         final String requestBody = "{\"id\": " + RESERVATION_ID + "}";
         when(service.handOut(RESERVATION_ID)).thenReturn(RESERVATION_ID);
-        mvc.perform(post("/api/v1/reservations/admin/hand-out")
+        mvc.perform(post("/api/v1/reservations/admin/handout")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
                 .andExpect(status().isCreated())
                 .andExpect(content().string(mapper.writeValueAsString(reservationDTO)));
     }
 
-    @WithMockUser(username = USER_NAME, password = "janis000", authorities = "ADMIN")
+    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "ADMIN")
     @Test
     public void shouldTakeInReservation() throws Exception {
         final ReservationDTO reservationDTO = new ReservationDTO();
         reservationDTO.setId(RESERVATION_ID);
         final String requestBody = "{\"id\": " + RESERVATION_ID + "}";
         when(service.handOut(RESERVATION_ID)).thenReturn(RESERVATION_ID);
-        mvc.perform(post("/api/v1/reservations/admin/take-in")
+        mvc.perform(post("/api/v1/reservations/admin/take")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(content().string(mapper.writeValueAsString(reservationDTO)));
     }
 
-    @WithMockUser(username = USER_NAME, password = "janis000", authorities = "ADMIN")
+    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "ADMIN")
     @Test
     public void shouldReturnUserActiveReservationsByParameters() throws Exception {
         final String requestBody = "{\"handOut\": \"true\",\"returned\": \"false\"}";
@@ -175,7 +200,7 @@ public class ReservationControllerRESTTest {
                 .andExpect(content().string(mapper.writeValueAsString(mockList)));
     }
 
-    @WithMockUser(username = USER_NAME, password = "janis000", authorities = "ADMIN")
+    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "ADMIN")
     @Test
     public void shouldReturnUserReturnedReservationsByParameters() throws Exception {
         final String requestBody = "{\"handOut\": \"true\",\"returned\": \"true\"}";
@@ -187,7 +212,6 @@ public class ReservationControllerRESTTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(mapper.writeValueAsString(mockList)));
     }
-
 
     ///Auxiliary methods
 
@@ -214,6 +238,4 @@ public class ReservationControllerRESTTest {
         user.setUserName(USER_NAME);
         return user;
     }
-
-
 }
