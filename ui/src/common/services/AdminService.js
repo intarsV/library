@@ -50,6 +50,10 @@ class AdminService {
         return axios.post(API_URL + '/api/v1/reservations/admin/take', reservationData, this.config());
     }
 
+    removeReservation(reservationData) {
+        return axios.post(API_URL + '/api/v1/reservations/admin/delete', reservationData, this.config());
+    }
+
     /* functions for users*/
     getUsers() {
         return axios.get(API_URL + '/api/v1/users', this.config());

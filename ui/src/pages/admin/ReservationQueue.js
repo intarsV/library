@@ -30,6 +30,15 @@ const ReservationQueue=()=>{
             )
     };
 
+    const removeReservation = (id) => {
+        AdminService.removeReservation({id: id})
+            .then(response => {
+                    let filteredArray = adminReservationQueue.filter(item => item.id !== id);
+                    setAdminReservationQueue(filteredArray);
+                }
+            )
+    };
+
     return (
         <div className="card">
                 <h4 className="header-padding">User reservations Queue</h4>
@@ -58,12 +67,18 @@ const ReservationQueue=()=>{
                         },
                         {
                             className:"columnAlignCenter",
+                            maxWidth: 100,
+                            Header: '',
+                            accessor: 'id',
+                            Cell: ({value}) => (<button onClick={() => {handOut(value)}}>Hand out</button>)
+                        },
+                        {
+                            className:"columnAlignCenter",
+                            maxWidth: 100,
                             Header: '',
                             accessor: 'id',
                             Cell: ({value}) => (
-                                <button onClick={() => {
-                                    handOut(value)
-                                }}>Hand out</button>)
+                                <button onClick={() => {removeReservation(value)}}>Remove</button>)
                         }
                     ]}
                 />
