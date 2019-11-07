@@ -21,7 +21,7 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "enabled", columnDefinition = "TINYINT", length = 1)
+    @Column(name = "enabled")
     private boolean enabled;
 
     @ManyToMany(cascade = CascadeType.ALL)

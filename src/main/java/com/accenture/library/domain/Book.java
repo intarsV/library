@@ -30,7 +30,7 @@ public class Book {
     @Column(name = "available")
     private int available;
 
-    @Column(name = "deleted", columnDefinition = "TINYINT", length = 1)
+    @Column(name = "deleted")
     private boolean deleted;
 
     public Book() {

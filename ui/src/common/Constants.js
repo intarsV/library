@@ -4,9 +4,9 @@ export const adminMenu = [
     {key: 'Main', value: '/admin'},
     {key: 'Manage authors', value: '/admin/add/author'},
     {key: 'Manage books', value: '/admin/add/book'},
-    {key: 'Manage users', value: '/admin/users'},
     {key: 'Search reservations', value: '/admin/reservations'},
-    {key: 'Users queue', value: '/admin/queue'}
+    {key: 'Users queue', value: '/admin/queue'},
+    {key: 'Manage users', value: '/admin/users'}
 ];
 
 export const userMenu = [

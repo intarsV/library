@@ -24,13 +24,13 @@ public class Reservation {
     @Column(name = "reservationDate")
     private Date reservationDate;
 
-    @Column(name = "handOut", columnDefinition = "TINYINT", length = 1)
+    @Column(name = "handOut")
     private boolean handOut;
 
-    @Column(name = "returned", columnDefinition = "TINYINT", length = 1)
+    @Column(name = "returned")
     private boolean returned;
 
-    @Column(name = "deleted", columnDefinition = "TINYINT", length = 1)
+    @Column(name = "deleted")
     private boolean deleted;
 
     public Reservation() {

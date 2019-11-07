@@ -30,6 +30,9 @@ const ManageBook=()=>{
                         }
                     }
                 )
+                .catch((error) => {
+                message('error', error.response.data.message);
+            })
         }, []
     );
 
@@ -54,6 +57,9 @@ const ManageBook=()=>{
                     setBooksData(filteredArray);
                 }
             )
+            .catch((error) => {
+                message('error', error.response.data.message);
+            })
     };
 
     const message = (type, msg) => {

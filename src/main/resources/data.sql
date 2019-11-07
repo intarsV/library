@@ -4,7 +4,7 @@ drop table if exists authors, authorities, books, reservations, users;
 create table authors(
 author_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 author_name VARCHAR(100) NOT NULL,
-deleted TINYINT
+deleted BOOLEAN
  );
 CREATE INDEX author_name ON authors(author_name);
 
@@ -20,7 +20,7 @@ book_author BIGINT, foreign key (book_author) references authors(author_id),
 book_genre VARCHAR(30),
 copies INTEGER,
 available INTEGER,
-deleted TINYINT
+deleted BOOLEAN
 );
 CREATE INDEX book_title ON books(book_title);
 CREATE INDEX book_author ON books(book_author);
@@ -30,7 +30,7 @@ create table users(
 user_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 user_name VARCHAR(100) NOT NULL,
 password VARCHAR(100) NOT NULL,
-enabled TINYINT
+enabled BOOLEAN
 );
 CREATE INDEX user_name ON users(user_name);
 
@@ -39,9 +39,9 @@ reservation_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 reservation_date timestamp ,
 book BIGINT, foreign key (book) references books(book_id),
 user BIGINT, foreign key (user) references users(user_id),
-hand_out INTEGER,
-returned INTEGER,
-deleted TINYINT
+hand_out BOOLEAN,
+returned BOOLEAN,
+deleted BOOLEAN
 );
 CREATE INDEX book ON reservations(book);
 CREATE INDEX user ON reservations(user);

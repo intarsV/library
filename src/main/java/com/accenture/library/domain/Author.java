@@ -17,7 +17,7 @@ public class Author {
     @Column(name = "author_name")
     private String name;
 
-    @Column(name = "deleted", columnDefinition = "TINYINT", length = 1)
+    @Column(name = "deleted")
     private boolean deleted;
 
     public Author() {
