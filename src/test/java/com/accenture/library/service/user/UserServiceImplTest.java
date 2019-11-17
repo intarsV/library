@@ -80,7 +80,7 @@ public class UserServiceImplTest {
         final User testUser = createTestUser();
         when(repository.findById(USER_ID)).thenReturn(Optional.of(testUser));
         when(repository.save(any(User.class))).thenReturn(testUser);
-        assertEquals(USER_ID, service.enableUser(USER_ID));
+        assertEquals(USER_ID, service.enableDisableUser(USER_ID));
     }
 
     @Test
@@ -88,7 +88,7 @@ public class UserServiceImplTest {
         when(repository.findById(USER_ID)).thenReturn(Optional.empty());
         exception.expect(LibraryException.class);
         exception.expectMessage("User not found!");
-        service.enableUser(USER_ID);
+        service.enableDisableUser(USER_ID);
     }
 
     @Test
@@ -96,16 +96,16 @@ public class UserServiceImplTest {
         final User testUser = createTestUser();
         when(repository.findById(USER_ID)).thenReturn(Optional.of(testUser));
         when(repository.save(any(User.class))).thenReturn(testUser);
-        assertEquals(USER_ID, service.enableUser(USER_ID));
+        assertEquals(USER_ID, service.enableDisableUser(USER_ID));
     }
 
-    @Test
-    public void shouldThrowExceptionDisableUserNotFound(){
-        when(repository.findById(USER_ID)).thenReturn(Optional.empty());
-        exception.expect(LibraryException.class);
-        exception.expectMessage("User not found!");
-        service.disableUser(USER_ID);
-    }
+//    @Test
+//    public void shouldThrowExceptionDisableUserNotFound(){
+//        when(repository.findById(USER_ID)).thenReturn(Optional.empty());
+//        exception.expect(LibraryException.class);
+//        exception.expectMessage("User not found!");
+//        service.disableUser(USER_ID);
+//    }
 
     //AUXILIARY methods
 

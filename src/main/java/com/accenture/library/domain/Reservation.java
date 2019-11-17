@@ -2,6 +2,7 @@ package com.accenture.library.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "reservations")
@@ -24,14 +25,8 @@ public class Reservation {
     @Column(name = "reservationDate")
     private Date reservationDate;
 
-    @Column(name = "handOut")
-    private boolean handOut;
-
-    @Column(name = "returned")
-    private boolean returned;
-
-    @Column(name = "deleted")
-    private boolean deleted;
+    @Column(name = "status")
+    private String status;
 
     public Reservation() {
     }
@@ -46,13 +41,11 @@ public class Reservation {
         this.reservationDate = reservationDate;
     }
 
-    public Reservation(Book book, User user, Date reservationDate, boolean handOut, boolean returned, boolean deleted) {
+    public Reservation(Book book, User user, Date reservationDate, String status) {
         this.book = book;
         this.user = user;
         this.reservationDate = reservationDate;
-        this.handOut = handOut;
-        this.returned = returned;
-        this.deleted = deleted;
+        this.status = status;
     }
 
     public Long getId() {
@@ -83,31 +76,40 @@ public class Reservation {
         return reservationDate;
     }
 
-    public boolean isHandOut() {
-        return handOut;
-    }
-
-    public void setHandOut(boolean handOut) {
-        this.handOut = handOut;
-    }
-
     public void setReservationDate(Date reservationDate) {
         this.reservationDate = reservationDate;
     }
 
-    public boolean isReturned() {
-        return returned;
+    public String getStatus() {
+        return status;
     }
 
-    public void setReturned(boolean returned) {
-        this.returned = returned;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Reservation that = (Reservation) o;
+
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(book, that.book)) return false;
+        if (!Objects.equals(user, that.user)) return false;
+        if (!Objects.equals(reservationDate, that.reservationDate))
+            return false;
+        return Objects.equals(status, that.status);
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (book != null ? book.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (reservationDate != null ? reservationDate.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        return result;
     }
 }

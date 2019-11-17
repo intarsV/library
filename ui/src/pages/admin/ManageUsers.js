@@ -1,54 +1,47 @@
 import React, {useContext, useEffect} from 'react';
-import {Context} from "../../common/Context";
 import ReactTable from "react-table";
 import AdminService from "../../common/services/AdminService";
+import {AdminContext} from "../../context/AdminContext";
 
-const ManageUsers=()=>{
+const ManageUsers = () => {
 
-    const{adminUserData: [userData, setUserData]}=useContext(Context);
+    const {adminData, dispatch} = useContext(AdminContext);
 
     useEffect(() => {
             AdminService.getUsers()
                 .then(
                     response => {
-                        setUserData(response.data);
+                        dispatch({type: 'USERS_DATA', payload: {usersData: response.data}});
                     }
                 )
         }, []
     );
 
-    const enableUser = (id) => {
-        AdminService.enableUser({id: id})
+    const changeUserStatus = (id) => {
+        AdminService.changeUserStatus({id: id})
             .then(
                 response => {
-                    updateData(true, id)
+                    updateData(id)
                 })
     };
 
-    const disableUser = (id) => {
-        AdminService.disableUser({id: id})
-            .then(
-                response => {
-                    updateData(false, id)
-                })
-    };
-
-    const updateData = (boolean, id) => {
-        let updatedData = userData.map((item) => {
+    const updateData = (id) => {
+        let updatedData = adminData.usersData.map((item) => {
             if (item.id === id) {
-                return {id: item.id, userName: item.userName, enabled: boolean}
+                let previousStatus = item.enabled;
+                return {id: item.id, userName: item.userName, enabled: !previousStatus}
             }
             return item
         });
-        setUserData(updatedData);
+        dispatch({type: 'USERS_DATA', payload: {usersData: updatedData}});
     };
 
     return(
         <div class="card">
             <h4 className="header-padding">Users</h4>
             <ReactTable
-                minRows={1} noDataText={'No data found'} showPagination={false} data={userData}
-                className={userData.length < 10 ? '-striped -highlight table-format'
+                minRows={1} noDataText={'No data found'} showPagination={false} data={adminData.usersData}
+                className={adminData.usersData.length < 10 ? '-striped -highlight table-format'
                                                   : '-striped -highlight table-format-large'}
                 columns={[
                     {
@@ -67,9 +60,9 @@ const ManageUsers=()=>{
                         className: "columnAlignCenter",
                         accessor: "id",
                         Cell: Cell => Cell.original.enabled === true ?
-                            <button onClick={() => disableUser(Cell.original.id)}>Disable</button>
+                            <button onClick={() => changeUserStatus(Cell.original.id)}>Enable</button>
                             :
-                            <button onClick={() => enableUser(Cell.original.id)}>Enable</button>
+                            <button onClick={() => changeUserStatus(Cell.original.id)}>Disable</button>
                     }
                 ]}
             />

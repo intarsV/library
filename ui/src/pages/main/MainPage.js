@@ -1,8 +1,6 @@
 import React from 'react'
 
-
 const MainPage=()=>{
-
 
     return (
         <div className="card">
@@ -14,7 +12,6 @@ const MainPage=()=>{
             </h5>
         </div>
     )
-
 };
 
 export default MainPage;

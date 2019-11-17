@@ -1,40 +1,37 @@
 import React, {useContext, useEffect } from 'react';
 import ReactTable from "react-table";
 import AdminService from "../../common/services/AdminService";
-import {Context} from "../../common/Context";
+import {AdminContext} from "../../context/AdminContext";
 
-const ReservationQueue=()=>{
+const ReservationQueue = () => {
 
-    const{adminReservationQueue:[adminReservationQueue, setAdminReservationQueue]}=useContext(Context);
+    const {adminData, dispatch} = useContext(AdminContext);
+
+    const statusTypes = {
+        QUEUE: 'QUEUE',
+        HANDOUT: 'HANDOUT',
+        CANCELED: 'CANCELED'
+    };
 
     useEffect(() => {
-        refreshReservations();
+            refreshReservations();
         }, []
     );
 
     const refreshReservations = () => {
-        AdminService.getReservationQueue()
+        AdminService.searchReservations({status: 'QUEUE'})
             .then(
                 response => {
-                    setAdminReservationQueue(response.data);
+                    dispatch({type: 'ADMIN_RESERVATION_QUEUE', payload: {adminReservationQueue: response.data}});
                 }
             )
     };
 
-    const handOut = (id) => {
-        AdminService.handOut({id: id})
+    const process = (id, statusValue) => {
+        AdminService.process({id: id, status: statusValue})
             .then(response => {
-                    let filteredArray = adminReservationQueue.filter(item => item.id !== id);
-                    setAdminReservationQueue(filteredArray);
-                }
-            )
-    };
-
-    const removeReservation = (id) => {
-        AdminService.removeReservation({id: id})
-            .then(response => {
-                    let filteredArray = adminReservationQueue.filter(item => item.id !== id);
-                    setAdminReservationQueue(filteredArray);
+                    let filteredArray = adminData.adminReservationQueue.filter(item => item.id !== id);
+                    dispatch({type: 'ADMIN_RESERVATION_QUEUE', payload: {adminReservationQueue: filteredArray}});
                 }
             )
     };
@@ -44,8 +41,9 @@ const ReservationQueue=()=>{
                 <h4 className="header-padding">User reservations Queue</h4>
                 <button className="button-small-margin" onClick={() => refreshReservations()}>Refresh</button>
                 <ReactTable
-                    minRows={1} noDataText={'No data found'} showPagination={false} data={adminReservationQueue}
-                    className={adminReservationQueue.length < 10 ? '-striped -highlight table-format'
+                    minRows={1} noDataText={'No data found'} showPagination={false}
+                    data={adminData.adminReservationQueue}
+                    className={adminData.adminReservationQueue.length < 10 ? '-striped -highlight table-format'
                                                                  : '-striped -highlight table-format-large'}
                     columns={[
                         {
@@ -70,7 +68,7 @@ const ReservationQueue=()=>{
                             maxWidth: 100,
                             Header: '',
                             accessor: 'id',
-                            Cell: ({value}) => (<button onClick={() => {handOut(value)}}>Hand out</button>)
+                            Cell: ({value}) => (<button onClick={() => {process(value, statusTypes.HANDOUT)}}>Hand out</button>)
                         },
                         {
                             className:"columnAlignCenter",
@@ -78,7 +76,7 @@ const ReservationQueue=()=>{
                             Header: '',
                             accessor: 'id',
                             Cell: ({value}) => (
-                                <button onClick={() => {removeReservation(value)}}>Remove</button>)
+                                <button onClick={() => {process(value, statusTypes.CANCELED)}}>Remove</button>)
                         }
                     ]}
                 />

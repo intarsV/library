@@ -13,13 +13,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
+import org.springframework.security.access.AccessDeniedException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
+
+    private static final String QUEUE = "QUEUE";
+    private static final String HANDOUT = "HANDOUT";
+    private static final String RETURNED = "RETURNED";
+    private static final String CANCELED = "CANCELED";
 
     private ReservationRepository reservationRepository;
     private BookRepository bookRepository;
@@ -40,7 +45,7 @@ public class ReservationServiceImpl implements ReservationService {
         if (!bookFound.isPresent()) {
             throw new LibraryException("No book with such ID");
         }
-        final Reservation reservation = new Reservation(new Book(bookId), user, new Date());
+        final Reservation reservation = new Reservation(new Book(bookId), user, new Date(), QUEUE);
         try {
             final Long savedId = reservationRepository.save(reservation).getId();
             final ReservationDTO reservationDTO = new ReservationDTO();
@@ -49,78 +54,90 @@ public class ReservationServiceImpl implements ReservationService {
             reservationDTO.setReservationDate(reservation.getReservationDate());
             return reservationDTO;
         } catch (Exception e) {
-            String message = "Unable to save to database bookId:" + bookId + " userId:" + user.getId();
-            throw new LibraryException(message, e);
+            throw new LibraryException("Unable to save to database", e);  ///??????????
         }
-    }
-
-    @Override
-    public Long deleteReservation(Long reservationId, String userName) {
-        final Reservation reservation = verifyReservationId(reservationId);
-        final User user = reservation.getUser();
-        if (!user.getUserName().equals(userName)) {
-            throw new LibraryException("User " + userName + " dont have such reservation");
-        }
-        reservation.setDeleted(true);
-        reservationRepository.save(reservation);
-        return reservationId;
     }
 
     @Override
     @Transactional
-    public Long handOut(Long reservationId) {
+    public Long updateStatus(Long reservationId, String userName, String status, boolean isAdmin) {
         final Reservation reservation = verifyReservationId(reservationId);
-        final Book book = reservation.getBook();
-        if (book.getAvailable() == 0) {
-            throw new LibraryException("Book with id: " + book.getId() + " is not available");
+        switch (status) {
+            case HANDOUT:
+                return handOutReservation(reservation, isAdmin);
+            case RETURNED:
+                return returnReservation(reservation, isAdmin);
+            case CANCELED:
+                return cancelReservation(reservation, userName, isAdmin);
+            default:
+                throw new LibraryException("Unexpected status value");
         }
-        book.setAvailable(book.getAvailable() - 1);
-        bookRepository.save(book);
-
-        reservation.setReservationDate(new Date());
-        reservation.setHandOut(true);
-        return reservationRepository.save(reservation).getId();
     }
 
     @Override
-    @Transactional
-    public Long takeIn(Long reservationId) {
-        final Reservation reservation = verifyReservationId(reservationId);
-        final Book book = reservation.getBook();
-        book.setAvailable(book.getAvailable() + 1);
-        bookRepository.save(book);
-        reservation.setReturned(true);
-        return reservationRepository.save(reservation).getId();
-    }
-
-    @Override
-    public List<ReservationDTO> getByParameters(String bookTitle, String userName, Boolean handOut, Boolean returned) {
-        if (StringUtils.isEmpty(bookTitle) && StringUtils.isEmpty(userName) && handOut == null && returned == null) {
-            return new ArrayList<>();
+    public List<ReservationDTO> getByParameters(String bookTitle, String userName, String status, boolean isAdmin) {
+        if (isAdmin) {
+            validateAdminRequest(bookTitle, userName, status);
+        } else {
+            validateUserRequest(bookTitle, status);
         }
-        return reservationRepository.getByParameters(bookTitle, userName, handOut, returned);
-    }
-
-    @Override
-    public List<ReservationDTO> getReservationQueue() {
-        return reservationRepository.getQueue();
-    }
-
-    @Override
-    public Long deleteUserReservation(Long reservationId) {
-        final Reservation reservation = verifyReservationId(reservationId);
-        reservation.setDeleted(true);
-        reservationRepository.save(reservation);
-        return reservationId;
+        return reservationRepository.getByParameters(bookTitle, userName, status);
     }
 
     //Auxiliary methods
 
+    private Long cancelReservation(Reservation reservation, String userName, boolean isAdmin) {
+        final User user = reservation.getUser();
+
+        if (!user.getUserName().equals(userName) && !isAdmin) {
+            throw new LibraryException("User don't have such reservation");
+        }
+        reservation.setStatus(CANCELED);
+        return reservationRepository.save(reservation).getId();
+    }
+
+    private Long handOutReservation(Reservation reservation, boolean isAdmin) {
+        if (!isAdmin) {
+            throw  new AccessDeniedException("You don't have permission for this action");
+        }
+        final Book book = reservation.getBook();
+        if (book.getAvailable() == 0) {
+            throw new LibraryException("Book with is not available");
+        }
+        book.setAvailable(book.getAvailable() - 1);
+        bookRepository.save(book);
+        reservation.setReservationDate(new Date());
+        reservation.setStatus(HANDOUT);
+        return reservationRepository.save(reservation).getId();
+    }
+    private Long returnReservation(Reservation reservation, boolean isAdmin) {
+        if (!isAdmin) {
+            throw  new AccessDeniedException("You don't have permission for this action");
+        }
+        final Book book = reservation.getBook();
+        book.setAvailable(book.getAvailable() + 1);
+        bookRepository.save(book);
+        reservation.setStatus(RETURNED);
+        return reservationRepository.save(reservation).getId();
+    }
+
     private Reservation verifyReservationId(Long reservationId) {
         final Optional<Reservation> findReservation = reservationRepository.findById(reservationId);
         if (!findReservation.isPresent()) {
-            throw new LibraryException("No reservation with id: " + reservationId);
+            throw new LibraryException("No such reservation");
         }
         return findReservation.get();
+    }
+
+    private void validateUserRequest(String bookTitle, String status) {
+        if (StringUtils.isEmpty(bookTitle) && StringUtils.isEmpty(status)) {
+            throw new LibraryException("Search parameters missing");
+        }
+    }
+
+    private void validateAdminRequest(String bookTitle, String userName, String status) {
+        if (StringUtils.isEmpty(bookTitle) && StringUtils.isEmpty(userName) && StringUtils.isEmpty(status)) {
+            throw new LibraryException("Search parameters missing");
+        }
     }
 }

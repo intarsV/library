@@ -27,7 +27,7 @@ public class AuthorServiceImpl implements AuthorService {
         if (foundAuthor.isPresent()) {
             throw new LibraryException("Duplicate name exists!");
         }
-        return repository.save(new Author(name, false)).getId();
+        return repository.save(new Author(name, true)).getId();
     }
 
     @Override
@@ -45,14 +45,14 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Boolean deleteAuthor(Long id) {
+    public Boolean disableAuthor(Long id) {
         final Optional<Author> findAuthor = repository.findById(id);
         if (!findAuthor.isPresent()) {
-            throw new LibraryException("No such author with id: " + id);
+            throw new LibraryException("No such author with specified id");
         }
         final Author updateAuthor = findAuthor.get();
-        updateAuthor.setDeleted(true);
-        repository.save(updateAuthor);    //TODO heed something here
-        return true;
+        updateAuthor.setEnabled(false);
+        repository.save(updateAuthor);
+        return updateAuthor.isEnabled();
     }
 }

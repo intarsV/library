@@ -23,6 +23,7 @@ import java.util.Arrays;
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String ADMIN = "ADMIN";
+    private static final String USER = "USER";
 
     @Value("${spring.queries.users-query}")
     private String usersQuery;
@@ -37,7 +38,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication().dataSource(dataSource)
                 .usersByUsernameQuery(usersQuery)
                 .authoritiesByUsernameQuery(rolesQuery)
@@ -48,8 +49,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
-                .and()
                 .csrf().disable()//need for React port 3000 - should be removed on prod
                 .headers().frameOptions().disable()// need for H2 console - should be removed on prod
                 .and()
@@ -57,17 +56,20 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2/**").permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/basicauth").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/v1/users/add").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/v1/users/**").hasAuthority(ADMIN)
-                .antMatchers("/api/v1/users/admin/**").hasAuthority(ADMIN)
-                .antMatchers(HttpMethod.GET,"/api/v1/authors/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/v1/authors/**").hasAuthority(ADMIN)
-                .antMatchers("/api/v1/reservations/admin/**").hasAuthority(ADMIN)
-                .antMatchers("/api/v1/reservations/users/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/v1/books/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/v1/books/search").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/v1/books/**").hasAuthority(ADMIN)
+                .antMatchers(HttpMethod.OPTIONS, "**").permitAll()//allow CORS option calls
+                .antMatchers(HttpMethod.GET, "/basicauth").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority(ADMIN)
+                .antMatchers(HttpMethod.PUT, "/api/v1/users/**").hasAnyAuthority(ADMIN)
+                .antMatchers(HttpMethod.GET, "/api/v1/authors").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/authors").hasAuthority(ADMIN)
+                .antMatchers(HttpMethod.PUT, "/api/v1/authors/**").hasAnyAuthority(ADMIN)
+                .antMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/books").hasAuthority(ADMIN)
+                .antMatchers(HttpMethod.PUT, "/api/v1/books/**").hasAuthority(ADMIN)
+                .antMatchers(HttpMethod.GET, "/api/v1/reservations").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/v1/reservations").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/v1/reservations/**").authenticated()
                 .anyRequest()
                 .authenticated()
                 .and()

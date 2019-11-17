@@ -4,15 +4,15 @@ public class AuthorDTO {
 
     private Long id;
     private String name;
-    private boolean deleted;
+    private boolean enabled;
 
     public AuthorDTO() {
     }
 
-    public AuthorDTO( Long id, String name, boolean deleted) {
+    public AuthorDTO( Long id, String name, boolean enabled) {
         this.id = id;
         this.name = name;
-        this.deleted = deleted;
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -31,12 +31,12 @@ public class AuthorDTO {
         this.name = name;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class AuthorDTO {
         return "AuthorDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", deleted=" + deleted +
+                ", enabled=" + enabled +
                 '}';
     }
 }

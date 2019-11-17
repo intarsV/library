@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/authors")
+@CrossOrigin(origins = "http://localhost:3000")  //should remove on production
 public class AuthorControllerREST {
 
     private AuthorService authorService;
@@ -26,17 +27,16 @@ public class AuthorControllerREST {
         return authorService.authorList();
     }
 
-    @PostMapping(value="/add")
+    @PostMapping
     public ResponseEntity<AuthorDTO> saveAuthor(@RequestBody AuthorDTO authorDto) {
         final Long id = authorService.saveAuthor(authorDto.getName());
         authorDto.setId(id);
         return new ResponseEntity<>(authorDto, HttpStatus.CREATED);
     }
 
-    @PostMapping(value="/delete")
-    public ResponseEntity<AuthorDTO> deleteAuthor(@RequestBody AuthorDTO authorDto) {
-        final boolean isDeleted = authorService.deleteAuthor(authorDto.getId());
-        authorDto.setDeleted(isDeleted);
+    @PutMapping(value="/{id}")
+    public ResponseEntity<AuthorDTO> deleteAuthor(@PathVariable Long id,@RequestBody AuthorDTO authorDto) {
+        authorDto.setEnabled(authorService.disableAuthor(id));
         return new ResponseEntity<>(authorDto, HttpStatus.ACCEPTED);
     }
 }

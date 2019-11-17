@@ -13,17 +13,16 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
     @Query("SELECT new com.accenture.library.dto.ReservationDTO(r.id, r.book.id, r.book.title, r.user.id" +
-            ", r.user.userName, r.reservationDate, r.handOut, r.returned, r.deleted) " +
-            "FROM Reservation r WHERE (:bookTitle IS NULL OR LOWER( r.book.title) LIKE LOWER(concat('%',:bookTitle,'%')))" +
-            " AND (:userName IS NULL OR LOWER( r.user.userName) LIKE LOWER(concat('%',:userName,'%'))) " +
-            "AND (:handOut IS NULL OR r.handOut=:handOut) AND(:returned IS NULL OR r.returned=:returned) AND (r.deleted=false)")
+            ", r.user.userName, r.reservationDate, r.status) " +
+            "FROM Reservation r WHERE (:bookTitle IS NULL OR LOWER( r.book.title) LIKE LOWER(concat('%',:bookTitle,'%'))) " +
+            "AND (:userName IS NULL OR LOWER( r.user.userName) LIKE LOWER(concat('%',:userName,'%'))) " +
+            "AND (:status IS NULL OR r.status=:status)")
     List<ReservationDTO> getByParameters(@Param("bookTitle") String bookTitle,
                                          @Param("userName") String userName,
-                                         @Param("handOut")Boolean handOut,
-                                         @Param("returned") Boolean returned);
+                                         @Param("status") String status);
 
-    @Query("SELECT new com.accenture.library.dto.ReservationDTO(r.id, r.book.id, r.book.title, r.user.id" +
-            ", r.user.userName, r.reservationDate, r.handOut, r.returned, r.deleted) " +
-            "FROM Reservation r WHERE r.handOut=false AND r.returned=false AND r.deleted=false")
-    List<ReservationDTO> getQueue();
+//    @Query("SELECT new com.accenture.library.dto.ReservationDTO(r.id, r.book.id, r.book.title, r.user.id" +
+//            ", r.user.userName, r.reservationDate, r.status) " +
+//            "FROM Reservation r WHERE r.status='QUEUE'")
+//    List<ReservationDTO> getQueue();
 }

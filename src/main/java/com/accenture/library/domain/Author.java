@@ -17,21 +17,21 @@ public class Author {
     @Column(name = "author_name")
     private String name;
 
-    @Column(name = "deleted")
-    private boolean deleted;
+    @Column(name = "enabled")
+    private boolean enabled;
 
     public Author() {
     }
 
-    public Author(Long id, String name, boolean deleted) {
+    public Author(Long id, String name, boolean enabled) {
         this.id=id;
         this.name = name;
-        this.deleted = deleted;
+        this.enabled = enabled;
     }
 
-    public Author(@NotNull(message = "Should enter some name!") String name, boolean deleted) {
+    public Author(String name, boolean enabled) {
         this.name = name;
-        this.deleted = deleted;
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -50,12 +50,12 @@ public class Author {
         this.name = name;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Author {
 
         Author author = (Author) o;
 
-        if (deleted != author.deleted) return false;
+        if (enabled != author.enabled) return false;
         if (!Objects.equals(id, author.id)) return false;
         return Objects.equals(name, author.name);
     }
@@ -74,7 +74,7 @@ public class Author {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (deleted ? 1 : 0);
+        result = 31 * result + (enabled ? 1 : 0);
         return result;
     }
 }

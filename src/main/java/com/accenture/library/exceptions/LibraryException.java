@@ -6,7 +6,7 @@ public class LibraryException extends RuntimeException {
         super(message);
     }
 
-    public LibraryException(final String message, final Exception exception ){
+    public LibraryException(final String message, final Exception exception) {
         super(message, exception);
     }
 

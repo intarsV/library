@@ -10,8 +10,5 @@ public interface UserService {
 
     Long addUser(String encryptedUserName, String encryptedPassword);
 
-    Long enableUser(Long userId);
-
-    Long disableUser(Long userId);
-
+    Long enableDisableUser(Long userId);
 }

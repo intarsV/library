@@ -28,35 +28,29 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> getAllBooks() {
-        return bookRepository.getAllBooks();
-     }
-
-    @Override
     public Long addBook(String title, String authorName, String genre, int copies) {
-        if (StringUtils.isEmpty(title) || StringUtils.isEmpty(authorName) || StringUtils.isEmpty(genre) || copies == 0) {
+        if (StringUtils.isEmpty(title) || StringUtils.isEmpty(authorName) || StringUtils.isEmpty(genre) || copies == 0) {  //dto validation
             throw new LibraryException("Bad request - require all field");
         }
-        Optional<Book> foundBook=bookRepository.findByTitleAndAuthor_Name(title, authorName);
+        Optional<Book> foundBook = bookRepository.findByTitleAndAuthor_Name(title, authorName);
         if (foundBook.isPresent()) {
             throw new LibraryException("Duplicate book exists!");
         }
         final Author bookAuthor = authorService.findByName(authorName);
-        final Book book = new Book(title, bookAuthor, genre, copies, copies, false);
+        final Book book = new Book(title, bookAuthor, genre, copies, copies, true);
         return bookRepository.save(book).getId();
     }
 
     @Override
-    public Boolean deleteBook(Long id) {
+    public Boolean disableBook(Long id) {
         final Optional<Book> findBook = bookRepository.findById(id);
         if (!findBook.isPresent()) {
-            throw new LibraryException("Book with ID: " + id + "not found");
-        } else {
-            Book updateBook=findBook.get();
-            updateBook.setDeleted(true);
-            bookRepository.save(updateBook);
+            throw new LibraryException("No such book found");
         }
-        return true;
+        Book updateBook = findBook.get();
+        updateBook.setEnabled(false);
+        bookRepository.save(updateBook);
+        return updateBook.isEnabled();
     }
 
     @Override

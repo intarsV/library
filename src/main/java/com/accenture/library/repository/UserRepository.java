@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
    @Query("SELECT new com.accenture.library.dto.UserResponseDTO(u.id, u.userName, u.enabled) " +
-           "FROM User u  JOIN u.authorities ua WHERE ua=2")
+           "FROM User u  JOIN u.authorities ua WHERE ua.authorityName='USER'")
     List<UserResponseDTO> getAllUsers();
 
     User findByUserName(String userName);

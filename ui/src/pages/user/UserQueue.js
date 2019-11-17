@@ -1,29 +1,28 @@
 import React, {useContext, useEffect} from 'react';
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
-import {Context} from "../../common/Context";
-import BookService from "../../common/services/UserService";
+import UserService from "../../common/services/UserService";
+import {UserContext} from "../../context/UserContext";
 
 const UserQueue = () => {
 
-    const {userReservationQueue:[reservationQueue, setReservationQueue]} = useContext(Context);
-    const {showUserQueue:[showUserQueue, setShowUserQueue]} = useContext(Context);
+    const {userData, dispatch} = useContext(UserContext);
 
-    const removeReservation = (id) => {
-        BookService.removeReservation({id: id})
+    const removeReservation = (id, statusValue) => {
+        UserService.processReservation({id: id, status: 'CANCELED'})
             .then(
                 response => {
-                    let filteredArray = reservationQueue.filter(item => item.id !== id);
-                    setReservationQueue(filteredArray);
+                    let filteredArray = userData.reservationQueue.filter(item => item.id !== id);
+                    dispatch({type: 'SET_RESERVATION_QUEUE', payload: {reservationQueue: filteredArray}});
                 }
             )
     };
 
     useEffect(() => {
-            if (reservationQueue.length === 0) {
-                setShowUserQueue(false);
+            if (userData.reservationQueue.length === 0) {
+                dispatch({type: 'SHOW_USER_QUEUE', payload: false});
             }
-        }, [reservationQueue]
+        }, [userData.reservationQueue]
     );
 
 
@@ -32,8 +31,8 @@ const UserQueue = () => {
             <div>
                 <h6 className="login-header">Queue</h6>
                 <ReactTable
-                    minRows={1} noDataText={''} showPagination={false} data={reservationQueue}
-                    className={reservationQueue.length < 10 ? '-striped -highlight table-format'
+                    minRows={1} noDataText={''} showPagination={false} data={userData.reservationQueue}
+                    className={userData.reservationQueue.length < 10 ? '-striped -highlight table-format'
                                                             : '-striped -highlight table-format-large'}
                     columns={[
                         {

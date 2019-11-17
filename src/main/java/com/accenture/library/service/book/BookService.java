@@ -5,11 +5,10 @@ import com.accenture.library.dto.BookDTO;
 import java.util.List;
 
 public interface BookService {
-    List<BookDTO> getAllBooks();
 
-    Long addBook(String title, String author, String genre, int copies) throws Exception;
+    Long addBook(String title, String author, String genre, int copies);
 
-    Boolean deleteBook(Long id);
+    Boolean disableBook(Long id);
 
     List<BookDTO> getByParameters(String title, String author, String genre);
 }

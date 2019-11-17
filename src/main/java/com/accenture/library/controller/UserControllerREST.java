@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@CrossOrigin(origins = "http://localhost:3000")  //should remove on production
 public class UserControllerREST {
 
     private UserService userService;
@@ -27,22 +28,15 @@ public class UserControllerREST {
         return userService.getUsers();
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping()
     public ResponseEntity addUser(@RequestBody UserDTO userDTO) {
         final String encodedUserName = userDTO.getUserName();
         final String encodedPassword = userDTO.getPassword();
         return new ResponseEntity<>(userService.addUser(encodedUserName, encodedPassword), HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/admin/enable")
-    public ResponseEntity enableUser(@RequestBody UserDTO userDTO) {
-        final Long userId = userDTO.getId();
-        return new ResponseEntity<>(userService.enableUser(userId), HttpStatus.ACCEPTED);
-    }
-
-    @PostMapping(value = "/admin/disable")
-    public ResponseEntity disableUser(@RequestBody UserDTO userDTO) {
-        final Long userId = userDTO.getId();
-        return new ResponseEntity<>(userService.disableUser(userId), HttpStatus.ACCEPTED);
+    @PutMapping(value = "/{id}")
+    public ResponseEntity enableUser(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.enableDisableUser(id), HttpStatus.ACCEPTED);
     }
 }

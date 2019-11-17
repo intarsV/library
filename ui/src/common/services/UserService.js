@@ -9,25 +9,30 @@ class UserService {
     };
 
     searchBook(searchData) {
-        return axios.post(API_URL + '/api/v1/books/search', searchData, this.config());
+        return axios.get(API_URL + '/api/v1/books', {
+            params: searchData,
+            headers: {authorization: sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME)}
+        });
     }
 
-    getReservations(reservationData) {
-        return axios.post(API_URL + '/api/v1/reservations/user/queue', reservationData, this.config());
+    searchReservations(reservationData) {
+        return axios.get(API_URL + '/api/v1/reservations', {
+            params: reservationData,
+            headers: {authorization: sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME)}
+        });
+    }
+
+    processReservation(reservationData) {
+        return axios.put(API_URL + '/api/v1/reservations/'+reservationData.id, reservationData, this.config());
     }
 
     makeReservation(reservationData) {
-        return axios.post(API_URL + '/api/v1/reservations/user/add', reservationData, this.config());
-    }
-
-    removeReservation(reservationData) {
-        return axios.post(API_URL + '/api/v1/reservations/user/delete', reservationData, this.config());
+        return axios.post(API_URL + '/api/v1/reservations', reservationData, this.config());
     }
 
     register(userData) {
         return axios.post(API_URL + '/api/v1/users/add', userData);
     }
-
 }
 
 export default new UserService();

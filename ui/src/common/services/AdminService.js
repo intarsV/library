@@ -13,11 +13,11 @@ class AdminService {
     }
 
     addAuthor(authorData) {
-        return axios.post(API_URL + '/api/v1/authors/add', authorData, this.config());
+        return axios.post(API_URL + '/api/v1/authors', authorData, this.config());
     }
 
-    deleteAuthor(authorData) {
-        return axios.post(API_URL + '/api/v1/authors/delete', authorData, this.config());
+    disableAuthor(authorData) {
+        return axios.put(API_URL + '/api/v1/authors/' + authorData.id, authorData, this.config());
     }
 
     //Functions for book
@@ -26,32 +26,24 @@ class AdminService {
     }
 
     addABook(bookData) {
-        return axios.post(API_URL + '/api/v1/books/add', bookData, this.config());
+        return axios.post(API_URL + '/api/v1/books', bookData, this.config());
     }
 
-    deleteBook(bookData) {
-        return axios.post(API_URL + '/api/v1/books/delete', bookData, this.config());
+    disableBook(bookData) {
+        return axios.put(API_URL + '/api/v1/books/' + bookData.id, bookData, this.config());
     }
 
     //Functions for reservations
-    getReservationQueue() {
-        return axios.get(API_URL + '/api/v1/reservations/admin/queue', this.config());
-    }
 
-    handOut(reservationData) {
-        return axios.post(API_URL + '/api/v1/reservations/admin/handout', reservationData, this.config());
+    process(reservationData) {
+        return axios.put(API_URL + '/api/v1/reservations/' + reservationData.id, reservationData, this.config());
     }
 
     searchReservations(reservationData) {
-        return axios.post(API_URL + '/api/v1/reservations/admin/search', reservationData, this.config());
-    }
-
-    takeIn(reservationData){
-        return axios.post(API_URL + '/api/v1/reservations/admin/take', reservationData, this.config());
-    }
-
-    removeReservation(reservationData) {
-        return axios.post(API_URL + '/api/v1/reservations/admin/delete', reservationData, this.config());
+        return axios.get(API_URL + '/api/v1/reservations' ,  {
+            params: reservationData,
+            headers: {authorization: sessionStorage.getItem(USER_NAME_SESSION_ATTRIBUTE_NAME)}
+        });
     }
 
     /* functions for users*/
@@ -59,12 +51,8 @@ class AdminService {
         return axios.get(API_URL + '/api/v1/users', this.config());
     }
 
-    enableUser(userData) {
-        return axios.post(API_URL + '/api/v1/users/admin/enable', userData, this.config());
-    }
-
-    disableUser(userData) {
-        return axios.post(API_URL + '/api/v1/users/admin/disable', userData, this.config());
+    changeUserStatus(userData) {
+        return axios.put(API_URL + '/api/v1/users/'+userData.id, userData, this.config());
     }
 }
 

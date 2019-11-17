@@ -1,24 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
-import BookService from '../../common/services/UserService'
+import UserService from '../../common/services/UserService'
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import {userReservation} from '../../common/Constants'
-import {Context} from "../../common/Context";
+import {UserContext} from "../../context/UserContext";
 
 const BookReservations = () => {
 
     const [selection, setSelection] = useState('optionActive');
-    const {userReservationData:[reservationsData, setReservationData]}=useContext(Context);
+    const {userData, dispatch} = useContext(UserContext);
 
-    useEffect(()=>{
-            getReservationData({handOut: "true", returned: "false"}, "optionActive")
-        },[]
+    useEffect(() => {
+            getReservationData('HANDOUT', "optionActive")
+        }, []
     );
 
     const getReservationData = (requestData, selectedOption) => {
-        BookService.getReservations(requestData)
+        UserService.searchReservations({status: requestData})
             .then(response => {
-                    setReservationData(response.data);
+                    dispatch({type: 'SET_RESERVATION_DATA', payload: {reservationsData: response.data}});
                     setSelection(selectedOption);
                 }
             );
@@ -41,8 +41,8 @@ const BookReservations = () => {
                     )}
                 </div>
                 <ReactTable
-                    minRows={1} noDataText={'No data found'} showPagination={false} data={reservationsData}
-                    className={reservationsData.length < 10 ? '-striped -highlight table-format'
+                    minRows={1} noDataText={'No data found'} showPagination={false} data={userData.reservationsData}
+                    className={userData.reservationsData.length < 10 ? '-striped -highlight table-format'
                                                             : '-striped -highlight table-format-large'}
                     columns={[
                         {

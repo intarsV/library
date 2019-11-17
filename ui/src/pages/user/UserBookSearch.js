@@ -1,9 +1,9 @@
 import React, {useContext, useState} from 'react';
-import BookService from '../../common/services/UserService'
+import UserService from '../../common/services/UserService'
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import {genres} from "../../common/Constants";
-import {Context} from "../../common/Context";
+import {UserContext} from "../../context/UserContext";
 
 const UserBookSearch = () => {
 
@@ -12,9 +12,8 @@ const UserBookSearch = () => {
     const [genre, setGenre] = useState('');
     const [books, setBooks] = useState([]);
     const [searchData, setSearchData] = useState({});
-    const {userReservationQueue:[reservationQueue, setReservationQueue]} = useContext(Context);
-    const {showUserQueue:[showUserQueue, setShowUserQueue]} = useContext(Context);
 
+    const {userData, dispatch} = useContext(UserContext);
 
     const prepareRequest = () => {
         setSearchData({});
@@ -32,20 +31,24 @@ const UserBookSearch = () => {
     const searchBooks = () => {
         prepareRequest();
         if (Object.keys(searchData).length > 0) {
-        BookService.searchBook(searchData)
-            .then(
-                response => {
-                    setBooks(response.data)
-                }
-            )}
+            UserService.searchBook(searchData)
+                .then(
+                    response => {
+                        setBooks(response.data)
+                    }
+                )
+        }
     };
 
     const makeReservation = (bookId) => {
-        BookService.makeReservation({bookId: bookId})
+        UserService.makeReservation({bookId: bookId})
             .then(
                 response => {
-                    setReservationQueue([...reservationQueue, response.data]);
-                    setShowUserQueue(true)
+                    dispatch({
+                        type: 'SET_RESERVATION_QUEUE',
+                        payload: {reservationQueue: [...userData.reservationQueue, response.data]}
+                    });
+                    dispatch({type: 'SHOW_USER_QUEUE', payload: {showUserQueue: true}});
                 }
             )
     };

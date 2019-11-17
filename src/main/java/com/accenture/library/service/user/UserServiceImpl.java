@@ -45,16 +45,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long enableUser(Long userId) {
+    public Long enableDisableUser(Long userId) {
         final User user = searchForUser(userId);
-        user.setEnabled(true);
-        return repository.save(user).getId();
-    }
-
-    @Override
-    public Long disableUser(Long userId) {
-        final User user = searchForUser(userId);
-        user.setEnabled(false);
+        boolean currentStatus = user.isEnabled();
+        user.setEnabled(!currentStatus);
         return repository.save(user).getId();
     }
 

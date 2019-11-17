@@ -91,7 +91,7 @@ public class AuthorControllerRESTTest {
     @Test
     public void shouldDeleteBookDTO() throws Exception {
         final String requestBody = "{\"id\":\"" + ID + "\"}";
-        when(service.deleteAuthor(ID)).thenReturn(true);
+        when(service.disableAuthor(ID)).thenReturn(true);
         mvc.perform(post("/api/v1/authors/delete")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))

@@ -1,7 +1,6 @@
 package com.accenture.library.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -30,19 +29,19 @@ public class Book {
     @Column(name = "available")
     private int available;
 
-    @Column(name = "deleted")
-    private boolean deleted;
+    @Column(name = "enabled")
+    private boolean enabled;
 
     public Book() {
     }
 
-    public Book(String title, Author author, String genre, int copies, int available, boolean deleted) {
+    public Book(String title, Author author, String genre, int copies, int available, boolean enabled) {
         this.title = title;
         this.author = author;
         this.genre = genre;
         this.copies = copies;
         this.available = available;
-        this.deleted = deleted;
+        this.enabled = enabled;
     }
 
     public Book(Long bookId) {
@@ -98,12 +97,12 @@ public class Book {
         this.available = available;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
@@ -115,7 +114,7 @@ public class Book {
 
         if (copies != book.copies) return false;
         if (available != book.available) return false;
-        if (deleted != book.deleted) return false;
+        if (enabled != book.enabled) return false;
         if (!Objects.equals(id, book.id)) return false;
         if (!Objects.equals(title, book.title)) return false;
         if (!Objects.equals(author, book.author)) return false;
@@ -130,7 +129,7 @@ public class Book {
         result = 31 * result + (genre != null ? genre.hashCode() : 0);
         result = 31 * result + copies;
         result = 31 * result + available;
-        result = 31 * result + (deleted ? 1 : 0);
+        result = 31 * result + (enabled ? 1 : 0);
         return result;
     }
 }

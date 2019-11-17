@@ -2,8 +2,8 @@ export const API_URL = 'http://localhost:8080';
 
 export const adminMenu = [
     {key: 'Main', value: '/admin'},
-    {key: 'Manage authors', value: '/admin/add/author'},
-    {key: 'Manage books', value: '/admin/add/book'},
+    {key: 'Manage authors', value: '/admin/authors'},
+    {key: 'Manage books', value: '/admin/books'},
     {key: 'Search reservations', value: '/admin/reservations'},
     {key: 'Users queue', value: '/admin/queue'},
     {key: 'Manage users', value: '/admin/users'}
@@ -20,15 +20,15 @@ export const genres = [
 ];
 
 export const returnedOptions = [
-    {key: 'active', value: 'false'},
-    {key: 'finished', value: 'true'}
+    {key: 'active', value: 'HANDOUT'},
+    {key: 'finished', value: 'RETURNED'}
 ];
 
 export const USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser';
 
 export const userReservation = [
-    {data: {handOut: "true", returned: "false"}, optionName: "optionActive", optionHeader: "Active"},
-    {data: {handOut: "true", returned: "true"}, optionName: "optionReturned", optionHeader: "History"}
+    {data:'HANDOUT', optionName: "optionActive", optionHeader: "Active"},
+    {data: 'RETURNED', optionName: "optionReturned", optionHeader: "History"}
 ];
 
 //fieldList for forms

@@ -83,7 +83,7 @@ public class AuthorServiceImplTest {
         Author author = createAuthor();
         when(repository.findById(1L)).thenReturn(Optional.of(author));
         when(repository.save(any(Author.class))).thenReturn(author);
-        assertTrue(service.deleteAuthor(ID));
+        assertTrue(service.disableAuthor(ID));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class AuthorServiceImplTest {
         when(repository.findById(1L)).thenReturn(Optional.empty());
         exception.expect(LibraryException.class);
         exception.expectMessage("No such author with id: "+ID );
-        service.deleteAuthor(ID);
+        service.disableAuthor(ID);
     }
 
     //Auxiliary methods

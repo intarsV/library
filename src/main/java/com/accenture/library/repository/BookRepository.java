@@ -14,13 +14,13 @@ import java.util.Optional;
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT new com.accenture.library.dto.BookDTO(b.id, b.title, b.author.name, b.genre, " +
-            "b.copies, b.available, b.deleted) FROM Book b WHERE b.deleted=false")
+            "b.copies, b.available, b.enabled) FROM Book b WHERE b.enabled=true")
     List<BookDTO> getAllBooks();
 
-    @Query("SELECT new com.accenture.library.dto.BookDTO(b.id, b.title, b.author.name, b.genre, b.copies, b.available, b.deleted)" +
+    @Query("SELECT new com.accenture.library.dto.BookDTO(b.id, b.title, b.author.name, b.genre, b.copies, b.available, b.enabled)" +
             " FROM Book b WHERE (:title IS NULL OR LOWER( b.title) LIKE  LOWER(concat('%',:title,'%'))) " +
             "AND (:author IS NULL OR LOWER( b.author.name) LIKE LOWER(concat('%',:author,'%'))) " +
-            "AND (:genre IS NULL OR b.genre=:genre) AND b.deleted=false")
+            "AND (:genre IS NULL OR b.genre=:genre) AND b.enabled=true")
     List<BookDTO> findByParameters(@Param("title") String title,
                                    @Param("author") String author,
                                    @Param("genre") String genre);

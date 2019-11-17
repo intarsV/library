@@ -2,8 +2,8 @@ import React, {useContext, useEffect, useState} from 'react';
 import {genres, bookFieldList} from "../../common/Constants";
 import ReactTable from "react-table";
 import AdminService from "../../common/services/AdminService";
-import {Context} from "../../common/Context";
 import Validate from "../../common/Validation";
+import {AdminContext} from "../../context/AdminContext";
 
 const ManageBook=()=>{
 
@@ -11,28 +11,29 @@ const ManageBook=()=>{
     const [authorName, setAuthorName] = useState('');
     const [genre, setGenre] = useState('');
     const [copies, setCopies] = useState('');
-    const {adminBookData: [booksData, setBooksData]} = useContext(Context);
-    const {adminAuthorData: [authorData, setAuthorData]} = useContext(Context);
-    const [infoMessage, setInfoMessage] = useState({type:'', msg: ''});
+    const {adminData, dispatch} = useContext(AdminContext);
+    const [infoMessage, setInfoMessage] = useState({type: '', msg: ''});
 
     useEffect(() => {
             AdminService.getAllBooks()
                 .then(
                     response => {
-                        setBooksData(response.data)
+                        dispatch({type: 'BOOKS_DATA', payload: {booksData: response.data}});
+                        // setBooksData(response.data)
                     }
                 );
             AdminService.getAllAuthors()
                 .then(
                     response => {
                         if (response.status === 200) {
-                            setAuthorData(response.data);
+                            dispatch({type: 'AUTHORS_DATA', payload: {authorsData: response.data}});
+                            // setAuthorData(response.data);
                         }
                     }
                 )
                 .catch((error) => {
-                message('error', error.response.data.message);
-            })
+                    message('error', error.response.data.message);
+                })
         }, []
     );
 
@@ -40,7 +41,8 @@ const ManageBook=()=>{
         if (Validate.validateForm(bookFieldList, setInfoMessage)) {
             AdminService.addABook({title: title, authorName: authorName, genre: genre, copies: copies})
                 .then(response => {
-                    setBooksData([...booksData, response.data]);
+                    dispatch({type: 'BOOKS_DATA', payload: [...adminData.booksData, response.data]});
+                    // setBooksData([...booksData, response.data]);
                     resetFields();
                     message('info', 'Book added successfully!');
                 })
@@ -50,11 +52,11 @@ const ManageBook=()=>{
         }
     };
 
-    const deleteBook = (id) => {
-        AdminService.deleteBook({id: id})
+    const disableBook = (id) => {
+        AdminService.disableBook({id: id})
             .then(response => {
-                    let filteredArray = booksData.filter(item => item.id !== id);
-                    setBooksData(filteredArray);
+                    let filteredArray = adminData.booksData.filter(item => item.id !== id);
+                    dispatch({type: 'BOOKS_DATA', payload: {booksData: filteredArray}});
                 }
             )
             .catch((error) => {
@@ -93,7 +95,7 @@ const ManageBook=()=>{
                                 setAuthorName(event.target.value)
                             }}>
                         <option value={''}/>
-                        {authorData.map(author =>
+                        {adminData.authorsData.map(author =>
                             <option value={author.name}>{author.name}</option>)
                         }
                     </select>
@@ -127,8 +129,8 @@ const ManageBook=()=>{
                   {infoMessage.msg}
             </span>
             <ReactTable
-                minRows={1} noDataText={'No data found'} showPagination={false} data={booksData}
-                className={booksData.length < 10 ? '-striped -highlight table-format'
+                minRows={1} noDataText={'No data found'} showPagination={false} data={adminData.booksData}
+                className={adminData.booksData.length < 10 ? '-striped -highlight table-format'
                                                  : '-striped -highlight table-format-large'}
                 columns={[
                     {
@@ -153,7 +155,7 @@ const ManageBook=()=>{
                         className: "columnAlignCenter",
                         accessor: "id",
                         Cell: ({value}) => (
-                            <button onClick={() => deleteBook(value)}>Delete</button>
+                            <button onClick={() => disableBook(value)}>Delete</button>
                         )
                     }
                 ]}

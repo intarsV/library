@@ -1,26 +1,25 @@
 import React, {useContext, useEffect} from 'react';
-import BookService from "../../common/services/UserService";
-import {Context} from "../../common/Context";
+import UserService from "../../common/services/UserService";
+import {UserContext} from "../../context/UserContext";
 
 const UserPage = () => {
 
-    const {userReservationQueue:[reservationQueue, setReservationQueue]} = useContext(Context);
-    const {showUserQueue:[showUserQueue, setShowUserQueue]} = useContext(Context);
+    const {userData, dispatch} = useContext(UserContext);
 
     useEffect(() => {
-            BookService.getReservations({handOut: "false", returned: "false"})
+            UserService.searchReservations({status: 'QUEUE'})
                 .then(response => {
-                        setReservationQueue(response.data);
+                        dispatch({type: 'SET_RESERVATION_QUEUE', payload: {reservationQueue: response.data}});
                     }
                 );
-        },[]
+        }, []
     );
 
     useEffect(() => {
-            if (reservationQueue.length > 0) {
-                setShowUserQueue(true);
+            if (userData.reservationQueue.length > 0) {
+                dispatch({type: 'SHOW_USER_QUEUE', payload: true});
             }
-        }, [reservationQueue]
+        }, [userData.reservationQueue]
     );
 
     return (

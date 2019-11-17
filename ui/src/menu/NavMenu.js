@@ -1,29 +1,29 @@
 import React, {useContext} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import AuthenticationService from '../common/services/AuthenticationService';
-import {Context} from '../common/Context';
+import {CommonContext} from '../context/CommonContext';
 import {adminMenu, userMenu} from '../common/Constants';
+import {UserContext} from "../context/UserContext";
 
 const NavMenu = () => {
 
-    const {userAuthority: [userAuthority, setUserAuthority]} = useContext(Context);
-    const {showUserQueue:[showUserQueue, setShowUserQueue]} = useContext(Context);
-    const {userReservationQueue:[reservationQueue, setReservationQueue]} = useContext(Context);
+    const {commonData, commonDispatch} = useContext(CommonContext);
+    const {dispatch} = useContext(UserContext);
 
     const logout = () => {
         AuthenticationService.logout();
         clearUserData();
     };
 
-    const clearUserData=()=>{
-        setUserAuthority(null);
-        setShowUserQueue(false);
-        setReservationQueue([]);
+    const clearUserData = () => {
+        commonDispatch({type: 'USER_AUTHORITY', payload: {userAuthority: null}});
+        dispatch({type: 'SET_RESERVATION_QUEUE', payload: {reservationQueue: []}});
+        dispatch({type: 'SHOW_USER_QUEUE', payload: false});
     };
 
     return (
         <>
-            {userAuthority === 'ADMIN' ?
+            {commonData.userAuthority === 'ADMIN' ?
                 <>
                     {adminMenu.map((item) =>
                         <li key={item.key} className="navLinks"><Link className="navLinks" to={item.value}>{item.key}</Link></li>

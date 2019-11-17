@@ -2,20 +2,20 @@ import React, {useContext, useEffect, useState} from 'react';
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import AdminService from "../../common/services/AdminService";
-import {Context} from "../../common/Context";
 import Validate from "../../common/Validation";
 import {authorFieldList} from "../../common/Constants"
+import {AdminContext} from "../../context/AdminContext";
 
 const ManageAuthor = () => {
 
     const [authorName, setAuthorName] = useState('');
-    const {adminAuthorData: [authorData, setAuthorData]} = useContext(Context);
+    const {adminData, dispatch} = useContext(AdminContext);
     const [infoMessage, setInfoMessage] = useState({type:'', msg: ''});
 
     useEffect(() => {
             AdminService.getAllAuthors()
                 .then(response => {
-                        setAuthorData(response.data);
+                    dispatch({type: 'AUTHORS_DATA', payload: {authorsData: response.data}});
                     })
                 .catch((error) => {
                     message('error', error.response.data.message);
@@ -27,7 +27,7 @@ const ManageAuthor = () => {
         if (Validate.validateForm(authorFieldList, setInfoMessage)) {
             AdminService.addAuthor({name: authorName})
                 .then(response => {
-                    setAuthorData([...authorData, response.data]);
+                    dispatch({type: 'AUTHORS_DATA', payload: {authorsData: [...adminData.authorsData, response.data]}});
                     setAuthorName('');
                     message('info', 'Author added successfully!');
                 })
@@ -37,11 +37,11 @@ const ManageAuthor = () => {
         }
     };
 
-    const deleteAuthor = (id) => {
-        AdminService.deleteAuthor({id: id})
+    const disableAuthor = (id) => {
+        AdminService.disableAuthor({id: id})
             .then(response => {
-                let filteredArray = authorData.filter(item => item.id !== id);
-                setAuthorData(filteredArray);
+                let filteredArray = adminData.authorsData.filter(item => item.id !== id);
+                dispatch({type: 'AUTHORS_DATA', payload: {authorsData: filteredArray}});
                 message('info', 'Author deleted successfully!');
             })
             .catch((error) => {
@@ -54,7 +54,7 @@ const ManageAuthor = () => {
     };
 
     return (
-        <div class="card">
+        <div className="card">
             <h4 className="header-padding">Manage Authors</h4>
             <div className="row row-format">
                 <h5 className="label">Author name:</h5>
@@ -71,8 +71,8 @@ const ManageAuthor = () => {
             </div>
             <button className="button" onClick={() => addAuthor()}>Add author</button>
             <ReactTable
-                 minRows={1} noDataText={'No data found'} showPagination={false} data={authorData}
-                className={authorData.length < 10 ? '-striped -highlight table-format'
+                 minRows={1} noDataText={'No data found'} showPagination={false} data={adminData.authorsData}
+                className={adminData.authorsData.length < 10 ? '-striped -highlight table-format'
                                                   : '-striped -highlight table-format-large'}
                 columns={[
                     {
@@ -84,7 +84,7 @@ const ManageAuthor = () => {
                         className: "columnAlignCenter",
                         accessor: "id",
                         Cell: ({value}) => (
-                            <button onClick={() => deleteAuthor(value)}>Delete</button>
+                            <button onClick={() => disableAuthor(value)}>Delete</button>
                         )
                     }
                 ]}

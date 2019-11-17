@@ -14,6 +14,6 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     Optional<Author> findByName(String name);
 
-    @Query("SELECT new com.accenture.library.dto.AuthorDTO(a.id, a.name, a.deleted) FROM Author a WHERE a.deleted=false")
+    @Query("SELECT new com.accenture.library.dto.AuthorDTO(a.id, a.name, a.enabled) FROM Author a WHERE a.enabled=true")
     List<AuthorDTO> getAllAuthors();
 }

@@ -5,22 +5,23 @@ public class BookDTO {
     private Long id;
     private String title;
     private String authorName;
+
     private String genre;
     private int copies;
     private int available;
-    private boolean deleted;
+    private boolean enabled;
 
     public BookDTO() {
     }
 
-    public BookDTO(Long id, String title, String authorName, String genre, int copies, int available, boolean deleted) {
+    public BookDTO(Long id, String title, String authorName, String genre, int copies, int available, boolean enabled) {
         this.id = id;
         this.title = title;
         this.authorName = authorName;
         this.genre = genre;
         this.copies = copies;
         this.available = available;
-        this.deleted = deleted;
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -63,8 +64,8 @@ public class BookDTO {
         this.copies = copies;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public int getAvailable() {
@@ -75,8 +76,8 @@ public class BookDTO {
         this.available = available;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
@@ -88,7 +89,7 @@ public class BookDTO {
                 ", genre='" + genre + '\'' +
                 ", copies=" + copies +
                 ", available=" + available +
-                ", deleted=" + deleted +
+                ", enabled=" + enabled +
                 '}';
     }
 }

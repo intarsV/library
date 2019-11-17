@@ -1,5 +1,7 @@
 package com.accenture.library.dto;
 
+import com.accenture.library.domain.EnumReservationStatus;
+
 import java.util.Date;
 
 public class ReservationDTO {
@@ -10,23 +12,23 @@ public class ReservationDTO {
     private Long userId;
     private String userName;
     private Date reservationDate;
-    private boolean handOut;
-    private boolean returned;
-    private boolean deleted;
+    private String status;
 
     public ReservationDTO() {
     }
 
-    public ReservationDTO(Long id, Long bookId, String bookTitle, Long userId, String userName, Date reservationDate, boolean handOut, boolean returned, boolean deleted) {
+    public ReservationDTO(Long id, Long bookId, String bookTitle, Long userId, String userName, Date reservationDate, String status) {
         this.id = id;
         this.bookId = bookId;
         this.bookTitle = bookTitle;
         this.userId = userId;
         this.userName = userName;
         this.reservationDate = reservationDate;
-        this.handOut = handOut;
-        this.returned = returned;
-        this.deleted = deleted;
+        this.status = status;
+    }
+
+    public ReservationDTO(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
@@ -77,42 +79,11 @@ public class ReservationDTO {
         this.reservationDate = reservationDate;
     }
 
-    public boolean isHandOut() {
-        return handOut;
+    public String getStatus() {
+        return status;
     }
 
-    public void setHandOut(boolean handOut) {
-        this.handOut = handOut;
-    }
-
-    public boolean isReturned() {
-        return returned;
-    }
-
-    public void setReturned(boolean returned) {
-        this.returned = returned;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    @Override
-    public String toString() {
-        return "ReservationDTO{" +
-                "id=" + id +
-                ", bookId=" + bookId +
-                ", bookTitle='" + bookTitle + '\'' +
-                ", userId=" + userId +
-                ", userName='" + userName + '\'' +
-                ", reservationDate=" + reservationDate +
-                ", handOut=" + handOut +
-                ", returned=" + returned +
-                ", deleted=" + deleted +
-                '}';
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

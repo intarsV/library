@@ -15,7 +15,7 @@ class Validation{
 
     rules(id, type) {
         const testValue = document.getElementById(id).value;
-        const textRegEx = /^[a-zA-Z]+$/;
+        const textRegEx = /^[a-zA-Zā-žĀ-ž ]*$/gm;
         const passwordRegex = /^[a-zA-Z0-9]+$/;
         switch (type) {
             case 'text':
