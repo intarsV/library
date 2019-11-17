@@ -16,14 +16,16 @@ const ManageBook=()=>{
 
     useEffect(() => {
         AdminService.getAllBooks()
-            .then(
-                response => {
-                    dispatch({type: 'BOOKS_DATA', payload: {booksData: response.data}});
+            .then(response => {
+                    if (response.status === 200) {
+                        dispatch({type: 'BOOKS_DATA', payload: {booksData: response.data}});
+                    }
                 }
-            );
+            ).catch((error) => {
+            message('error', error.response.data.message);
+        });
         AdminService.getAllAuthors()
-            .then(
-                response => {
+            .then(response => {
                     if (response.status === 200) {
                         dispatch({type: 'AUTHORS_DATA', payload: {authorsData: response.data}});
                     }

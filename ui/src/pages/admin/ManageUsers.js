@@ -9,20 +9,24 @@ const ManageUsers = () => {
 
     useEffect(() => {
             AdminService.getUsers()
-                .then(
-                    response => {
+                .then(response => {
                         dispatch({type: 'USERS_DATA', payload: {usersData: response.data}});
                     }
                 )
+                .catch((error) => {
+                    console.log(error.response.data.message);
+                })
         }, []
     );
 
     const changeUserStatus = (id) => {
         AdminService.changeUserStatus({id: id})
-            .then(
-                response => {
-                    updateData(id)
+            .then(response => {
+                    updateData(response.data.id)
                 })
+            .catch((error) => {
+                console.log(error.response.data.message);
+            })
     };
 
     const updateData = (id) => {

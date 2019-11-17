@@ -37,13 +37,15 @@ const UserBookSearch = () => {
                         setBooks(response.data)
                     }
                 )
+                .catch((error) => {
+                    console.log(error.response.data.message);
+                })
         }
     };
 
     const makeReservation = (bookId) => {
         UserService.makeReservation({bookId: bookId})
-            .then(
-                response => {
+            .then(response => {
                     dispatch({
                         type: 'SET_RESERVATION_QUEUE',
                         payload: {reservationQueue: [...userData.reservationQueue, response.data]}
@@ -51,6 +53,9 @@ const UserBookSearch = () => {
                     dispatch({type: 'SHOW_USER_QUEUE', payload: {showUserQueue: true}});
                 }
             )
+            .catch((error) => {
+                console.log(error.response.data.message);
+            })
     };
 
     return (

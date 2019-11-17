@@ -1,4 +1,4 @@
-import React, {useContext, useEffect } from 'react';
+import React, {useContext, useEffect} from 'react';
 import ReactTable from "react-table";
 import AdminService from "../../common/services/AdminService";
 import {AdminContext} from "../../context/AdminContext";
@@ -20,11 +20,13 @@ const ReservationQueue = () => {
 
     const refreshReservations = () => {
         AdminService.searchReservations({status: 'QUEUE'})
-            .then(
-                response => {
+            .then(response => {
                     dispatch({type: 'ADMIN_RESERVATION_QUEUE', payload: {adminReservationQueue: response.data}});
                 }
             )
+            .catch((error) => {
+                console.log(error.response.data.message);
+            })
     };
 
     const process = (id, statusValue) => {
@@ -34,6 +36,9 @@ const ReservationQueue = () => {
                     dispatch({type: 'ADMIN_RESERVATION_QUEUE', payload: {adminReservationQueue: filteredArray}});
                 }
             )
+            .catch((error) => {
+                console.log(error.response.data.message);
+            })
     };
 
     return (

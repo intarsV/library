@@ -11,7 +11,10 @@ const UserPage = () => {
                 .then(response => {
                         dispatch({type: 'SET_RESERVATION_QUEUE', payload: {reservationQueue: response.data}});
                     }
-                );
+                )
+                .catch((error) => {
+                    console.log(error.response.data.message);
+                })
         }, []
     );
 

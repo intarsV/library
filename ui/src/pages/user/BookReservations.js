@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import UserService from '../../common/services/UserService'
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
@@ -21,7 +21,10 @@ const BookReservations = () => {
                     dispatch({type: 'SET_RESERVATION_DATA', payload: {reservationsData: response.data}});
                     setSelection(selectedOption);
                 }
-            );
+            )
+            .catch((error) => {
+                console.log(error.response.data.message);
+            })
     };
 
         return (

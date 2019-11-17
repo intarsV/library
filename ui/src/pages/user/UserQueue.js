@@ -10,12 +10,14 @@ const UserQueue = () => {
 
     const removeReservation = (id, statusValue) => {
         UserService.processReservation({id: id, status: 'CANCELED'})
-            .then(
-                response => {
+            .then(response => {
                     let filteredArray = userData.reservationQueue.filter(item => item.id !== id);
                     dispatch({type: 'SET_RESERVATION_QUEUE', payload: {reservationQueue: filteredArray}});
                 }
             )
+            .catch((error) => {
+                console.log(error.response.data.message);
+            })
     };
 
     useEffect(() => {

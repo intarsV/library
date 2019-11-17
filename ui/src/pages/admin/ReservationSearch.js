@@ -29,11 +29,13 @@ const ReservationSearch = () => {
     const searchReservations = () => {
         prepareRequest();
         AdminService.searchReservations(searchData)
-            .then(
-                response => {
+            .then(response => {
                     setReservationsData(response.data)
                 }
             )
+            .catch((error) => {
+                console.log(error.response.data.message);
+            })
     };
 
     const returnBook = (id) => {
@@ -42,7 +44,10 @@ const ReservationSearch = () => {
                     let filteredArray = reservationsData.filter(item => item.id !== id);
                     setReservationsData(filteredArray);
                 }
-            );
+            )
+            .catch((error) => {
+                console.log(error.response.data.message);
+            })
     };
 
     const isReturned=(value)=>{
