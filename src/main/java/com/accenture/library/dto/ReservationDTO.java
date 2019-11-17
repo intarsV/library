@@ -1,17 +1,22 @@
 package com.accenture.library.dto;
 
-import com.accenture.library.domain.EnumReservationStatus;
+import com.accenture.library.customEnumValidation.EnumReservationStatus;
+import com.accenture.library.customEnumValidation.MyEnumValidation;
 
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 public class ReservationDTO {
 
     private Long id;
     private Long bookId;
+    @Pattern(regexp = "^[a-zA-Zā-žĀ-ž0-9 ]*$")
     private String bookTitle;
     private Long userId;
+    @Pattern(regexp = "^[a-zA-Zā-žĀ-ž0-9 ]*$")
     private String userName;
     private Date reservationDate;
+    @MyEnumValidation(enumClass = EnumReservationStatus.class)
     private String status;
 
     public ReservationDTO() {

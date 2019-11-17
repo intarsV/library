@@ -8,6 +8,9 @@ public class UserResponseDTO {
 
     private boolean enabled;
 
+    public UserResponseDTO() {
+    }
+
     public UserResponseDTO(Long id) {
         this.id = id;
     }

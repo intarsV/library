@@ -7,7 +7,7 @@ const Registration = () => {
 
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
-    const [infoMessage, setInfoMessage]=useState('');
+    const [infoMessage, setInfoMessage] = useState('');
 
     const addUser = () => {
         if (Validate.validateForm(registrationFieldList, setInfoMessage)) {

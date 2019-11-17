@@ -1,6 +1,5 @@
 import axios from 'axios'
-import {API_URL} from '../Constants'
-import {USER_NAME_SESSION_ATTRIBUTE_NAME} from "../Constants";
+import {API_URL, USER_NAME_SESSION_ATTRIBUTE_NAME} from '../Constants'
 
 class UserService {
 
@@ -31,7 +30,7 @@ class UserService {
     }
 
     register(userData) {
-        return axios.post(API_URL + '/api/v1/users/add', userData);
+        return axios.post(API_URL + '/api/v1/users', userData);
     }
 }
 

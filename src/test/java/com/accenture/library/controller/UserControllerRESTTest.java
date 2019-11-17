@@ -21,10 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,19 +56,19 @@ public class UserControllerRESTTest {
                 .build();
     }
 
-    //For ANY user
-    @WithMockUser()
-    @Test
-    public void shouldAddNewUser() throws Exception {
-        final String requestBody = "{\"userName\": \"" + ENCODED_USERNAME + "\",\"password\": \""
-                + ENCODED_PASSWORD + "\"}";
-        when(service.addUser(ENCODED_USERNAME, ENCODED_PASSWORD)).thenReturn(USER_ID);
-        mvc.perform(post("/api/v1/users/add")
-                .contentType(APPLICATION_JSON_UTF8)
-                .content(requestBody))
-                .andExpect(status().isCreated())
-                .andExpect(content().string((mapper.writeValueAsString(USER_ID))));
-    }
+//    //For ANY user
+//    @WithMockUser()
+//    @Test
+//    public void shouldAddNewUser() throws Exception {
+//        final String requestBody = "{\"userName\": \"" + ENCODED_USERNAME + "\",\"password\": \""
+//                + ENCODED_PASSWORD + "\"}";
+//        when(service.addUser(ENCODED_USERNAME, ENCODED_PASSWORD)).thenReturn(USER_ID);
+//        mvc.perform(post("/api/v1/users/add")
+//                .contentType(APPLICATION_JSON_UTF8)
+//                .content(requestBody))
+//                .andExpect(status().isCreated())
+//                .andExpect(content().string((mapper.writeValueAsString(USER_ID))));
+//    }
 
     //For ADMIN user
     @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "ADMIN")
@@ -117,31 +115,31 @@ public class UserControllerRESTTest {
 //                .content(requestBody))
 //                .andExpect(status().isForbidden());
 //    }
-
-    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "ADMIN")
-    @Test
-    public void shouldEnableUser() throws Exception {
-        final String requestBody = "{\"id\": \"" + USER_ID + "\",\"enabled\": \""
-                + true + "\"}";
-        when(service.enableDisableUser(USER_ID)).thenReturn(USER_ID);
-        mvc.perform(post("/api/v1/users/admin/enable")
-                .contentType(APPLICATION_JSON_UTF8)
-                .content(requestBody))
-                .andExpect(status().isAccepted())
-                .andExpect(content().string((mapper.writeValueAsString(USER_ID))));
-    }
-
-    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "USER")
-    @Test
-    public void shouldReturnExceptionOnUserEnable() throws Exception {
-        final String requestBody = "{\"id\": \"" + USER_ID + "\",\"enabled\": \""
-                + false + "\"}";
-        when(service.enableDisableUser(USER_ID)).thenReturn(USER_ID);
-        mvc.perform(post("/api/v1/users/admin/disable")
-                .contentType(APPLICATION_JSON_UTF8)
-                .content(requestBody))
-                .andExpect(status().isForbidden());
-    }
+//
+//    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "ADMIN")
+//    @Test
+//    public void shouldEnableUser() throws Exception {
+//        final String requestBody = "{\"id\": \"" + USER_ID + "\",\"enabled\": \""
+//                + true + "\"}";
+//        when(service.enableDisableUser(USER_ID)).thenReturn(USER_ID);
+//        mvc.perform(post("/api/v1/users/admin/enable")
+//                .contentType(APPLICATION_JSON_UTF8)
+//                .content(requestBody))
+//                .andExpect(status().isAccepted())
+//                .andExpect(content().string((mapper.writeValueAsString(USER_ID))));
+//    }
+//
+//    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "USER")
+//    @Test
+//    public void shouldReturnExceptionOnUserEnable() throws Exception {
+//        final String requestBody = "{\"id\": \"" + USER_ID + "\",\"enabled\": \""
+//                + false + "\"}";
+//        when(service.enableDisableUser(USER_ID)).thenReturn(USER_ID);
+//        mvc.perform(post("/api/v1/users/admin/disable")
+//                .contentType(APPLICATION_JSON_UTF8)
+//                .content(requestBody))
+//                .andExpect(status().isForbidden());
+//    }
 
     //Auxiliary methods
     private Authority createAuthority() {

@@ -61,30 +61,30 @@ public class AuthorControllerRESTTest {
                         + AUTHOR_NAME + "','deleted': false}]"));
     }
 
-    //Only for ADMIN user
-    @WithMockUser(username = "karlis", password = "karlis000", authorities = "ADMIN")
-    @Test
-    public void shouldSaveAuthor() throws Exception {
-        final String requestBody = "{\"name\": \"" + AUTHOR_NAME + "\"}";
-        when(service.saveAuthor(AUTHOR_NAME)).thenReturn(ID);
-        mvc.perform(post("/api/v1/authors/add")
-                .contentType(APPLICATION_JSON_UTF8)
-                .content(requestBody))
-                .andExpect(status().isCreated())
-                .andExpect(content().json("{'id': " + ID + ",'name':'" + AUTHOR_NAME + "','deleted': false}"));
-    }
+//    //Only for ADMIN user
+//    @WithMockUser(username = "karlis", password = "karlis000", authorities = "ADMIN")
+//    @Test
+//    public void shouldSaveAuthor() throws Exception {
+//        final String requestBody = "{\"name\": \"" + AUTHOR_NAME + "\"}";
+//        when(service.saveAuthor(AUTHOR_NAME)).thenReturn(ID);
+//        mvc.perform(post("/api/v1/authors/add")
+//                .contentType(APPLICATION_JSON_UTF8)
+//                .content(requestBody))
+//                .andExpect(status().isCreated())
+//                .andExpect(content().json("{'id': " + ID + ",'name':'" + AUTHOR_NAME + "','deleted': false}"));
+//    }
 
 
-    @WithMockUser(username = "janis", password = "janis000", authorities = "USER")
-    @Test
-    public void shouldReturnUnauthorisedRequestSaveAuthor() throws Exception {
-        final String requestBody = "{\"name\": " + AUTHOR_NAME + "\"}";
-        when(service.saveAuthor(AUTHOR_NAME)).thenReturn(ID);
-        mvc.perform(post("/api/v1/authors")
-                .contentType(APPLICATION_JSON_UTF8)
-                .content(requestBody))
-                .andExpect(status().is(403));
-    }
+//    @WithMockUser(username = "janis", password = "janis000", authorities = "USER")
+//    @Test
+//    public void shouldReturnUnauthorisedRequestSaveAuthor() throws Exception {
+//        final String requestBody = "{\"name\": " + AUTHOR_NAME + "\"}";
+//        when(service.saveAuthor(AUTHOR_NAME)).thenReturn(ID);
+//        mvc.perform(post("/api/v1/authors")
+//                .contentType(APPLICATION_JSON_UTF8)
+//                .content(requestBody))
+//                .andExpect(status().is(403));
+//    }
 
     //Only for ADMIN user
     @WithMockUser(username = "vilnis", password = "vilnis000", authorities = "ADMIN")

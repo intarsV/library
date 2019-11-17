@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {genres, bookFieldList} from "../../common/Constants";
+import {bookFieldList, genres} from "../../common/Constants";
 import ReactTable from "react-table";
 import AdminService from "../../common/services/AdminService";
 import Validate from "../../common/Validation";
@@ -15,25 +15,23 @@ const ManageBook=()=>{
     const [infoMessage, setInfoMessage] = useState({type: '', msg: ''});
 
     useEffect(() => {
-            AdminService.getAllBooks()
-                .then(
-                    response => {
-                        dispatch({type: 'BOOKS_DATA', payload: {booksData: response.data}});
-                        // setBooksData(response.data)
+        AdminService.getAllBooks()
+            .then(
+                response => {
+                    dispatch({type: 'BOOKS_DATA', payload: {booksData: response.data}});
+                }
+            );
+        AdminService.getAllAuthors()
+            .then(
+                response => {
+                    if (response.status === 200) {
+                        dispatch({type: 'AUTHORS_DATA', payload: {authorsData: response.data}});
                     }
-                );
-            AdminService.getAllAuthors()
-                .then(
-                    response => {
-                        if (response.status === 200) {
-                            dispatch({type: 'AUTHORS_DATA', payload: {authorsData: response.data}});
-                            // setAuthorData(response.data);
-                        }
-                    }
-                )
-                .catch((error) => {
-                    message('error', error.response.data.message);
-                })
+                }
+            )
+            .catch((error) => {
+                message('error', error.response.data.message);
+            })
         }, []
     );
 
@@ -41,8 +39,7 @@ const ManageBook=()=>{
         if (Validate.validateForm(bookFieldList, setInfoMessage)) {
             AdminService.addABook({title: title, authorName: authorName, genre: genre, copies: copies})
                 .then(response => {
-                    dispatch({type: 'BOOKS_DATA', payload: [...adminData.booksData, response.data]});
-                    // setBooksData([...booksData, response.data]);
+                    dispatch({type: 'BOOKS_DATA', payload: {booksData: [...adminData.booksData, response.data]}});
                     resetFields();
                     message('info', 'Book added successfully!');
                 })
@@ -57,6 +54,7 @@ const ManageBook=()=>{
             .then(response => {
                     let filteredArray = adminData.booksData.filter(item => item.id !== id);
                     dispatch({type: 'BOOKS_DATA', payload: {booksData: filteredArray}});
+                    message('info', 'Book deleted successfully!');
                 }
             )
             .catch((error) => {

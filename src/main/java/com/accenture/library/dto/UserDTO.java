@@ -1,11 +1,12 @@
 package com.accenture.library.dto;
 
+import javax.validation.constraints.Pattern;
+
 public class UserDTO {
 
     private Long id;
-
+    @Pattern(regexp = "^[a-zA-Zā-žĀ-ž0-9 ]*$")
     private String userName;
-
     private String password;
 
     public UserDTO() {

@@ -1,4 +1,4 @@
-package com.accenture.library.domain;
+package com.accenture.library.customEnumValidation;
 
 public enum EnumReservationStatus {
     QUEUE, HANDOUT, RETURNED, CANCELED

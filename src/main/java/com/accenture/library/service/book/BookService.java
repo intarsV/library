@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface BookService {
 
-    Long addBook(String title, String author, String genre, int copies);
+    BookDTO addBook(BookDTO bookDto);
 
     Boolean disableBook(Long id);
 

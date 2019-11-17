@@ -1,11 +1,18 @@
 package com.accenture.library.dto;
 
+import com.accenture.library.customEnumValidation.EnumGenre;
+import com.accenture.library.customEnumValidation.MyEnumValidation;
+
+import javax.validation.constraints.Pattern;
+
 public class BookDTO {
 
     private Long id;
+    @Pattern(regexp = "^[a-zA-Zā-žĀ-ž0-9 ]*$")
     private String title;
+    @Pattern(regexp = "^[a-zA-Zā-žĀ-ž0-9 ]*$")
     private String authorName;
-
+    @MyEnumValidation(enumClass = EnumGenre.class)
     private String genre;
     private int copies;
     private int available;
@@ -32,7 +39,7 @@ public class BookDTO {
         this.id = id;
     }
 
-    public String  getTitle() {
+    public String getTitle() {
         return title;
     }
 

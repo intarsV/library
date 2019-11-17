@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class ReservationControllerREST {
     }
 
     @PostMapping
-    public ResponseEntity saveReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {
+    public ResponseEntity saveReservation(@Valid @RequestBody ReservationDTO reservationDto, Authentication authentication) {
         final String userName = authentication.getName();
         return new ResponseEntity<>(reservationService.makeReservation(reservationDto.getBookId(),
                 userName), HttpStatus.CREATED);
@@ -51,7 +52,7 @@ public class ReservationControllerREST {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity updateReservation(@PathVariable Long id,
-                                            @RequestBody ReservationDTO reservationDto,
+                                            @Valid @RequestBody ReservationDTO reservationDto,
                                             Authentication authentication) {
         final Long reservationId = id;
         final String userName = authentication.getName();

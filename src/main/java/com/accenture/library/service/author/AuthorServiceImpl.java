@@ -4,6 +4,8 @@ import com.accenture.library.domain.Author;
 import com.accenture.library.dto.AuthorDTO;
 import com.accenture.library.exceptions.LibraryException;
 import com.accenture.library.repository.AuthorRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,21 +15,26 @@ import java.util.Optional;
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
+    private static final String DATABASE_SAVE_ERROR = "Database save error";
     private AuthorRepository repository;
+    private Logger logger = LoggerFactory.getLogger(AuthorServiceImpl.class);
 
     @Autowired
     public AuthorServiceImpl(AuthorRepository repository) {
         this.repository = repository;
     }
 
-
     @Override
-    public Long saveAuthor(String name) {
-        final Optional<Author> foundAuthor = repository.findByName(name);
-        if (foundAuthor.isPresent()) {
-            throw new LibraryException("Duplicate name exists!");
+    public AuthorDTO saveAuthor(AuthorDTO authorDTO) {
+        validateRequestForDuplicate(authorDTO);
+        try {
+            authorDTO.setId(repository.save(new Author(authorDTO.getName(), true)).getId());
+        } catch (Exception e) {
+            logger.error(DATABASE_SAVE_ERROR, e);
+            throw new LibraryException(DATABASE_SAVE_ERROR);
         }
-        return repository.save(new Author(name, true)).getId();
+        authorDTO.setEnabled(true);
+        return authorDTO;
     }
 
     @Override
@@ -52,7 +59,21 @@ public class AuthorServiceImpl implements AuthorService {
         }
         final Author updateAuthor = findAuthor.get();
         updateAuthor.setEnabled(false);
-        repository.save(updateAuthor);
+        try {
+            repository.save(updateAuthor);
+        } catch (Exception e) {
+            logger.error(DATABASE_SAVE_ERROR, e);
+            throw new LibraryException(DATABASE_SAVE_ERROR);
+        }
         return updateAuthor.isEnabled();
+    }
+
+    //AUXILIARY METHODS
+
+    private void validateRequestForDuplicate(AuthorDTO authorDTO) {
+        final Optional<Author> foundAuthor = repository.findByName(authorDTO.getName());
+        if (foundAuthor.isPresent()) {
+            throw new LibraryException("Duplicate name exists!");
+        }
     }
 }

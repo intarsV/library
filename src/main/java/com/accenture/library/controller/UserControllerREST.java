@@ -29,7 +29,7 @@ public class UserControllerREST {
     }
 
     @PostMapping()
-    public ResponseEntity addUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity addUser(@RequestBody final UserDTO userDTO) {
         final String encodedUserName = userDTO.getUserName();
         final String encodedPassword = userDTO.getPassword();
         return new ResponseEntity<>(userService.addUser(encodedUserName, encodedPassword), HttpStatus.CREATED);

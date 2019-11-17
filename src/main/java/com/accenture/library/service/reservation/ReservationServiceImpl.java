@@ -8,12 +8,14 @@ import com.accenture.library.exceptions.LibraryException;
 import com.accenture.library.repository.BookRepository;
 import com.accenture.library.repository.ReservationRepository;
 import com.accenture.library.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import org.springframework.security.access.AccessDeniedException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
+    private static final String DATABASE_SAVE_ERROR = "Database save error";
     private static final String QUEUE = "QUEUE";
     private static final String HANDOUT = "HANDOUT";
     private static final String RETURNED = "RETURNED";
@@ -29,6 +32,7 @@ public class ReservationServiceImpl implements ReservationService {
     private ReservationRepository reservationRepository;
     private BookRepository bookRepository;
     private UserRepository userRepository;
+    private Logger logger = LoggerFactory.getLogger(ReservationServiceImpl.class);
 
     @Autowired
     public ReservationServiceImpl(ReservationRepository reservationRepository
@@ -46,16 +50,16 @@ public class ReservationServiceImpl implements ReservationService {
             throw new LibraryException("No book with such ID");
         }
         final Reservation reservation = new Reservation(new Book(bookId), user, new Date(), QUEUE);
+        final ReservationDTO reservationDTO = new ReservationDTO();
         try {
-            final Long savedId = reservationRepository.save(reservation).getId();
-            final ReservationDTO reservationDTO = new ReservationDTO();
-            reservationDTO.setId(savedId);
-            reservationDTO.setBookTitle(bookFound.get().getTitle());
-            reservationDTO.setReservationDate(reservation.getReservationDate());
-            return reservationDTO;
+            reservationDTO.setId(reservationRepository.save(reservation).getId());
         } catch (Exception e) {
-            throw new LibraryException("Unable to save to database", e);  ///??????????
+            logger.error(DATABASE_SAVE_ERROR, e);
+            throw new LibraryException(DATABASE_SAVE_ERROR);
         }
+        reservationDTO.setBookTitle(bookFound.get().getTitle());
+        reservationDTO.setReservationDate(reservation.getReservationDate());
+        return reservationDTO;
     }
 
     @Override
@@ -93,32 +97,40 @@ public class ReservationServiceImpl implements ReservationService {
             throw new LibraryException("User don't have such reservation");
         }
         reservation.setStatus(CANCELED);
-        return reservationRepository.save(reservation).getId();
+        try {
+            reservationRepository.save(reservation);
+        } catch (Exception e) {
+            logger.error(DATABASE_SAVE_ERROR, e);
+            throw new LibraryException(DATABASE_SAVE_ERROR);
+        }
+        return reservation.getId();
     }
 
     private Long handOutReservation(Reservation reservation, boolean isAdmin) {
         if (!isAdmin) {
-            throw  new AccessDeniedException("You don't have permission for this action");
+            throw new AccessDeniedException("You don't have permission for this action");
         }
         final Book book = reservation.getBook();
         if (book.getAvailable() == 0) {
             throw new LibraryException("Book with is not available");
         }
         book.setAvailable(book.getAvailable() - 1);
-        bookRepository.save(book);
+
         reservation.setReservationDate(new Date());
         reservation.setStatus(HANDOUT);
-        return reservationRepository.save(reservation).getId();
+        saveToDatabase(reservation, book);
+        return reservation.getId();
     }
+
     private Long returnReservation(Reservation reservation, boolean isAdmin) {
         if (!isAdmin) {
-            throw  new AccessDeniedException("You don't have permission for this action");
+            throw new AccessDeniedException("You don't have permission for this action");
         }
         final Book book = reservation.getBook();
         book.setAvailable(book.getAvailable() + 1);
-        bookRepository.save(book);
         reservation.setStatus(RETURNED);
-        return reservationRepository.save(reservation).getId();
+        saveToDatabase(reservation, book);
+        return reservation.getId();
     }
 
     private Reservation verifyReservationId(Long reservationId) {
@@ -138,6 +150,16 @@ public class ReservationServiceImpl implements ReservationService {
     private void validateAdminRequest(String bookTitle, String userName, String status) {
         if (StringUtils.isEmpty(bookTitle) && StringUtils.isEmpty(userName) && StringUtils.isEmpty(status)) {
             throw new LibraryException("Search parameters missing");
+        }
+    }
+
+    private void saveToDatabase(Reservation reservation, Book book) {
+        try {
+            bookRepository.save(book);
+            reservationRepository.save(reservation);
+        } catch (Exception e) {
+            logger.error(DATABASE_SAVE_ERROR, e);
+            throw new LibraryException(DATABASE_SAVE_ERROR);
         }
     }
 }

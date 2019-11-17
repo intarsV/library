@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,14 +29,12 @@ public class AuthorControllerREST {
     }
 
     @PostMapping
-    public ResponseEntity<AuthorDTO> saveAuthor(@RequestBody AuthorDTO authorDto) {
-        final Long id = authorService.saveAuthor(authorDto.getName());
-        authorDto.setId(id);
-        return new ResponseEntity<>(authorDto, HttpStatus.CREATED);
+    public ResponseEntity<AuthorDTO> saveAuthor(@Valid @RequestBody final AuthorDTO authorDto) {
+        return new ResponseEntity<>(authorService.saveAuthor(authorDto), HttpStatus.CREATED);
     }
 
-    @PutMapping(value="/{id}")
-    public ResponseEntity<AuthorDTO> deleteAuthor(@PathVariable Long id,@RequestBody AuthorDTO authorDto) {
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<AuthorDTO> deleteAuthor(@PathVariable Long id, @RequestBody final AuthorDTO authorDto) {
         authorDto.setEnabled(authorService.disableAuthor(id));
         return new ResponseEntity<>(authorDto, HttpStatus.ACCEPTED);
     }

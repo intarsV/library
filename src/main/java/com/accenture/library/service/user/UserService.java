@@ -8,7 +8,7 @@ public interface UserService {
 
     List<UserResponseDTO> getUsers();
 
-    Long addUser(String encryptedUserName, String encryptedPassword);
+    UserResponseDTO addUser(String encryptedUserName, String encryptedPassword);
 
-    Long enableDisableUser(Long userId);
+    UserResponseDTO enableDisableUser(Long userId);
 }
