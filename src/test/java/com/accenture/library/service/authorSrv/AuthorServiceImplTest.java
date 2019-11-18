@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -45,22 +45,25 @@ public class AuthorServiceImplTest {
         assertEquals(list.get(0).getName(), result.get(0).getName());
     }
 
-//    @Test
-//    public void shouldSaveAuthor(){
-//        Author author = createAuthor();
-//        when(repository.findByName(AUTHOR_NAME)).thenReturn(Optional.empty());
-//        when(repository.save(new Author(AUTHOR_NAME, false))).thenReturn(author);
-//        assertEquals(ID , service.saveAuthor(AUTHOR_NAME));
-//    }
-//
-//    @Test
-//    public void shouldThrowErrorOnDuplicateSave(){
-//        Author author = createAuthor();
-//        when(repository.findByName(AUTHOR_NAME)).thenReturn(Optional.of(author));
-//        exception.expect(LibraryException.class);
-//        exception.expectMessage("Duplicate name exists!");
-//        service.saveAuthor(AUTHOR_NAME);
-//    }
+    @Test
+    public void shouldSaveAuthor() {
+        Author author = createAuthor();
+        AuthorDTO authorDTO = createDTO();
+        when(repository.findByName(AUTHOR_NAME)).thenReturn(Optional.empty());
+        when(repository.save(new Author(AUTHOR_NAME, true))).thenReturn(author);
+        AuthorDTO returnedDTO = service.saveAuthor(authorDTO);
+        assertEquals(ID, returnedDTO.getId());
+    }
+
+    @Test
+    public void shouldThrowErrorOnDuplicateSave(){
+        Author author = createAuthor();
+        AuthorDTO authorDTO = createDTO();
+        when(repository.findByName(AUTHOR_NAME)).thenReturn(Optional.of(author));
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Duplicate name exists!");
+        service.saveAuthor(authorDTO);
+    }
 
     @Test
     public void shouldFindByName(){
@@ -83,14 +86,14 @@ public class AuthorServiceImplTest {
         Author author = createAuthor();
         when(repository.findById(1L)).thenReturn(Optional.of(author));
         when(repository.save(any(Author.class))).thenReturn(author);
-        assertTrue(service.disableAuthor(ID));
+        assertFalse(service.disableAuthor(ID));
     }
 
     @Test
     public void shouldThrowErrorWhenDelete(){
         when(repository.findById(1L)).thenReturn(Optional.empty());
         exception.expect(LibraryException.class);
-        exception.expectMessage("No such author with id: "+ID );
+        exception.expectMessage("No such author with specified id");
         service.disableAuthor(ID);
     }
 

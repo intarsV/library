@@ -11,12 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -57,7 +53,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "**").permitAll()//allow CORS option calls
-                .antMatchers(HttpMethod.GET, "/basicauth").permitAll()
+                .antMatchers(HttpMethod.GET, "/basicauth").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority(ADMIN)
                 .antMatchers(HttpMethod.PUT, "/api/v1/users/**").hasAnyAuthority(ADMIN)

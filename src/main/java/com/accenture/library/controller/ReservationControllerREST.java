@@ -44,7 +44,7 @@ public class ReservationControllerREST {
     }
 
     @PostMapping
-    public ResponseEntity saveReservation(@Valid @RequestBody ReservationDTO reservationDto, Authentication authentication) {
+    public ResponseEntity saveReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {
         final String userName = authentication.getName();
         return new ResponseEntity<>(reservationService.makeReservation(reservationDto.getBookId(),
                 userName), HttpStatus.CREATED);

@@ -3,6 +3,7 @@ package com.accenture.library.controller;
 import com.accenture.library.domain.Author;
 import com.accenture.library.dto.AuthorDTO;
 import com.accenture.library.service.author.AuthorServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,11 +19,11 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,6 +33,9 @@ public class AuthorControllerRESTTest {
 
     private static final Long ID = 1L;
     private static final String AUTHOR_NAME = "Janka";
+
+    @Autowired
+    private ObjectMapper mapper;
 
     @Autowired
     private WebApplicationContext context;
@@ -57,54 +61,57 @@ public class AuthorControllerRESTTest {
         when(service.authorList()).thenReturn(mockList);
         mvc.perform(get("/api/v1/authors"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{'id': " + ID + ",'name':'"
-                        + AUTHOR_NAME + "','deleted': false}]"));
+                .andExpect(content().string((mapper.writeValueAsString(mockList))));
     }
 
-//    //Only for ADMIN user
-//    @WithMockUser(username = "karlis", password = "karlis000", authorities = "ADMIN")
-//    @Test
-//    public void shouldSaveAuthor() throws Exception {
-//        final String requestBody = "{\"name\": \"" + AUTHOR_NAME + "\"}";
-//        when(service.saveAuthor(AUTHOR_NAME)).thenReturn(ID);
-//        mvc.perform(post("/api/v1/authors/add")
-//                .contentType(APPLICATION_JSON_UTF8)
-//                .content(requestBody))
-//                .andExpect(status().isCreated())
-//                .andExpect(content().json("{'id': " + ID + ",'name':'" + AUTHOR_NAME + "','deleted': false}"));
-//    }
+    //Only for ADMIN user
+    @WithMockUser(username = "karlis", password = "karlis000", authorities = "ADMIN")
+    @Test
+    public void shouldSaveAuthor() throws Exception {
+        final AuthorDTO authorDTO = createAuthorDTO();
+        final String requestBody = "{\"name\": \"" + AUTHOR_NAME + "\"}";
+        when(service.saveAuthor(any(AuthorDTO.class))).thenReturn(authorDTO);
+        mvc.perform(post("/api/v1/authors")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestBody))
+                .andExpect(status().isCreated())
+                .andExpect(content().string((mapper.writeValueAsString(authorDTO))));
+    }
 
-
-//    @WithMockUser(username = "janis", password = "janis000", authorities = "USER")
-//    @Test
-//    public void shouldReturnUnauthorisedRequestSaveAuthor() throws Exception {
-//        final String requestBody = "{\"name\": " + AUTHOR_NAME + "\"}";
-//        when(service.saveAuthor(AUTHOR_NAME)).thenReturn(ID);
-//        mvc.perform(post("/api/v1/authors")
-//                .contentType(APPLICATION_JSON_UTF8)
-//                .content(requestBody))
-//                .andExpect(status().is(403));
-//    }
+    @WithMockUser(username = "janis", password = "janis000", authorities = "USER")
+    @Test
+    public void shouldReturnUnauthorisedRequestSaveAuthor() throws Exception {
+        final AuthorDTO authorDTO = createAuthorDTO();
+        final String requestBody = "{\"name\": " + AUTHOR_NAME + "\"}";
+        when(service.saveAuthor(any(AuthorDTO.class))).thenReturn(authorDTO);
+        mvc.perform(post("/api/v1/authors")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestBody))
+                .andExpect(status().is(403));
+    }
 
     //Only for ADMIN user
     @WithMockUser(username = "vilnis", password = "vilnis000", authorities = "ADMIN")
     @Test
-    public void shouldDeleteBookDTO() throws Exception {
+    public void shouldDisableAuthor() throws Exception {
+        final AuthorDTO authorDTO = new AuthorDTO();
+        authorDTO.setId(ID);
+        authorDTO.setEnabled(false);
         final String requestBody = "{\"id\":\"" + ID + "\"}";
-        when(service.disableAuthor(ID)).thenReturn(true);
-        mvc.perform(post("/api/v1/authors/delete")
+        when(service.disableAuthor(ID)).thenReturn(false);
+        mvc.perform(put("/api/v1/authors/"+ID)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
                 .andExpect(status().isAccepted())
-                .andExpect(content().json("{'id':" + ID +  ", 'deleted': " + true + "}"));
+                .andExpect(content().string((mapper.writeValueAsString(authorDTO))));
     }
 
     //Only for ADMIN user
     @WithMockUser(username = "vilnis", password = "vilnis000", authorities = "User")
     @Test
-    public void shouldReturnExceptionDeleteBookDTO() throws Exception {
+    public void shouldReturnExceptionDisableAuthor() throws Exception {
         final String requestBody = "{\"id\":\"" + ID + "\"}";
-        mvc.perform(post("/api/v1/authors/delete")
+        mvc.perform(put("/api/v1/authors/"+ID)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
                 .andExpect(status().is(403));
@@ -113,7 +120,7 @@ public class AuthorControllerRESTTest {
     //Auxiliary methods
 
     private AuthorDTO createAuthorDTO() {
-        return new AuthorDTO(ID, AUTHOR_NAME, false);
+        return new AuthorDTO(ID, AUTHOR_NAME, true);
     }
 
     private List<AuthorDTO> createAuthorDTOList() {
@@ -123,6 +130,6 @@ public class AuthorControllerRESTTest {
     }
 
     private Author createAuthor() {
-        return new Author(ID, AUTHOR_NAME, false);
+        return new Author(ID, AUTHOR_NAME, true);
     }
 }

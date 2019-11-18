@@ -59,6 +59,7 @@ public class ReservationServiceImpl implements ReservationService {
         }
         reservationDTO.setBookTitle(bookFound.get().getTitle());
         reservationDTO.setReservationDate(reservation.getReservationDate());
+        reservationDTO.setStatus(reservation.getStatus());
         return reservationDTO;
     }
 
@@ -112,7 +113,7 @@ public class ReservationServiceImpl implements ReservationService {
         }
         final Book book = reservation.getBook();
         if (book.getAvailable() == 0) {
-            throw new LibraryException("Book with is not available");
+            throw new LibraryException("Book is not available");
         }
         book.setAvailable(book.getAvailable() - 1);
 

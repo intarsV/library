@@ -34,7 +34,6 @@ class AdminService {
     }
 
     //Functions for reservations
-
     process(reservationData) {
         return axios.put(API_URL + '/api/v1/reservations/' + reservationData.id, reservationData, this.config());
     }
@@ -46,7 +45,7 @@ class AdminService {
         });
     }
 
-    /* functions for users*/
+    /*Functions for users*/
     getUsers() {
         return axios.get(API_URL + '/api/v1/users', this.config());
     }

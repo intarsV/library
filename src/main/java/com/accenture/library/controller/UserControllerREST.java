@@ -24,7 +24,7 @@ public class UserControllerREST {
     }
 
     @GetMapping
-    public List<UserResponseDTO> getAllBooks() {
+    public List<UserResponseDTO> getAllUsers() {
         return userService.getUsers();
     }
 

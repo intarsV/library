@@ -17,10 +17,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +36,11 @@ public class ReservationServiceImplTest {
     private static final String GENRE = "NOVEL";
     private static final int INITIAL_COPIES = 3;
     private static final int BEFORE_TAKE_IN = 2;
+    private static final String QUEUE = "QUEUE";
+    private static final String HANDOUT = "HANDOUT";
+    private static final String RETURNED = "RETURNED";
+    private static final String CANCELED = "CANCELED";
+    private static final String DATABASE_SAVE_ERROR = "Database save error";
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
@@ -51,36 +57,34 @@ public class ReservationServiceImplTest {
     @InjectMocks
     ReservationServiceImpl service;
 
-//    @Test
-//    public void makeReservationShouldReturnSavedReservationDTO() {
-//        User user = createTestUser();
-//        Book book = createBook(INITIAL_COPIES);
-//        final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, false, false, false);
-//        reservation.setId(RESERVATION_ID);
-//        when(userRepository.findByUserName(USER_NAME)).thenReturn(user);
-//        when(bookRepository.findById(BOOK_ID)).thenReturn(Optional.of(book));
-//        when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
-//        ReservationDTO reservationDTO = service.makeReservation(BOOK_ID, USER_NAME);
-//        assertEquals("GoodBook", reservationDTO.getBookTitle());
-//        assertFalse(reservationDTO.isHandOut());
-//        assertFalse(reservationDTO.isReturned());
-//        assertFalse(reservationDTO.isDeleted());
-//    }
+    @Test
+    public void makeReservationShouldReturnSavedReservationDTO() {
+        User user = createTestUser();
+        Book book = createBook(INITIAL_COPIES);
+        final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, QUEUE);
+        reservation.setId(RESERVATION_ID);
+        when(userRepository.findByUserName(USER_NAME)).thenReturn(user);
+        when(bookRepository.findById(BOOK_ID)).thenReturn(Optional.of(book));
+        when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
+        ReservationDTO reservationDTO = service.makeReservation(BOOK_ID, USER_NAME);
+        assertEquals("GoodBook", reservationDTO.getBookTitle());
+        assertEquals(QUEUE, reservationDTO.getStatus());
+    }
 
-//    @Test
-//    public void makeReservationShouldThrowExceptionOnSaveError() {
-//        User user = createTestUser();
-//        Book book = createBook(INITIAL_COPIES);
-//        final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, false, false, false);
-//        reservation.setId(RESERVATION_ID);
-//        when(userRepository.findByUserName(USER_NAME)).thenReturn(user);
-//        when(bookRepository.findById(BOOK_ID)).thenReturn(Optional.of(book));
-//        when(reservationRepository.save(any(Reservation.class))).thenThrow(
-//                new LibraryException("Unable to save to database bookId:" + BOOK_ID + " userId:" + USER_ID));
-//        exception.expect(LibraryException.class);
-//        exception.expectMessage("Unable to save to database bookId:" + BOOK_ID + " userId:" + USER_ID);
-//        service.makeReservation(BOOK_ID, USER_NAME);
-//    }
+    @Test
+    public void makeReservationShouldThrowExceptionOnSaveError() {
+        User user = createTestUser();
+        Book book = createBook(INITIAL_COPIES);
+        final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, QUEUE);
+        reservation.setId(RESERVATION_ID);
+        when(userRepository.findByUserName(USER_NAME)).thenReturn(user);
+        when(bookRepository.findById(BOOK_ID)).thenReturn(Optional.of(book));
+        when(reservationRepository.save(any(Reservation.class))).thenThrow(
+                new LibraryException(DATABASE_SAVE_ERROR));
+        exception.expect(LibraryException.class);
+        exception.expectMessage(DATABASE_SAVE_ERROR);
+        service.makeReservation(BOOK_ID, USER_NAME);
+    }
 
     @Test
     public void makeReservationShouldThrowExceptionIfBookIdNotFound() {
@@ -90,148 +94,137 @@ public class ReservationServiceImplTest {
         service.makeReservation(BOOK_ID, USER_NAME);
     }
 
-//    @Test
-//    public void shouldDeleteReservation() {
-//        final Reservation reservation = createReservation();
-//        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
-//        when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
-//        assertEquals(RESERVATION_ID, service.cancelReservation(RESERVATION_ID, USER_NAME));
-//    }
+    @Test
+    public void shouldCancelReservation() {
+        final Reservation reservation = createReservation(CANCELED);
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
+        when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
+        assertEquals(RESERVATION_ID, service.updateStatus(RESERVATION_ID, USER_NAME, CANCELED, false));
+    }
 
-//    @Test
-//    public void shouldThrowExceptionOnReservationDeleteNoReservation() {
-//        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.empty());
-//        exception.expect(LibraryException.class);
-//        exception.expectMessage("No reservation with id: " + RESERVATION_ID);
-//        service.cancelReservation(RESERVATION_ID, USER_NAME);
-//    }
+    @Test
+    public void shouldThrowExceptionOnReservationCancelNoReservation() {
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.empty());
+        exception.expect(LibraryException.class);
+        exception.expectMessage("No such reservation");
+        service.updateStatus(RESERVATION_ID, USER_NAME, CANCELED, false);
+    }
 
-//    @Test
-//    public void shouldThrowExceptionOnReservationDeleteNoReservationForUser() {
-//        final Reservation reservation = createReservation();
-//        final String DIFFERENT_USER = "Karlis";
-//        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
-//        exception.expect(LibraryException.class);
-//        exception.expectMessage("User " + DIFFERENT_USER + " dont have such reservation");
-//        service.cancelReservation(RESERVATION_ID, DIFFERENT_USER);
-//    }
-//
-//    @Test
-//    public void handOutShouldUpdateReservationStatusAndAvailableBookCopies() {
-//        final Book book = createBook(INITIAL_COPIES);
-//        final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, true, false, false);
-//        reservation.setId(RESERVATION_ID);
-//        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(
-//                Optional.of(reservation));
-//        when(bookRepository.save(book)).thenReturn(book);
-//        when(reservationRepository.save(reservation)).thenReturn(reservation);
-//        assertEquals(RESERVATION_ID, service.handOutReservation(RESERVATION_ID));
-//        assertEquals(INITIAL_COPIES - 1, book.getAvailable());
-//    }
-//
-//    @Test
-//    public void handOutShouldThrowExceptionIfReservationIdNotFound() {
-//        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(
-//                Optional.empty());
-//        exception.expect(LibraryException.class);
-//        exception.expectMessage("No reservation with id: " + RESERVATION_ID);
-//        service.handOutReservation(RESERVATION_ID);
-//    }
-//
-//    @Test
-//    public void handOutShouldThrowExceptionIfBookAvailableCopiesIsZero() {
-//        final int AVAILABLE_COPIES = 0;
-//        final Book book = createBook(AVAILABLE_COPIES);
-//        book.setId(BOOK_ID);
-//        final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, true, false, false);
-//        reservation.setId(RESERVATION_ID);
-//        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(
-//                Optional.of(reservation));
-//        exception.expect(LibraryException.class);
-//        exception.expectMessage("Book with id: " + BOOK_ID + " is not available");
-//        service.handOutReservation(RESERVATION_ID);
-//    }
-//
-//    @Test
-//    public void ByParametersShouldReturnHistoryReservationList() {
-//        final ReservationDTO reservationDTO = createReservationDTO(
-//                true);
-//        final List<ReservationDTO> mockList = createReservationDTOList(reservationDTO);
-//        when(reservationRepository.getByParameters(BOOK_TITLE, USER_NAME, true, true))
-//                .thenReturn(mockList);
-//        assertEquals(mockList, service.getByParameters(BOOK_TITLE, USER_NAME, true, true));
-//    }
-//
-//    @Test
-//    public void takeInShouldUpdateReservationStatusAndAvailableBookCopies() {
-//        final Book book = createBook(BEFORE_TAKE_IN);
-//        final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, true, true, false);
-//        reservation.setId(RESERVATION_ID);
-//        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(
-//                Optional.of(reservation));
-//        when(bookRepository.save(book)).thenReturn(book);
-//        when(reservationRepository.save(reservation)).thenReturn(reservation);
-//        assertEquals(RESERVATION_ID, service.returnReservation(RESERVATION_ID));
-//        assertEquals(BEFORE_TAKE_IN + 1, book.getAvailable());
-//    }
-//
-//    @Test
-//    public void takeInShouldThrowExceptionIfReservationIdNotFound() {
-//        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(
-//                Optional.empty());
-//        exception.expect(LibraryException.class);
-//        exception.expectMessage("No reservation with id: " + RESERVATION_ID);
-//        service.returnReservation(RESERVATION_ID);
-//    }
-//
-//    @Test
-//    public void ByParametersShouldReturnActiveReservationList() {
-//        final ReservationDTO reservationDTO = createReservationDTO(
-//                true);
-//        final List<ReservationDTO> mockList = createReservationDTOList(reservationDTO);
-//        when(reservationRepository.getByParameters(BOOK_TITLE, USER_NAME, true, false))
-//                .thenReturn(mockList);
-//        assertEquals(mockList, service.getByParameters(BOOK_TITLE, USER_NAME, true, false));
-//    }
-//
-//    @Test
-//    public void byParametersShouldReturnEmptyListIfParametersNullOrEmpty() {
-//        final List<ReservationDTO> list = new ArrayList<>();
-//        assertEquals(list, service.getByParameters(null, "", null, null));
-//    }
-//
-//    @Test
-//    public void QueueForAdminShouldReturnReservationQueueList() {
-//        final ReservationDTO reservationDTO = createReservationDTO(
-//                false);
-//        final List<ReservationDTO> mockList = createReservationDTOList(reservationDTO);
-//        when(reservationRepository.getQueue()).thenReturn(mockList);
-//        assertEquals(mockList, service.getReservationQueue());
-//    }
-//
-//    @Test
-//    public void shouldDeleteUserReservation() {
-//        final Reservation reservation = createReservation();
-//        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
-//        when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
-//        assertEquals(RESERVATION_ID, service.cancelUserReservation(RESERVATION_ID));
-//    }
-//
-//    @Test
-//    public void shouldThrowExceptionOnUserReservationDeleteNoReservation() {
-//        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.empty());
-//        exception.expect(LibraryException.class);
-//        exception.expectMessage("No reservation with id: " + RESERVATION_ID);
-//        service.cancelUserReservation(RESERVATION_ID);
-//    }
-//
-//    ///Auxiliary methods
-//
-//    private ReservationDTO createReservationDTO(boolean handOut) {
-//        final ReservationDTO reservationDTO = new ReservationDTO(RESERVATION_ID, BOOK_ID, BOOK_TITLE,
-//                USER_ID, USER_NAME, RESERVATION_DATE, handOut, false, false);
-//        return reservationDTO;
-//    }
+    @Test
+    public void shouldThrowExceptionOnReservationCancelNoReservationForUser() {
+        final Reservation reservation = createReservation(CANCELED);
+        final String DIFFERENT_USER = "Karlis";
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
+        exception.expect(LibraryException.class);
+        exception.expectMessage("User don't have such reservation");
+        service.updateStatus(RESERVATION_ID, DIFFERENT_USER, CANCELED, false);
+    }
+
+    @Test
+    public void handOutShouldUpdateReservationStatusAndAvailableBookCopies() {
+        final Book book = createBook(INITIAL_COPIES);
+        final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, HANDOUT);
+        reservation.setId(RESERVATION_ID);
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(
+                Optional.of(reservation));
+        when(bookRepository.save(book)).thenReturn(book);
+        when(reservationRepository.save(reservation)).thenReturn(reservation);
+        assertEquals(RESERVATION_ID, service.updateStatus(RESERVATION_ID, USER_NAME, HANDOUT, true));
+        assertEquals(INITIAL_COPIES - 1, book.getAvailable());
+    }
+
+    @Test
+    public void handOutShouldThrowExceptionIfReservationIdNotFound() {
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.empty());
+        exception.expect(LibraryException.class);
+        exception.expectMessage("No such reservation");
+        service.updateStatus(RESERVATION_ID, USER_NAME, HANDOUT, true);
+    }
+
+    @Test
+    public void handOutShouldThrowExceptionIfUserIsNotAdmin() {
+        Reservation reservation = createReservation(QUEUE);
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
+        exception.expect(AccessDeniedException.class);
+        exception.expectMessage("You don't have permission for this action");
+        service.updateStatus(RESERVATION_ID, USER_NAME, HANDOUT, false);
+    }
+
+    @Test
+    public void handOutShouldThrowExceptionIfBookAvailableCopiesIsZero() {
+        final int AVAILABLE_COPIES = 0;
+        final Book book = createBook(AVAILABLE_COPIES);
+        book.setId(BOOK_ID);
+        final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, HANDOUT);
+        reservation.setId(RESERVATION_ID);
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(
+                Optional.of(reservation));
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Book is not available");
+        service.updateStatus(RESERVATION_ID, USER_NAME, HANDOUT, true);
+    }
+
+    @Test
+    public void takeInShouldUpdateReservationStatusAndAvailableBookCopies() {
+        final Book book = createBook(BEFORE_TAKE_IN);
+        final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, RETURNED);
+        reservation.setId(RESERVATION_ID);
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(
+                Optional.of(reservation));
+        when(bookRepository.save(book)).thenReturn(book);
+        when(reservationRepository.save(reservation)).thenReturn(reservation);
+        assertEquals(RESERVATION_ID, service.updateStatus(RESERVATION_ID, USER_NAME, RETURNED, true));
+        assertEquals(BEFORE_TAKE_IN + 1, book.getAvailable());
+    }
+
+    @Test
+    public void takeInShouldThrowExceptionIfReservationIdNotFound() {
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.empty());
+        exception.expect(LibraryException.class);
+        exception.expectMessage("No such reservation");
+        service.updateStatus(RESERVATION_ID, USER_NAME, RETURNED, true);
+    }
+
+    @Test
+    public void ByParametersShouldReturnHistoryReservationList() {
+        final ReservationDTO reservationDTO = createReservationDTO(RETURNED);
+        final List<ReservationDTO> mockList = createReservationDTOList(reservationDTO);
+        when(reservationRepository.getByParameters(BOOK_TITLE, USER_NAME, RETURNED))
+                .thenReturn(mockList);
+        assertEquals(mockList, service.getByParameters(BOOK_TITLE, USER_NAME, RETURNED, false));
+    }
+
+    @Test
+    public void ByParametersShouldReturnActiveReservationList() {
+        final ReservationDTO reservationDTO = createReservationDTO(HANDOUT);
+        final List<ReservationDTO> mockList = createReservationDTOList(reservationDTO);
+        when(reservationRepository.getByParameters(BOOK_TITLE, USER_NAME, HANDOUT))
+                .thenReturn(mockList);
+        assertEquals(mockList, service.getByParameters(BOOK_TITLE, USER_NAME, HANDOUT, false));
+    }
+
+    @Test
+    public void byParametersShouldReturnEmptyListIfParametersNullOrEmpty() {
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Search parameters missing");
+        service.getByParameters(null, "", null, false);
+    }
+
+    @Test
+    public void QueueForAdminShouldReturnReservationQueueList() {
+        final ReservationDTO reservationDTO = createReservationDTO(QUEUE);
+        final List<ReservationDTO> mockList = createReservationDTOList(reservationDTO);
+        when(reservationRepository.getByParameters(null, null, QUEUE)).thenReturn(mockList);
+        assertEquals(mockList, service.getByParameters(null, null, QUEUE, true));
+    }
+
+    ///Auxiliary methods
+
+    private ReservationDTO createReservationDTO(String status) {
+        final ReservationDTO reservationDTO = new ReservationDTO(RESERVATION_ID, BOOK_ID, BOOK_TITLE,
+                USER_ID, USER_NAME, RESERVATION_DATE, status);
+        return reservationDTO;
+    }
 
     private List<ReservationDTO> createReservationDTOList(ReservationDTO reservationDTO) {
         final List<ReservationDTO> reservationDTOList = new ArrayList<>();
@@ -251,14 +244,12 @@ public class ReservationServiceImplTest {
         return user;
     }
 
-//    private Reservation createReservation() {
-//        final Reservation reservation = new Reservation();
-//        reservation.setId(RESERVATION_ID);
-//        reservation.setBook(createBook(BEFORE_TAKE_IN));
-//        reservation.setUser(createTestUser());
-//        reservation.setHandOut(false);
-//        reservation.setReturned(false);
-//        reservation.setCancelled(false);
-//        return reservation;
-//    }
+    private Reservation createReservation(String status) {
+        final Reservation reservation = new Reservation();
+        reservation.setId(RESERVATION_ID);
+        reservation.setBook(createBook(BEFORE_TAKE_IN));
+        reservation.setUser(createTestUser());
+        reservation.setStatus(status);
+        return reservation;
+    }
 }

@@ -34,7 +34,7 @@ public class AuthorControllerREST {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<AuthorDTO> deleteAuthor(@PathVariable Long id, @RequestBody final AuthorDTO authorDto) {
+    public ResponseEntity<AuthorDTO> disableAuthor(@PathVariable Long id, @RequestBody final AuthorDTO authorDto) {
         authorDto.setEnabled(authorService.disableAuthor(id));
         return new ResponseEntity<>(authorDto, HttpStatus.ACCEPTED);
     }

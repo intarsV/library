@@ -21,6 +21,13 @@ public class BookDTO {
     public BookDTO() {
     }
 
+    public BookDTO(@Pattern(regexp = "^[a-zA-Zā-žĀ-ž0-9 ]*$") String title, @Pattern(regexp = "^[a-zA-Zā-žĀ-ž0-9 ]*$") String authorName, String genre, int copies) {
+        this.title = title;
+        this.authorName = authorName;
+        this.genre = genre;
+        this.copies = copies;
+    }
+
     public BookDTO(Long id, String title, String authorName, String genre, int copies, int available, boolean enabled) {
         this.id = id;
         this.title = title;

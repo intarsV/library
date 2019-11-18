@@ -33,8 +33,7 @@ public class BookControllerREST {
 
     @PostMapping
     public ResponseEntity<BookDTO> saveBook(@Valid @RequestBody final BookDTO bookDto) {
-        bookService.addBook(bookDto);
-        return new ResponseEntity<>(bookDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(bookService.addBook(bookDto), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")

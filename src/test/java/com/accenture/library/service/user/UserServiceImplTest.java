@@ -15,9 +15,12 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -61,7 +64,8 @@ public class UserServiceImplTest {
         when(repository.getByUserName(USER_NAME)).thenReturn(Optional.empty());
         when(repository.save(any(User.class))).thenReturn(newUser);
         when(authorityRepository.findAuthoritiesByAuthorityName("USER")).thenReturn(createAuthority());
-        assertEquals(USER_ID, service.addUser(encodedUserName, encodedPassword));
+        UserResponseDTO userResponseDTO = service.addUser(encodedUserName, encodedPassword);
+        assertEquals(USER_ID, userResponseDTO.getId());
     }
 
     @Test
@@ -76,11 +80,12 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void shouldEnableUser() {
+    public void shouldEnableOrDisableUser() {
         final User testUser = createTestUser();
         when(repository.findById(USER_ID)).thenReturn(Optional.of(testUser));
         when(repository.save(any(User.class))).thenReturn(testUser);
-        assertEquals(USER_ID, service.enableDisableUser(USER_ID));
+        UserResponseDTO userResponseDTO = service.enableDisableUser(USER_ID);
+        assertEquals(USER_ID,userResponseDTO.getId() );
     }
 
     @Test
@@ -90,22 +95,6 @@ public class UserServiceImplTest {
         exception.expectMessage("User not found!");
         service.enableDisableUser(USER_ID);
     }
-
-    @Test
-    public void shouldDisableUser() {
-        final User testUser = createTestUser();
-        when(repository.findById(USER_ID)).thenReturn(Optional.of(testUser));
-        when(repository.save(any(User.class))).thenReturn(testUser);
-        assertEquals(USER_ID, service.enableDisableUser(USER_ID));
-    }
-
-//    @Test
-//    public void shouldThrowExceptionDisableUserNotFound(){
-//        when(repository.findById(USER_ID)).thenReturn(Optional.empty());
-//        exception.expect(LibraryException.class);
-//        exception.expectMessage("User not found!");
-//        service.disableUser(USER_ID);
-//    }
 
     //AUXILIARY methods
 
