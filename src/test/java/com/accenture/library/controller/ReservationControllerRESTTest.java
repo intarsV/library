@@ -188,7 +188,7 @@ public class ReservationControllerRESTTest {
 
     private Book createBook(int available) {
         Author author = new Author();
-        return new Book(BOOK_TITLE, author, GENRE, INITIAL_COPIES, available, false);
+        return new Book(BOOK_TITLE, author, GENRE, INITIAL_COPIES, available, true);
     }
 
     private User createTestUser() {

@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.dao.DataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,7 @@ public class AuthorServiceImplTest {
     }
 
     @Test
-    public void shouldThrowErrorOnDuplicateSave(){
+    public void shouldThrowErrorOnDuplicateSave() {
         Author author = createAuthor();
         AuthorDTO authorDTO = createDTO();
         when(repository.findByName(AUTHOR_NAME)).thenReturn(Optional.of(author));
@@ -66,14 +67,25 @@ public class AuthorServiceImplTest {
     }
 
     @Test
-    public void shouldFindByName(){
+    public void shouldThrowErrorOnRepositorySave() {
+        Author author = createAuthor();
+        AuthorDTO authorDTO = createDTO();
+        when(repository.save(new Author(AUTHOR_NAME, true))).thenThrow(new DataAccessException("Bac!") {
+        });
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Database save error");
+        service.saveAuthor(authorDTO);
+    }
+
+    @Test
+    public void shouldFindByName() {
         Author author = createAuthor();
         when(repository.findByName(AUTHOR_NAME)).thenReturn(Optional.of(author));
         assertEquals(author, service.findByName(AUTHOR_NAME));
     }
 
     @Test
-    public void shouldThrowErrorOnFindByName(){
+    public void shouldThrowErrorOnFindByName() {
         when(repository.findByName(AUTHOR_NAME)).thenReturn(Optional.empty());
         exception.expect(LibraryException.class);
         exception.expect(LibraryException.class);
@@ -82,18 +94,29 @@ public class AuthorServiceImplTest {
     }
 
     @Test
-    public void shouldDeleteAuthor(){
+    public void shouldDisableAuthor() {
         Author author = createAuthor();
-        when(repository.findById(1L)).thenReturn(Optional.of(author));
+        when(repository.findById(ID)).thenReturn(Optional.of(author));
         when(repository.save(any(Author.class))).thenReturn(author);
         assertFalse(service.disableAuthor(ID));
     }
 
     @Test
-    public void shouldThrowErrorWhenDelete(){
+    public void shouldThrowErrorWhenDisableAuthor() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
         exception.expect(LibraryException.class);
         exception.expectMessage("No such author with specified id");
+        service.disableAuthor(ID);
+    }
+
+    @Test
+    public void shouldThrowErrorOnRepositorySaveForDisable() {
+        Author author = createAuthor();
+        when(repository.findById(ID)).thenReturn(Optional.of(author));
+        when(repository.save(author)).thenThrow(new DataAccessException("Bac!") {
+        });
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Database save error");
         service.disableAuthor(ID);
     }
 
@@ -103,13 +126,13 @@ public class AuthorServiceImplTest {
         return new AuthorDTO(ID, AUTHOR_NAME, false);
     }
 
-    private List<AuthorDTO> createList(){
-        List<AuthorDTO> list=new ArrayList<>();
+    private List<AuthorDTO> createList() {
+        List<AuthorDTO> list = new ArrayList<>();
         list.add(createDTO());
         return list;
     }
 
     private Author createAuthor() {
-        return new Author( ID, AUTHOR_NAME, false);
+        return new Author(ID, AUTHOR_NAME, false);
     }
 }
