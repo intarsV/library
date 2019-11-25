@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AuthorService {
 
-    AuthorDTO saveAuthor(AuthorDTO authorDTO);
+    AuthorDTO addAuthor(AuthorDTO authorDTO);
 
     List<AuthorDTO> authorList();
 

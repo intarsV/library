@@ -34,6 +34,8 @@ export default ({children}) => {
                 return {
                     ...commonData, showSuccessMessage: action.payload
                 };
+            default:
+                return commonData
         }
     };
 

@@ -30,7 +30,7 @@ public class AuthorControllerREST {
 
     @PostMapping
     public ResponseEntity<AuthorDTO> saveAuthor(@Valid @RequestBody final AuthorDTO authorDto) {
-        return new ResponseEntity<>(authorService.saveAuthor(authorDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(authorService.addAuthor(authorDto), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")

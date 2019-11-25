@@ -54,7 +54,7 @@ public class RestExceptionHandlerTest {
     public void shouldReturnEntityWithInternalServerErrorStatusOnSaveAuthor() throws Exception {
         final AuthorDTO authorDTO = createAuthorDTO();
         final String requestBody = "{\"name\": \"" + AUTHOR_NAME + "\"}";
-        when(service.saveAuthor(any(AuthorDTO.class))).thenThrow(new LibraryException(DATABASE_SAVE_ERROR));
+        when(service.addAuthor(any(AuthorDTO.class))).thenThrow(new LibraryException(DATABASE_SAVE_ERROR));
         mvc.perform(post("/api/v1/authors")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))

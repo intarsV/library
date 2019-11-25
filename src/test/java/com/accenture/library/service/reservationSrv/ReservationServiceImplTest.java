@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.AccessDeniedException;
 
 import java.util.*;
@@ -72,6 +73,19 @@ public class ReservationServiceImplTest {
     }
 
     @Test
+    public void shouldThrowErrorOnRepositorySave() {
+        User user = createTestUser();
+        Book book = createBook(INITIAL_COPIES);
+        final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, QUEUE);
+        reservation.setId(RESERVATION_ID);
+        when(userRepository.findByUserName(USER_NAME)).thenReturn(user);
+        when(bookRepository.findById(BOOK_ID)).thenReturn(Optional.of(book));
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Database save error");
+        service.makeReservation(BOOK_ID, USER_NAME);
+    }
+
+    @Test
     public void makeReservationShouldThrowExceptionOnSaveError() {
         User user = createTestUser();
         Book book = createBook(INITIAL_COPIES);
@@ -95,11 +109,33 @@ public class ReservationServiceImplTest {
     }
 
     @Test
+    public void updateReservationShouldThrowExceptionUnexpectedStatus() {
+        final String UNKNOWN_STATUS="UNKNOWN";
+        final Reservation reservation = createReservation(QUEUE);
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Unexpected status value");
+        service.updateStatus(RESERVATION_ID, USER_NAME, UNKNOWN_STATUS, false);
+    }
+
+    @Test
     public void shouldCancelReservation() {
         final Reservation reservation = createReservation(CANCELED);
         when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
         when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
         assertEquals(RESERVATION_ID, service.updateStatus(RESERVATION_ID, USER_NAME, CANCELED, false));
+    }
+
+    @Test
+    public void shouldThrowErrorOnReservationCancelRepositorySave() {
+        final Reservation reservation = createReservation(CANCELED);
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
+        when(reservationRepository.save(any(Reservation.class))).thenThrow(new DataAccessException("Bac!") {
+        });
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Database save error");
+        service.updateStatus(RESERVATION_ID, USER_NAME, CANCELED, false);
     }
 
     @Test
@@ -165,6 +201,18 @@ public class ReservationServiceImplTest {
     }
 
     @Test
+    public void handOutShouldThrowExceptionOnRepositorySave() {
+        final Reservation reservation = createReservation(CANCELED);
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
+        when(reservationRepository.save(any(Reservation.class))).thenThrow(new DataAccessException("Bac!") {
+        });
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Database save error");
+        service.updateStatus(RESERVATION_ID, USER_NAME, HANDOUT, true);
+    }
+
+    @Test
     public void takeInShouldUpdateReservationStatusAndAvailableBookCopies() {
         final Book book = createBook(BEFORE_TAKE_IN);
         final Reservation reservation = new Reservation(book, new User(), RESERVATION_DATE, RETURNED);
@@ -178,6 +226,15 @@ public class ReservationServiceImplTest {
     }
 
     @Test
+    public void takeInShouldThrowExceptionIfUserIsNotAdmin() {
+        Reservation reservation = createReservation(QUEUE);
+        when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.of(reservation));
+        exception.expect(AccessDeniedException.class);
+        exception.expectMessage("You don't have permission for this action");
+        service.updateStatus(RESERVATION_ID, USER_NAME, RETURNED, false);
+    }
+
+    @Test
     public void takeInShouldThrowExceptionIfReservationIdNotFound() {
         when(reservationRepository.findById(RESERVATION_ID)).thenReturn(Optional.empty());
         exception.expect(LibraryException.class);
@@ -186,7 +243,7 @@ public class ReservationServiceImplTest {
     }
 
     @Test
-    public void ByParametersShouldReturnHistoryReservationList() {
+    public void byParametersShouldReturnHistoryReservationList() {
         final ReservationDTO reservationDTO = createReservationDTO(RETURNED);
         final List<ReservationDTO> mockList = createReservationDTOList(reservationDTO);
         when(reservationRepository.getByParameters(BOOK_TITLE, USER_NAME, RETURNED))
@@ -195,7 +252,7 @@ public class ReservationServiceImplTest {
     }
 
     @Test
-    public void ByParametersShouldReturnActiveReservationList() {
+    public void byParametersShouldReturnActiveReservationList() {
         final ReservationDTO reservationDTO = createReservationDTO(HANDOUT);
         final List<ReservationDTO> mockList = createReservationDTOList(reservationDTO);
         when(reservationRepository.getByParameters(BOOK_TITLE, USER_NAME, HANDOUT))
@@ -204,10 +261,18 @@ public class ReservationServiceImplTest {
     }
 
     @Test
-    public void byParametersShouldReturnEmptyListIfParametersNullOrEmpty() {
+    public void byParametersShouldReturnEmptyListIfParametersNullOrEmptyForUser() {
         exception.expect(LibraryException.class);
         exception.expectMessage("Search parameters missing");
         service.getByParameters(null, "", null, false);
+    }
+
+
+    @Test
+    public void byParametersShouldReturnEmptyListIfParametersNullOrEmptyForAdmin() {
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Search parameters missing");
+        service.getByParameters(null, "", null, true);
     }
 
     @Test

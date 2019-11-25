@@ -29,7 +29,7 @@ public class ReservationControllerREST {
     }
 
     @GetMapping
-    public List<ReservationDTO> searchByParameters(final ReservationDTO reservationDTO,
+    public List<ReservationDTO> searchByParameters(@Valid final ReservationDTO reservationDTO,
                                                    Authentication authentication) {
         final String bookTitle = reservationDTO.getBookTitle();
         final String status = reservationDTO.getStatus();
@@ -44,7 +44,7 @@ public class ReservationControllerREST {
     }
 
     @PostMapping
-    public ResponseEntity saveReservation(@RequestBody ReservationDTO reservationDto, Authentication authentication) {
+    public ResponseEntity saveReservation(@Valid @RequestBody ReservationDTO reservationDto, Authentication authentication) {
         final String userName = authentication.getName();
         return new ResponseEntity<>(reservationService.makeReservation(reservationDto.getBookId(),
                 userName), HttpStatus.CREATED);

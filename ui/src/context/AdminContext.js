@@ -1,4 +1,4 @@
-import React,{useReducer, createContext} from 'react'
+import React, {createContext, useReducer} from 'react'
 
 export const AdminContext = createContext(null);
 
@@ -31,6 +31,8 @@ export default ({children}) => {
                 return {
                     ...adminData, usersData: action.payload.usersData
                 };
+            default:
+                return adminData
         }
     };
 

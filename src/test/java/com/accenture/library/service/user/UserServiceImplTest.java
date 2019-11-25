@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
@@ -69,6 +70,15 @@ public class UserServiceImplTest {
     }
 
     @Test
+    public void shouldThrowErrorOnRepositorySave() {
+        final String encodedUserName = new String(encoder.encode(USER_NAME.getBytes()));
+        final String encodedPassword = new String(encoder.encode(PASSWORD.getBytes()));
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Database save error");
+        service.addUser(encodedUserName, encodedPassword);
+    }
+
+    @Test
     public void shouldThrowExceptionDuplicateUserName() {
         final String encodedUserName = new String(encoder.encode(USER_NAME.getBytes()));
         final String encodedPassword = new String(encoder.encode(PASSWORD.getBytes()));
@@ -86,6 +96,17 @@ public class UserServiceImplTest {
         when(repository.save(any(User.class))).thenReturn(testUser);
         UserResponseDTO userResponseDTO = service.enableDisableUser(USER_ID);
         assertEquals(USER_ID,userResponseDTO.getId() );
+    }
+
+    @Test
+    public void shouldThrowErrorOnRepositorySaveForEnableDisable() {
+        User user = createTestUser();
+        when(repository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(repository.save(user)).thenThrow(new DataAccessException("Bac!") {
+        });
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Database save error");
+        service.enableDisableUser(USER_ID);
     }
 
     @Test

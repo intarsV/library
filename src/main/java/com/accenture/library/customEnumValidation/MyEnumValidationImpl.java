@@ -1,5 +1,7 @@
 package com.accenture.library.customEnumValidation;
 
+import org.springframework.util.StringUtils;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.ArrayList;
@@ -21,6 +23,10 @@ public class MyEnumValidationImpl implements ConstraintValidator<MyEnumValidatio
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return valueList.contains(value.toUpperCase());
+        if (!StringUtils.isEmpty(value)) {
+            return valueList.contains(value.toUpperCase());
+        } else {
+            return true;
+        }
     }
 }

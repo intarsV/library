@@ -26,6 +26,8 @@ class Validation{
                 return testValue !== '' && testValue.length >= 3 && textRegEx.test(testValue);
             case 'reg-password':
                 return testValue !== '' && testValue.length >= 3 && passwordRegex.test(testValue);
+            default:
+                return false;
         }
     }
 

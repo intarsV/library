@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,7 +30,7 @@ public class UserControllerREST {
     }
 
     @PostMapping()
-    public ResponseEntity addUser(@RequestBody final UserDTO userDTO) {
+    public ResponseEntity addUser(@Valid @RequestBody final UserDTO userDTO) {
         final String encodedUserName = userDTO.getUserName();
         final String encodedPassword = userDTO.getPassword();
         return new ResponseEntity<>(userService.addUser(encodedUserName, encodedPassword), HttpStatus.CREATED);

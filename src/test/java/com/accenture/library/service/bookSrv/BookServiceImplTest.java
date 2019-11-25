@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.dao.DataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class BookServiceImplTest {
     public final ExpectedException exception = ExpectedException.none();
 
     @Mock
-    private BookRepository bookRepository;
+    private BookRepository repository;
 
     @Mock
     private AuthorServiceImpl authorSrv;
@@ -46,15 +47,23 @@ public class BookServiceImplTest {
     BookServiceImpl service;
 
     @Test
-    public void shouldSaveBook() {
+    public void shouldAddBook() {
         BookDTO bookDTO = createDTO();
         Author author = createAuthor();
         Book book = new Book(TITLE, author, GENRE, COPIES, COPIES, true);
         book.setId(ID);
         when(authorSrv.findByName(AUTHOR_NAME)).thenReturn(author);
-        when(bookRepository.save(new Book(TITLE, author, GENRE, COPIES, COPIES, true))).thenReturn(book);
+        when(repository.save(new Book(TITLE, author, GENRE, COPIES, COPIES, true))).thenReturn(book);
         BookDTO responseBookDTO = service.addBook(bookDTO);
         assertEquals(ID, responseBookDTO.getId());
+    }
+
+    @Test
+    public void shouldThrowErrorOnAddBook() {
+        BookDTO bookDTO = createDTO();
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Database save error");
+        service.addBook(bookDTO);
     }
 
     @Test
@@ -68,16 +77,39 @@ public class BookServiceImplTest {
     }
 
     @Test
-    public void shouldDeleteBook() {
+    public void shouldThrowErrorOnSaveValidateRequestForDuplicates() {
+        BookDTO bookDTO = createDTO();
+        bookDTO.setTitle(TITLE);
+        bookDTO.setCopies(1);
+        when(repository.findByTitleAndAuthor_Name(TITLE, AUTHOR_NAME)).thenReturn(Optional.of(new Book()));
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Duplicate book exists!");
+        service.addBook(bookDTO);
+    }
+
+    @Test
+    public void shouldDisableBook() {
         final Author author = createAuthor();
         Book book = new Book(TITLE, author, GENRE, COPIES, COPIES, false);
-        when(bookRepository.findById(ID)).thenReturn(Optional.of(book));
+        when(repository.findById(ID)).thenReturn(Optional.of(book));
         assertFalse(service.disableBook(ID));
     }
 
     @Test
-    public void shouldThrowErrorOnDelete() {
-        when(bookRepository.findById(ID)).thenReturn(Optional.empty());
+    public void shouldThrowErrorOnRepositorySaveForDisableBook() {
+        Author author = createAuthor();
+        Book book = new Book(TITLE, author, GENRE, COPIES, COPIES, false);
+        when(repository.findById(ID)).thenReturn(Optional.of(book));
+        when(repository.save(book)).thenThrow(new DataAccessException("Bac!") {
+        });
+        exception.expect(LibraryException.class);
+        exception.expectMessage("Database save error");
+        service.disableBook(ID);
+    }
+
+    @Test
+    public void shouldThrowErrorOnDisable() {
+        when(repository.findById(ID)).thenReturn(Optional.empty());
         exception.expect(LibraryException.class);
         exception.expectMessage("No such book found");
         service.disableBook(ID);
@@ -86,14 +118,14 @@ public class BookServiceImplTest {
     @Test
     public void shouldReturnListOnParameterSearch() {
         final List<BookDTO> mockList = createList();
-        when(bookRepository.findByParameters(null, AUTHOR_NAME, null)).thenReturn(mockList);
+        when(repository.findByParameters(null, AUTHOR_NAME, null)).thenReturn(mockList);
         Assert.assertEquals(mockList, service.getByParameters(null, AUTHOR_NAME, null));
     }
 
     @Test
     public void shouldReturnListOfAllBooksOnParameterSearchWithoutAnyValidParam() {
         final List<BookDTO> mockList = createList();
-        when(bookRepository.getAllBooks()).thenReturn(mockList);
+        when(repository.getAllBooks()).thenReturn(mockList);
         assertEquals(mockList, service.getByParameters(null, null, null));
     }
 

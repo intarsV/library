@@ -70,7 +70,7 @@ public class AuthorControllerRESTTest {
     public void shouldSaveAuthor() throws Exception {
         final AuthorDTO authorDTO = createAuthorDTO();
         final String requestBody = "{\"name\": \"" + AUTHOR_NAME + "\"}";
-        when(service.saveAuthor(any(AuthorDTO.class))).thenReturn(authorDTO);
+        when(service.addAuthor(any(AuthorDTO.class))).thenReturn(authorDTO);
         mvc.perform(post("/api/v1/authors")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
@@ -83,7 +83,7 @@ public class AuthorControllerRESTTest {
     public void shouldReturnUnauthorisedRequestSaveAuthor() throws Exception {
         final AuthorDTO authorDTO = createAuthorDTO();
         final String requestBody = "{\"name\": " + AUTHOR_NAME + "\"}";
-        when(service.saveAuthor(any(AuthorDTO.class))).thenReturn(authorDTO);
+        when(service.addAuthor(any(AuthorDTO.class))).thenReturn(authorDTO);
         mvc.perform(post("/api/v1/authors")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))

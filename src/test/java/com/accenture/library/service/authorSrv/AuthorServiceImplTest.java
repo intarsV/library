@@ -47,12 +47,12 @@ public class AuthorServiceImplTest {
     }
 
     @Test
-    public void shouldSaveAuthor() {
+    public void shouldAddAuthor() {
         Author author = createAuthor();
         AuthorDTO authorDTO = createDTO();
         when(repository.findByName(AUTHOR_NAME)).thenReturn(Optional.empty());
         when(repository.save(new Author(AUTHOR_NAME, true))).thenReturn(author);
-        AuthorDTO returnedDTO = service.saveAuthor(authorDTO);
+        AuthorDTO returnedDTO = service.addAuthor(authorDTO);
         assertEquals(ID, returnedDTO.getId());
     }
 
@@ -63,18 +63,15 @@ public class AuthorServiceImplTest {
         when(repository.findByName(AUTHOR_NAME)).thenReturn(Optional.of(author));
         exception.expect(LibraryException.class);
         exception.expectMessage("Duplicate name exists!");
-        service.saveAuthor(authorDTO);
+        service.addAuthor(authorDTO);
     }
 
     @Test
     public void shouldThrowErrorOnRepositorySave() {
-        Author author = createAuthor();
         AuthorDTO authorDTO = createDTO();
-        when(repository.save(new Author(AUTHOR_NAME, true))).thenThrow(new DataAccessException("Bac!") {
-        });
         exception.expect(LibraryException.class);
         exception.expectMessage("Database save error");
-        service.saveAuthor(authorDTO);
+        service.addAuthor(authorDTO);
     }
 
     @Test

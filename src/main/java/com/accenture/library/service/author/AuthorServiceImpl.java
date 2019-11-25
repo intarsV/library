@@ -25,7 +25,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorDTO saveAuthor(AuthorDTO authorDTO) {
+    public AuthorDTO addAuthor(AuthorDTO authorDTO) {
         validateRequestForDuplicate(authorDTO);
         try {
             authorDTO.setId(repository.save(new Author(authorDTO.getName(), true)).getId());

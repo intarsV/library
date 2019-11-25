@@ -26,6 +26,8 @@ export default ({children}) => {
                 return {
                     ...userData, reservationsData: action.payload.reservationsData
                 };
+            default:
+                return userData
         }
     };
 
