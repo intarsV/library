@@ -9,21 +9,21 @@ pipeline {
          stages {
                 stage('Compile') {
                     steps {
-                        maven(maven:'maven_3_6_3'){
+
                             sh 'mvn clean compile'
-                        }
+
                     }
                 }
                 stage('Testing'){
                      steps {
-                         maven(maven:'maven_3_6_3'){
+
                             sh 'mvn test'
-                         }
+
                      }
                 }
                 stage('Deploy'){
                     steps {
-                          maven(maven:'maven_3_6_3'){
+
                              sh 'mvn clean package'
                     }
                     post {// If Maven was able to run the tests, even if some of the test
