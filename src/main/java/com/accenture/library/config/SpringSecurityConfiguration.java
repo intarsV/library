@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 import javax.sql.DataSource;
 
@@ -19,7 +18,6 @@ import javax.sql.DataSource;
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String ADMIN = "ADMIN";
-    private static final String USER = "USER";
 
     @Value("${spring.queries.users-query}")
     private String usersQuery;
@@ -27,26 +25,28 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${spring.queries.authorities-query}")
     private String rolesQuery;
 
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Autowired
     DataSource dataSource;
 
-    @Autowired
-    BCryptPasswordEncoder passwordEncoder;
-
     @Override
+    @Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication().dataSource(dataSource)
                 .usersByUsernameQuery(usersQuery)
                 .authoritiesByUsernameQuery(rolesQuery)
-                .passwordEncoder(passwordEncoder);
+                .passwordEncoder(passwordEncoder());
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()//need for React port 3000 - should be removed on prod
-                .headers().frameOptions().disable()// need for H2 console - should be removed on prod
+                .csrf().disable()
+                .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/h2/**").permitAll()
@@ -66,24 +66,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/v1/reservations").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/v1/reservations").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/v1/reservations/**").authenticated()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin()
                 .and()
                 .httpBasic();
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public JdbcUserDetailsManager jdbcUserDetailsManager() throws Exception {
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
-        jdbcUserDetailsManager.setDataSource(dataSource);
-        return jdbcUserDetailsManager;
     }
 }
 

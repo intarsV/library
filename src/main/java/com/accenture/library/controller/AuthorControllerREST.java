@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/authors")
-@CrossOrigin(origins = "http://localhost:3000")  //should remove on production
 public class AuthorControllerREST {
 
     private AuthorService authorService;

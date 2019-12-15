@@ -16,7 +16,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/reservations")
-@CrossOrigin(origins = "http://localhost:3000")  //should remove on production
 public class ReservationControllerREST {
 
     private static final String ADMIN_AUTHORITY = "ADMIN";
