@@ -9,21 +9,16 @@ pipeline {
          stages {
                 stage('Compile') {
                     steps {
-
                             sh 'mvn clean compile'
-
                     }
                 }
                 stage('Testing'){
                      steps {
-
                             sh 'mvn test'
-
                      }
                 }
                 stage('Deploy'){
                     steps {
-
                              sh 'mvn clean package'
                     }
                     post {// If Maven was able to run the tests, even if some of the test
@@ -36,4 +31,3 @@ pipeline {
                 }
          }
     }
-}
