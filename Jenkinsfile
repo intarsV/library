@@ -4,7 +4,7 @@ pipeline {
      tools {
           // Install the Maven version configured as "M3" and add it to the path.
           maven "maven_3.6.3"
-     }
+    }
 
      stages {
          stage('Compile') {
@@ -29,11 +29,15 @@ pipeline {
                   }
              }
          }
-         stage('SonarQube analysis') {
-             def scannerHome = tool 'SonarScanner 4.0';
-             withSonarQubeEnv() { // If you have configured more than one global server connection, you can specify its name
-               sh "${scannerHome}/bin/sonar-scanner"
-             }
-           }
-     }
+          stage('SonarQube analysis') {
+          steps{
+
+              withSonarQubeEnv('SonarCloud') { // If you have configured more than one global server connection, you can specify its name
+
+                sh "${SonarCloud}/bin/sonar-scanner"
+              }
+            }
+            }
+		}
+    }
 }

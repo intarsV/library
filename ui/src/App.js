@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import { Router, Route, Switch} from 'react-router-dom'
+import {Route, Router, Switch} from 'react-router-dom'
 import './App.css';
 import LoginPage from './pages/login/LoginPage';
 import AuthenticatedRoute from './common/AuthenticatedRoute';
@@ -33,7 +33,7 @@ const App = () => {
                 <div className="row">
                 <div className="col-md-2 menu-side">
                     <div className="logo">
-                        <h4>Super Library </h4>
+                        <h4>Super Library</h4>
                         <h6>by Initex</h6>
                     </div>
                     {commonData.userAuthority !== null && isUserLoggedIn === true &&

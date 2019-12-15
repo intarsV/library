@@ -1,4 +1,4 @@
-export const API_URL = 'http://192.168.0.2:8080';
+export const API_URL = 'http://193.0.140.12:80';
 
 export const adminMenu = [
     {key: 'Main', value: '/admin'},
