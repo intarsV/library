@@ -10,8 +10,9 @@ public class Reservation {
 
     @Id
     @Column(name = "reservation_id")
-    @SequenceGenerator(name = "seqReservation", initialValue = 6, allocationSize = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqReservation")
+//    @SequenceGenerator(name = "seqReservation", initialValue = 6, allocationSize = 100)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne

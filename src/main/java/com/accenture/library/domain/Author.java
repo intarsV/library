@@ -9,8 +9,9 @@ public class Author {
 
     @Id
     @Column(name = "author_id")
-    @SequenceGenerator(name = "seqAuthor", initialValue = 6, allocationSize = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqAuthor")
+//    @SequenceGenerator(name = "seqAuthor", initialValue = 6, allocationSize = 100)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqAuthor")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "author_name")
