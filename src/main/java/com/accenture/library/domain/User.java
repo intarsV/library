@@ -10,8 +10,6 @@ public class User {
 
     @Id
     @Column(name = "user_id")
-//    @SequenceGenerator(name = "seqUserName", initialValue = 4, allocationSize = 100)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqUserName")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

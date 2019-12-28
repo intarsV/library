@@ -9,8 +9,6 @@ public class Book {
 
     @Id
     @Column(name = "book_id")
-//    @SequenceGenerator(name = "seqBook", initialValue = 7, allocationSize = 100)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqBook")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

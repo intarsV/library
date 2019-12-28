@@ -10,8 +10,6 @@ public class Reservation {
 
     @Id
     @Column(name = "reservation_id")
-//    @SequenceGenerator(name = "seqReservation", initialValue = 6, allocationSize = 100)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
