@@ -21,8 +21,4 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                                          @Param("userName") String userName,
                                          @Param("status") String status);
 
-//    @Query("SELECT new com.accenture.library.dto.ReservationDTO(r.id, r.book.id, r.book.title, r.user.id" +
-//            ", r.user.userName, r.reservationDate, r.status) " +
-//            "FROM Reservation r WHERE r.status='QUEUE'")
-//    List<ReservationDTO> getQueue();
 }
