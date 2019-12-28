@@ -12,7 +12,7 @@ public class Reservation {
     @Column(name = "reservation_id")
 //    @SequenceGenerator(name = "seqReservation", initialValue = 6, allocationSize = 100)
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
