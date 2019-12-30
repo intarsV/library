@@ -1,23 +1,23 @@
 package com.accenture.library.controller;
 
+import com.accenture.library.config.SpringSecurityConfiguration;
 import com.accenture.library.domain.Author;
 import com.accenture.library.domain.Book;
 import com.accenture.library.domain.User;
 import com.accenture.library.dto.ReservationDTO;
 import com.accenture.library.service.reservation.ReservationServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,13 +25,13 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebMvcTest(controllers = ReservationControllerREST.class)
+@Import(SpringSecurityConfiguration.class)
 public class ReservationControllerRESTTest {
 
     private static final Long RESERVATION_ID = 1L;
@@ -49,23 +49,16 @@ public class ReservationControllerRESTTest {
     private static final String CANCELED = "CANCELED";
 
     @Autowired
-    private WebApplicationContext context;
-
-    @Autowired
     private ObjectMapper mapper;
+
+    @MockBean
+    private DataSource dataSource;
 
     @MockBean
     private ReservationServiceImpl service;
 
+    @Autowired
     private MockMvc mvc;
-
-    @Before
-    public void setup() {
-        mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity())
-                .build();
-    }
 
     @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "USER")
     @Test
