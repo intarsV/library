@@ -5,13 +5,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.is;
@@ -23,8 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {LibraryApplication.class, SpringSecurityConfiguration.class})
-@TestPropertySource(locations = "/testApplication.properties")
-@TestConfiguration
+@ActiveProfiles(value = "integration")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class UserControllerRESTIntegrationTest {
 
     private static final int USER_ID = 3;
@@ -35,6 +37,15 @@ public class UserControllerRESTIntegrationTest {
     private static final String ENCODED_USERNAME = "secretJanis";
     private static final String ENCODED_PASSWORD = "secretPassword";
     private static final String URL_TEMPLATE = "/api/v1/users";
+
+    @Value("${admin}")
+    private String admin;
+    @Value("${adminPassword}")
+    private String adminPassword;
+    @Value("${user}")
+    private String user;
+    @Value("${userPassword}")
+    private String userPassword;
 
     @Autowired
     private WebApplicationContext context;
@@ -62,29 +73,32 @@ public class UserControllerRESTIntegrationTest {
     }
 
     //For ADMIN user
-    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "ADMIN")
     @Test
     public void shouldReturnUserResponseDTOList() throws Exception {
-        mvc.perform(get(URL_TEMPLATE))
+        mvc.perform(get(URL_TEMPLATE)
+                .header(HttpHeaders.AUTHORIZATION,
+                        "Basic " + Base64Utils.encodeToString((admin + ":" + adminPassword).getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(EXISTING_USER_ID)))
                 .andExpect(jsonPath("$[0].userName", is(EXISTING_USER_NAME)));
     }
 
     //For ADMIN user
-    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "USER")
     @Test
     public void shouldReturnExceptionOnGetUser() throws Exception {
-        mvc.perform(get(URL_TEMPLATE))
-                .andExpect(status().isForbidden());
+        mvc.perform(get(URL_TEMPLATE)
+                .header(HttpHeaders.AUTHORIZATION,
+                        "Basic " + Base64Utils.encodeToString((user + ":" + userPassword).getBytes())))
+                .andExpect(status().is(403));
     }
 
-    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "ADMIN")
     @Test
     public void shouldEnableOrDisableUser() throws Exception {
         final String requestBody = "{\"id\": \"" + 2 + "\",\"enabled\": \""
                 + false + "\"}";
         mvc.perform(put(URL_TEMPLATE + "/" + 2)
+                .header(HttpHeaders.AUTHORIZATION,
+                        "Basic " + Base64Utils.encodeToString((admin + ":" + adminPassword).getBytes()))
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
                 .andExpect(status().isAccepted())
@@ -92,14 +106,15 @@ public class UserControllerRESTIntegrationTest {
                 .andExpect(jsonPath("$.enabled", is(false)));
     }
 
-    @WithMockUser(username = USER_NAME, password = PASSWORD, authorities = "USER")
     @Test
     public void shouldReturnExceptionOnUserDisable() throws Exception {
         final String requestBody = "{\"id\": \"" + USER_ID + "\",\"enabled\": \""
                 + false + "\"}";
         mvc.perform(put(URL_TEMPLATE + "/" + USER_ID)
+                .header(HttpHeaders.AUTHORIZATION,
+                        "Basic " + Base64Utils.encodeToString((user + ":" + userPassword).getBytes()))
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
-                .andExpect(status().isForbidden());
+                .andExpect(status().is(403));
     }
 }

@@ -1,5 +1,7 @@
 package com.accenture.library.controller;
 
+import com.accenture.library.LibraryApplication;
+import com.accenture.library.config.SpringSecurityConfiguration;
 import com.accenture.library.dto.AuthorDTO;
 import com.accenture.library.exceptions.LibraryException;
 import com.accenture.library.service.author.AuthorServiceImpl;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -24,7 +27,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {LibraryApplication.class, SpringSecurityConfiguration.class})
+@ActiveProfiles(value = "test")
 public class RestExceptionHandlerTest {
 
     private static final Long ID = 1L;
