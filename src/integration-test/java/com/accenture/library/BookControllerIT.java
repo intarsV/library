@@ -27,11 +27,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {LibraryApplication.class, SpringSecurityConfiguration.class})
 @ActiveProfiles(value = "integration")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class AuthorControllerIntegrationTest {
+public class BookControllerIT {
 
     private static final int ID = 1;
-    private static final String AUTHOR_NAME = "Janka";
-    private static final String URL_TEMPLATE = "/api/v1/authors";
+    private static final int NEW_ID = 4;
+    private static final String TITLE = "Zelta zirgs";
+    private static final String NEW_TITLE = "Good book";
+    private static final String AUTHOR_NAME = "Rainis";
+    private static final String GENRE = "POETRY";
+    private static final int COPIES = 7;
+    private static final String URL_TEMPLATE = "/api/v1/books";
 
     @Value("${admin}")
     private String admin;
@@ -41,7 +46,6 @@ public class AuthorControllerIntegrationTest {
     private String user;
     @Value("${userPassword}")
     private String userPassword;
-
 
     @Autowired
     private WebApplicationContext context;
@@ -56,30 +60,51 @@ public class AuthorControllerIntegrationTest {
                 .build();
     }
 
+    //For ANY user
     @Test
-    public void getAllAuthors() throws Exception {
+    public void shouldReturnAllBookList() throws Exception {
         mvc.perform(get(URL_TEMPLATE))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].name", is("Rainis")));
+                .andExpect(jsonPath("$[0].id", is(ID)))
+                .andExpect(jsonPath("$[0].title", is(TITLE)));
+    }
+
+    //For ANY user
+    @Test
+    public void shouldReturnBookListByParameters() throws Exception {
+        mvc.perform(get(URL_TEMPLATE + "?title=" + TITLE + "&authorName=" + AUTHOR_NAME + "&genre=" + GENRE)
+                .header(HttpHeaders.AUTHORIZATION,
+                        "Basic " + Base64Utils.encodeToString((user + ":" + userPassword).getBytes())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(ID)))
+                .andExpect(jsonPath("$[0].title", is(TITLE)))
+                .andExpect(jsonPath("$[0].authorName", is(AUTHOR_NAME)))
+                .andExpect(jsonPath("$[0].genre", is(GENRE)));
     }
 
     //Only for ADMIN user
     @Test
-    public void shouldSaveAuthor() throws Exception {
-        final String requestBody = "{\"name\": \"" + AUTHOR_NAME + "\"}";
+    public void shouldSaveBook() throws Exception {
+        final String requestBody = "{\"title\": \"" + NEW_TITLE + "\",\"authorName\": \"" + AUTHOR_NAME
+                + "\",\"genre\": \"" + GENRE + "\", \"copies\":" + COPIES + "}";
         mvc.perform(post(URL_TEMPLATE)
                 .header(HttpHeaders.AUTHORIZATION,
                         "Basic " + Base64Utils.encodeToString((admin + ":" + adminPassword).getBytes()))
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(requestBody))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(4)));
+                .andExpect(jsonPath("$.id", is(NEW_ID)))
+                .andExpect(jsonPath("$.title", is(NEW_TITLE)))
+                .andExpect(jsonPath("$.authorName", is(AUTHOR_NAME)))
+                .andExpect(jsonPath("$.genre", is(GENRE)))
+                .andExpect(jsonPath("$.copies", is(COPIES)));
     }
 
+    //Only for ADMIN user
     @Test
-    public void shouldReturnUnauthorisedRequestSaveAuthor() throws Exception {
-        final String requestBody = "{\"name\": " + AUTHOR_NAME + "\"}";
+    public void shouldReturnExceptionSaveBook() throws Exception {
+        final String requestBody = "{\"title\": \"" + TITLE + "\",\"authorName\": \"" + AUTHOR_NAME
+                + "\",\"genre\": \"" + GENRE + "\", \"copies\":" + COPIES + "}";
         mvc.perform(post(URL_TEMPLATE)
                 .header(HttpHeaders.AUTHORIZATION,
                         "Basic " + Base64Utils.encodeToString((user + ":" + userPassword).getBytes()))
@@ -90,7 +115,7 @@ public class AuthorControllerIntegrationTest {
 
     //Only for ADMIN user
     @Test
-    public void shouldDisableAuthor() throws Exception {
+    public void shouldDisableBook() throws Exception {
         final String requestBody = "{\"id\":\"" + ID + "\"}";
         mvc.perform(put(URL_TEMPLATE + "/" + ID)
                 .header(HttpHeaders.AUTHORIZATION,
@@ -104,7 +129,7 @@ public class AuthorControllerIntegrationTest {
 
     //Only for ADMIN user
     @Test
-    public void shouldReturnExceptionDisableAuthor() throws Exception {
+    public void shouldReturnExceptionDeleteBook() throws Exception {
         final String requestBody = "{\"id\":\"" + ID + "\"}";
         mvc.perform(put(URL_TEMPLATE + "/" + ID)
                 .header(HttpHeaders.AUTHORIZATION,

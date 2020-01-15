@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {LibraryApplication.class, SpringSecurityConfiguration.class})
 @ActiveProfiles(value = "integration")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class ReservationControllerRESTIntegrationTest {
+public class ReservationControllerIT {
 
     private static final int RESERVATION_ID = 2;
     private static final Long BOOK_ID = 2L;
