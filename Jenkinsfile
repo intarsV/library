@@ -7,19 +7,14 @@ pipeline {
     }
 
      stages {
-         stage('Compile') {
+         stage('Compile & test') {
              steps {
-                 sh 'mvn clean compile'
-             }
-         }
-         stage('Testing'){
-             steps {
-                 sh 'mvn test'
+                 sh 'mvn clean compile test'
              }
          }
          stage('Integration tests'){
                       steps {
-                          sh 'mvn test -DskipUT=true -DskipIT=false'
+                          sh 'mvn verify -DskipUT=true -DskipIT=false'
                       }
                   }
          stage('Deploy'){
