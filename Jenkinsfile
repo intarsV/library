@@ -29,15 +29,5 @@ pipeline {
                   }
              }
          }
-          stage('SonarQube analysis') {
-          steps{
-
-              withSonarQubeEnv('SonarCloud') { // If you have configured more than one global server connection, you can specify its name
-
-                sh "${SonarCloud}/bin/sonar-scanner"
-              }
-            }
-            }
 		}
     }
-}
