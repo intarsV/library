@@ -8,16 +8,6 @@ pipeline {
     }
 
      stages {
-         stage('Compile & test') {
-             steps {
-                 sh 'mvn clean compile test'
-             }
-         }
-         stage('Integration tests'){
-                      steps {
-                          sh 'mvn verify -DskipUT=true -DskipIT=false'
-                      }
-                  }
          stage('Deploy'){
              steps {
                   sh 'mvn clean package -DskipUT=true -DskipIT=true'
