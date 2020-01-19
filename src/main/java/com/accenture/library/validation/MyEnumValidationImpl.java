@@ -1,4 +1,4 @@
-package com.accenture.library.customEnumValidation;
+package com.accenture.library.validation;
 
 import org.springframework.util.StringUtils;
 

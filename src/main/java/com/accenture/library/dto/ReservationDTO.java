@@ -1,7 +1,7 @@
 package com.accenture.library.dto;
 
-import com.accenture.library.customEnumValidation.EnumReservationStatus;
-import com.accenture.library.customEnumValidation.MyEnumValidation;
+import com.accenture.library.validation.EnumReservationStatus;
+import com.accenture.library.validation.MyEnumValidation;
 
 import javax.validation.constraints.Pattern;
 import java.util.Date;
