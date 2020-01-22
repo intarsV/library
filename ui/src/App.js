@@ -34,7 +34,6 @@ const App = () => {
                 <div className="col-md-2 menu-side">
                     <div className="logo">
                         <h4>Super Library</h4>
-                        <h5>Ccc</h5>
                         <h6>by Initex</h6>
                     </div>
                     {commonData.userAuthority !== null && isUserLoggedIn === true &&
