@@ -64,9 +64,9 @@ const ManageUsers = () => {
                         className: "columnAlignCenter",
                         accessor: "id",
                         Cell: Cell => Cell.original.enabled === true ?
-                            <button onClick={() => changeUserStatus(Cell.original.id)}>Enable</button>
-                            :
                             <button onClick={() => changeUserStatus(Cell.original.id)}>Disable</button>
+                            :
+                            <button onClick={() => changeUserStatus(Cell.original.id)}>Enable</button>
                     }
                 ]}
             />
