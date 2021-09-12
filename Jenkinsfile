@@ -28,7 +28,7 @@ node {
      stage('Deploy') {
          sh "docker container stop library || true"
          sh "docker build -f Dockerfile -t library target/"
-         sh 'docker images -q -f dangling=true | xargs --no-run-if-empty docker rmi'
+         sh 'docker images -q -f dangling=true | xargs --no-run-if-empty docker -f rmi'
          sh "docker run -d -p 80:8080 --name library --rm library:latest"
     }
 }
